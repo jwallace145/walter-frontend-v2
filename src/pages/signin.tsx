@@ -1,4 +1,33 @@
-export default function Example() {
+import React, { useState } from 'react';
+import axios, { AxiosResponse } from 'axios';
+import { setCookie } from 'typescript-cookie';
+import { WALTER_API_TOKEN_NAME } from '@/pages/api/Constants';
+
+const SignIn: React.FC = (): React.ReactElement => {
+  const [loading, setLoading] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    setLoading(true);
+    axios
+      .post('/api/auth/auth-user', { email: email, password: password })
+      .then((response: AxiosResponse): any => response.data)
+      .then((data: any): void => {
+        if (data['Status'].toLowerCase() === 'success') {
+          setCookie(WALTER_API_TOKEN_NAME, data['Data']['token']);
+          window.location.href = '/dashboard';
+        } else {
+          alert(data.message);
+        }
+      })
+      .catch((error: any): void => {
+        console.log(error);
+      })
+      .finally((): void => setLoading(false));
+  };
+
   return (
     <>
       <div className="flex min-h-full flex-1 flex-col justify-center py-12 sm:px-6 lg:px-8">
@@ -15,7 +44,7 @@ export default function Example() {
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-[480px]">
           <div className="bg-white px-6 py-12 shadow-sm sm:rounded-lg sm:px-12">
-            <form action="#" method="POST" className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-6">
               <div>
                 <label htmlFor="email" className="block text-sm/6 font-medium text-gray-900">
                   Email address
@@ -27,6 +56,8 @@ export default function Example() {
                     type="email"
                     required
                     autoComplete="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                     className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                   />
                 </div>
@@ -43,6 +74,8 @@ export default function Example() {
                     type="password"
                     required
                     autoComplete="current-password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                     className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                   />
                 </div>
@@ -170,4 +203,6 @@ export default function Example() {
       </div>
     </>
   );
-}
+};
+
+export default SignIn;

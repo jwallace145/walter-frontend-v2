@@ -1,11 +1,11 @@
-import { CheckIcon } from '@heroicons/react/20/solid'
+import { CheckIcon } from '@heroicons/react/20/solid';
 
 const includedFeatures = [
   'Weekly newsletter with personalized AI insights',
   'Smart expense tracking and budgeting tools',
   'AI-powered investment updates and market news',
   'Retirement planning and simulation tools',
-]
+];
 
 export default function Example() {
   return (
@@ -18,15 +18,22 @@ export default function Example() {
         </div>
         <div className="mx-auto mt-16 max-w-2xl rounded-3xl ring-1 ring-gray-200 sm:mt-20 lg:mx-0 lg:flex lg:max-w-none">
           <div className="p-8 sm:p-10 lg:flex-auto">
-            <h3 className="text-3xl font-semibold tracking-tight text-gray-900">Monthly Subscription</h3>
+            <h3 className="text-3xl font-semibold tracking-tight text-gray-900">
+              Monthly Subscription
+            </h3>
             <p className="mt-6 text-base/7 text-gray-600">
-              Unlock Walter’s weekly AI-powered financial newsletter with insights tailored to your spending, investments, and the market news that matters. Billed monthly. No subscription, no insights.
+              Unlock Walter’s weekly AI-powered financial newsletter with insights tailored to your
+              spending, investments, and the market news that matters. Billed monthly. No
+              subscription, no insights.
             </p>
             <div className="mt-10 flex items-center gap-x-4">
               <h4 className="flex-none text-sm/6 font-semibold text-indigo-600">What’s included</h4>
               <div className="h-px flex-auto bg-gray-100" />
             </div>
-            <ul role="list" className="mt-8 grid grid-cols-1 gap-4 text-sm/6 text-gray-600 sm:grid-cols-2 sm:gap-6">
+            <ul
+              role="list"
+              className="mt-8 grid grid-cols-1 gap-4 text-sm/6 text-gray-600 sm:grid-cols-2 sm:gap-6"
+            >
               {includedFeatures.map((feature) => (
                 <li key={feature} className="flex gap-x-3">
                   <CheckIcon aria-hidden="true" className="h-6 w-5 flex-none text-indigo-600" />
@@ -49,14 +56,12 @@ export default function Example() {
                 >
                   Subscribe
                 </a>
-                <p className="mt-6 text-xs/5 text-gray-600">
-                  Unsubscribe at any time.
-                </p>
+                <p className="mt-6 text-xs/5 text-gray-600">Unsubscribe at any time.</p>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 }

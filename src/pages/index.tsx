@@ -46,8 +46,8 @@ export default function Example() {
             ))}
           </div>
           <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-            <a href="#" className="text-sm/6 font-semibold text-gray-900">
-              Log in <span aria-hidden="true">&rarr;</span>
+            <a href="/signin" className="text-sm/6 font-semibold text-gray-900">
+              Sign in <span aria-hidden="true">&rarr;</span>
             </a>
           </div>
         </nav>

@@ -4,12 +4,16 @@ import { EllipsisVerticalIcon } from '@heroicons/react/20/solid';
 import { Expense } from '@/lib/Expense';
 import { US_DOLLAR } from '@/pages/api/Constants';
 import DeleteTransactionModal from '@/components/transactions/DeleteTransactionModal';
+import EditTransactionModal from '@/components/transactions/EditTransactionModal';
 
 const TransactionsList: React.FC<{ expenses: Expense[] }> = ({ expenses }): React.ReactElement => {
   const [selectedExpense, setSelectedExpense] = useState<Expense | null>(null);
-  const [openDeleteTransactionModel, setOpenDeleteTransactionModel] = useState(false);
+  const [openEditTransactionModal, setOpenEditTransactionModal] = useState<boolean>(false);
+  const [openDeleteTransactionModal, setOpenDeleteTransactionModal] = useState<boolean>(false);
 
-  const getExpenseCategoryBadge = (category: string): React.ReactElement => {
+  const getExpenseCategoryBadge: (category: string) => React.ReactElement = (
+    category: string
+  ): React.ReactElement => {
     switch (category.toLowerCase()) {
       case 'transportation':
         return (
@@ -95,7 +99,10 @@ const TransactionsList: React.FC<{ expenses: Expense[] }> = ({ expenses }): Reac
                   >
                     <MenuItem>
                       <a
-                        href="#"
+                        onClick={(): void => {
+                          setSelectedExpense(expense);
+                          setOpenEditTransactionModal(true);
+                        }}
                         className="block px-3 py-1 text-sm/6 text-gray-900 data-focus:bg-gray-50 data-focus:outline-hidden"
                       >
                         Edit<span className="sr-only">, {expense.category}</span>
@@ -103,10 +110,9 @@ const TransactionsList: React.FC<{ expenses: Expense[] }> = ({ expenses }): Reac
                     </MenuItem>
                     <MenuItem>
                       <a
-                        href="#"
-                        onClick={() => {
+                        onClick={(): void => {
                           setSelectedExpense(expense);
-                          setOpenDeleteTransactionModel(true);
+                          setOpenDeleteTransactionModal(true);
                         }}
                         className="block px-3 py-1 text-sm/6 text-gray-900 data-focus:bg-gray-50 data-focus:outline-hidden"
                       >
@@ -121,8 +127,13 @@ const TransactionsList: React.FC<{ expenses: Expense[] }> = ({ expenses }): Reac
         )}
       </ul>
       <DeleteTransactionModal
-        open={openDeleteTransactionModel}
-        setOpen={setOpenDeleteTransactionModel}
+        open={openDeleteTransactionModal}
+        setOpen={setOpenDeleteTransactionModal}
+        expense={selectedExpense}
+      />
+      <EditTransactionModal
+        open={openEditTransactionModal}
+        setOpen={setOpenEditTransactionModal}
         expense={selectedExpense}
       />
     </>

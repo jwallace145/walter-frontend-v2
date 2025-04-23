@@ -16,6 +16,7 @@ import {
   Bars3Icon,
   BellIcon,
   ChartBarIcon,
+  ChartPieIcon,
   Cog6ToothIcon,
   CreditCardIcon,
   NewspaperIcon,
@@ -28,7 +29,7 @@ const AUTHENTICATED_PAGES = [
   { name: 'Dashboard', href: 'dashboard', icon: ChartBarIcon },
   { name: 'Transactions', href: 'transactions', icon: CreditCardIcon },
   { name: 'Savings', href: 'savings', icon: BanknotesIcon },
-  { name: 'Investments', href: 'investments', icon: ChartBarIcon },
+  { name: 'Investments', href: 'investments', icon: ChartPieIcon },
   { name: 'Retirement', href: 'retirement', icon: PresentationChartLineIcon },
   { name: 'Newsletters', href: 'newsletters', icon: NewspaperIcon },
 ];

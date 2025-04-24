@@ -8,6 +8,8 @@ import dynamic from 'next/dynamic';
 import { PortfolioStock } from '@/lib/PortfolioStock';
 import { Price } from '@/lib/Price';
 import PortfolioStockCards from '@/components/portfolio/PortfolioStockCards';
+import { PlusSmallIcon } from '@heroicons/react/20/solid';
+import AddPortfolioStockModal from '@/components/portfolio/AddPortfolioStockModal';
 
 const PortfolioEquityPieChart = dynamic(
   () => import('@/components/portfolio/PortfolioEquityPieChart'),
@@ -25,6 +27,7 @@ export default function Dashboard(): React.ReactElement {
   const [getPricesLoading, setGetPricesLoading] = useState<boolean>(false);
   const [stocks, setStocks] = useState<PortfolioStock[]>([]);
   const [prices, setPrices] = useState<Price[]>([]);
+  const [openAddStockModal, setOpenAddStockModal] = useState<boolean>(false);
 
   useEffect((): void => {
     getPortfolio();
@@ -59,20 +62,30 @@ export default function Dashboard(): React.ReactElement {
 
   const getContent: () => React.ReactElement = (): React.ReactElement => {
     return (
-      <main className="p-8">
-        <h1 className="text-2xl font-bold mb-4">Your Portfolio Allocation</h1>
-        <div className="flex flex-col gap-6 md:flex-row">
-          <div className="flex-1">
-            <PortfolioEquityPieChart loading={getPortfolioLoading} stocks={stocks} />
+      <>
+        <main className="p-8">
+          <h1 className="text-2xl font-bold mb-4">Your Portfolio Allocation</h1>
+          <div className="flex flex-col gap-6 md:flex-row">
+            <div className="flex-1">
+              <PortfolioEquityPieChart loading={getPortfolioLoading} stocks={stocks} />
+            </div>
+            <div className="flex-1">
+              <StockLineChart loading={getPricesLoading} prices={prices} />
+            </div>
           </div>
-          <div className="flex-1">
-            <StockLineChart loading={getPricesLoading} prices={prices} />
+          <div className="pt-4">
+            <button
+              onClick={(): void => setOpenAddStockModal(true)}
+              className="mb-4 inline-flex items-center rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+            >
+              <PlusSmallIcon aria-hidden="true" className="-ml-1.5 size-5" />
+              Add Stock
+            </button>
+            <PortfolioStockCards stocks={stocks} />
           </div>
-        </div>
-        <div className="pt-4">
-          <PortfolioStockCards stocks={stocks} />
-        </div>
-      </main>
+        </main>
+        <AddPortfolioStockModal open={openAddStockModal} setOpen={setOpenAddStockModal} />
+      </>
     );
   };
 

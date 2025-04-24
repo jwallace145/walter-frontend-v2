@@ -71,11 +71,14 @@ const TransactionsList: React.FC<{ expenses: Expense[] }> = ({ expenses }): Reac
             >
               <div className="flex min-w-0 gap-x-4">
                 <div className="min-w-0 flex-auto">
-                  <p className="text-sm/6 font-semibold text-gray-900">
-                    <a href="#" className="hover:underline">
-                      {expense.vendor}
-                    </a>
-                  </p>
+                  <div className="flex items-start gap-x-3">
+                    <p className="text-sm/6 font-semibold text-gray-900">
+                      <a href="#" className="hover:underline">
+                        {expense.vendor}
+                      </a>
+                    </p>
+                    {getExpenseCategoryBadge(expense.category)}
+                  </div>
                   <p className="mt-1 flex text-xs/5 text-gray-500">
                     <a href="#" className="truncate hover:underline">
                       {expense.date}
@@ -86,7 +89,6 @@ const TransactionsList: React.FC<{ expenses: Expense[] }> = ({ expenses }): Reac
               <div className="flex shrink-0 items-center gap-x-6">
                 <div className="hidden sm:flex sm:flex-col sm:items-end">
                   <p className="text-sm/6 text-gray-900">{US_DOLLAR.format(expense.amount)}</p>
-                  {getExpenseCategoryBadge(expense.category)}
                 </div>
                 <Menu as="div" className="relative flex-none">
                   <MenuButton className="-m-2.5 block p-2.5 text-gray-500 hover:text-gray-900">

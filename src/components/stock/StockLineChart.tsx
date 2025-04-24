@@ -290,7 +290,6 @@ const StockLineChart: React.FC<{ prices: Price[]; loading: boolean }> = ({
       y: price.price,
     }));
 
-    console.log(data);
     return [
       {
         id: 'TEST',

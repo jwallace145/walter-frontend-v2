@@ -3,6 +3,6 @@ export interface PortfolioStock {
   company: string;
   equity: number;
   price: number;
-  qunity: number;
+  quantity: number;
   sector: string;
 }

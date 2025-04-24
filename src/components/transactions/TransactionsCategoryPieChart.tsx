@@ -4,11 +4,13 @@ import React from 'react';
 import PieChart from '../charts/PieChart';
 import LoadingSpinner from '../loading/LoadingSpinner';
 import { Expense } from '@/lib/Expense';
+import { ExpenseCategory } from '@/lib/ExpenseCategory';
 
-const TransactionsCategoryPieChart: React.FC<{ loading: boolean; transactions: Expense[] }> = ({
-  loading,
-  transactions,
-}): React.ReactElement => {
+const TransactionsCategoryPieChart: React.FC<{
+  loading: boolean;
+  transactions: Expense[];
+  setCategory: (category: string) => void;
+}> = ({ loading, transactions, setCategory }): React.ReactElement => {
   const getTransactionCategories = () => {
     if (loading) {
       return [];
@@ -31,7 +33,11 @@ const TransactionsCategoryPieChart: React.FC<{ loading: boolean; transactions: E
 
   return (
     <div className="h-96 bg-white rounded-2xl p-6 shadow-md">
-      {loading ? <LoadingSpinner /> : <PieChart data={getTransactionCategories()} />}
+      {loading ? (
+        <LoadingSpinner />
+      ) : (
+        <PieChart data={getTransactionCategories()} onClick={setCategory} />
+      )}
     </div>
   );
 };

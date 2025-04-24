@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { TrashIcon, PencilSquareIcon } from '@heroicons/react/20/solid';
 import { PortfolioStock } from '@/lib/PortfolioStock';
 import DeletePortfolioStockModal from '@/components/portfolio/DeletePortfolioStockModal';
+import { US_DOLLAR } from '@/pages/api/Constants';
 
 const PortfolioStockCards: React.FC<{ stocks: PortfolioStock[] }> = ({
   stocks,
@@ -31,6 +32,10 @@ const PortfolioStockCards: React.FC<{ stocks: PortfolioStock[] }> = ({
                 <dl className="mt-1 flex grow flex-col justify-between">
                   <dt className="sr-only">Title</dt>
                   <dd className="text-sm text-gray-500">{stock.symbol}</dd>
+                  <dt className="mt-3 sr-only">Equity</dt>
+                  <dd className="mt-1 text-sm font-medium text-gray-700">
+                    {US_DOLLAR.format(stock.equity)}
+                  </dd>
                 </dl>
               </div>
               <div>

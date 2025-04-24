@@ -4,10 +4,18 @@ import React from 'react';
 import { ResponsivePie } from '@nivo/pie';
 import { US_DOLLAR } from '@/pages/api/Constants';
 
-const PieChart = ({ data }): React.ReactElement => {
+interface PieChartProps {
+  data: any;
+  onClick: (slice) => void;
+}
+
+const PieChart: React.FC<PieChartProps> = ({ data, onClick }): React.ReactElement => {
   return (
     <ResponsivePie
       data={data}
+      onClick={(slice): void => onClick(slice.label)}
+      valueFormat={(value: number): string => `${US_DOLLAR.format(value)}`}
+      colors={{ scheme: 'yellow_green_blue' }}
       margin={{ top: 40, right: 80, bottom: 80, left: 80 }}
       innerRadius={0.5}
       padAngle={2}
@@ -21,8 +29,6 @@ const PieChart = ({ data }): React.ReactElement => {
       arcLinkLabelsColor={{ from: 'color' }}
       arcLabelsSkipAngle={20}
       arcLabelsTextColor={{ from: 'color', modifiers: [['darker', 2]] }}
-      colors={{ scheme: 'yellow_green_blue' }}
-      valueFormat={(value) => `${US_DOLLAR.format(value)}`}
     />
   );
 };

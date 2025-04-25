@@ -4,7 +4,7 @@ import { User } from '@/lib/models/User';
 import { WALTER_API_ENDPOINT } from '@/pages/api/Constants';
 
 export function withAuthenticatedRedirect<T>(
-  getServerSidePropsFunc?: GetServerSideProps<T & { user: User }>
+  getServerSidePropsFunc?: GetServerSideProps<T>
 ): GetServerSideProps<T & { user: User }> {
   return async (
     context: GetServerSidePropsContext
@@ -21,7 +21,7 @@ export function withAuthenticatedRedirect<T>(
     }
 
     try {
-      const response: Response = await fetch(`${WALTER_API_ENDPOINT}/users`, {
+      const response = await fetch(`${WALTER_API_ENDPOINT}/users`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -32,27 +32,26 @@ export function withAuthenticatedRedirect<T>(
       }
 
       const json = await response.json();
-
       if (!json?.Data) {
         throw new Error('Invalid user response');
       }
 
       const user: User = json.Data;
 
-      const originalProps = getServerSidePropsFunc
+      const originalResult = getServerSidePropsFunc
         ? await getServerSidePropsFunc(context)
         : { props: {} as T };
 
-      if ('props' in originalProps) {
+      if ('props' in originalResult) {
         return {
           props: {
-            ...originalProps.props,
+            ...originalResult.props,
             user,
           },
         };
       }
 
-      return originalProps;
+      return originalResult as GetServerSidePropsResult<T & { user: User }>;
     } catch (err) {
       console.error('Auth error:', err);
       return {

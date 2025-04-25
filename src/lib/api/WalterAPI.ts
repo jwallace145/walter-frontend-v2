@@ -42,7 +42,8 @@ export class WalterAPI {
 
   public static async updateUser(request: IncomingMessage): Promise<any> {
     const token: string = request.headers.authorization?.split(' ')[1] || '';
-    const { _, files } = await this.parseForm(request);
+    const { fields, files } = await this.parseForm(request);
+    console.log(fields);
     const formData = new FormData();
     const profilePicture = files?.profile_picture;
     if (profilePicture && Array.isArray(profilePicture)) {

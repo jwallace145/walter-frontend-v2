@@ -5,11 +5,15 @@ import React, { useEffect, useState } from 'react';
 import { getCookie } from 'typescript-cookie';
 import { WALTER_API_TOKEN_NAME } from '@/pages/api/Constants';
 import dynamic from 'next/dynamic';
-import { PortfolioStock } from '@/lib/PortfolioStock';
-import { Price } from '@/lib/Price';
+import { PortfolioStock } from '@/lib/models/PortfolioStock';
+import { Price } from '@/lib/models/Price';
 import PortfolioStockCards from '@/components/portfolio/PortfolioStockCards';
 import { PlusSmallIcon } from '@heroicons/react/20/solid';
 import AddPortfolioStockModal from '@/components/portfolio/AddPortfolioStockModal';
+import { User } from '@/lib/models/User';
+import { withAuth } from '@/lib/auth/Authentication';
+import { GetServerSideProps } from 'next';
+import LoadingSpinner from '@/components/loading/LoadingSpinner';
 
 const PortfolioEquityPieChart = dynamic(
   () => import('@/components/portfolio/PortfolioEquityPieChart'),
@@ -22,7 +26,11 @@ const StockLineChart = dynamic(() => import('@/components/stock/StockLineChart')
   ssr: false,
 });
 
-export default function Dashboard(): React.ReactElement {
+interface DashboardProps {
+  user: User;
+}
+
+const Dashboard: React.FC<DashboardProps> = ({ user }): React.ReactElement => {
   const [getPortfolioLoading, setGetPortfolioLoading] = useState<boolean>(false);
   const [getPricesLoading, setGetPricesLoading] = useState<boolean>(false);
   const [stocks, setStocks] = useState<PortfolioStock[]>([]);
@@ -89,5 +97,13 @@ export default function Dashboard(): React.ReactElement {
     );
   };
 
-  return <AuthenticatedPageLayout pageName="dashboard" content={getContent()} />;
-}
+  return user ? (
+    <AuthenticatedPageLayout pageName="dashboard" user={user} content={getContent()} />
+  ) : (
+    <LoadingSpinner />
+  );
+};
+
+export const getServerSideProps: GetServerSideProps = withAuth();
+
+export default Dashboard;

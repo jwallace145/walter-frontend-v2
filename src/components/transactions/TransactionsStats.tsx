@@ -1,5 +1,5 @@
 import React from 'react';
-import { Expense } from '@/lib/Expense';
+import { Expense } from '@/lib/models/Expense';
 import { US_DOLLAR } from '@/pages/api/Constants';
 
 const TransactionStats: React.FC<{ transactions: Expense[] }> = ({

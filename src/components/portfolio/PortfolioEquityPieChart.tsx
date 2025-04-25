@@ -2,7 +2,7 @@
 
 import React from 'react';
 import PieChart from '../charts/PieChart';
-import { PortfolioStock } from '@/lib/PortfolioStock';
+import { PortfolioStock } from '@/lib/models/PortfolioStock';
 import LoadingSpinner from '../loading/LoadingSpinner';
 
 const PortfolioEquityPieChart: React.FC<{ loading: boolean; stocks: PortfolioStock[] }> = ({

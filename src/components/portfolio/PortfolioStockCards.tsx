@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { TrashIcon, PencilSquareIcon } from '@heroicons/react/20/solid';
-import { PortfolioStock } from '@/lib/PortfolioStock';
+import { PortfolioStock } from '@/lib/models/PortfolioStock';
 import DeletePortfolioStockModal from '@/components/portfolio/DeletePortfolioStockModal';
 import { US_DOLLAR } from '@/pages/api/Constants';
 

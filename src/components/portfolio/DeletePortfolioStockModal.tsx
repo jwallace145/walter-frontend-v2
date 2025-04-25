@@ -8,7 +8,7 @@ import {
   DialogTitle,
   DialogDescription,
 } from '@headlessui/react';
-import { PortfolioStock } from '@/lib/PortfolioStock';
+import { PortfolioStock } from '@/lib/models/PortfolioStock';
 
 interface DeletePortfolioStockModalProps {
   open: boolean;

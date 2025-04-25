@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Pagination from '@/components/pagination/Pagination';
-import { Expense } from '@/lib/Expense';
+import { Expense } from '@/lib/models/Expense';
 import TransactionsList from './TransactionsList';
 
 const PaginatedTransactionsList: React.FC<{

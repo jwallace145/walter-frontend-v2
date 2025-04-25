@@ -24,6 +24,7 @@ import {
   XMarkIcon,
 } from '@heroicons/react/24/outline';
 import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/react/20/solid';
+import { User } from '@/lib/models/User';
 
 const AUTHENTICATED_PAGES = [
   { name: 'Dashboard', href: 'dashboard', icon: ChartBarIcon },
@@ -45,6 +46,7 @@ function classNames(...classes) {
 
 interface AuthenticatedLayoutProps {
   pageName: string;
+  user: User;
   content: React.ReactNode;
 }
 
@@ -250,7 +252,7 @@ export default function AuthenticatedPageLayout(
                     <span className="sr-only">Open user menu</span>
                     <img
                       alt=""
-                      src="https://walterai-media.s3.us-east-1.amazonaws.com/IMG_5419.jpeg"
+                      src={props.user.profile_picture_url}
                       className="size-8 rounded-full bg-gray-50"
                     />
                     <span className="hidden lg:flex lg:items-center">
@@ -258,7 +260,7 @@ export default function AuthenticatedPageLayout(
                         aria-hidden="true"
                         className="ml-4 text-sm/6 font-semibold text-gray-900"
                       >
-                        Tom Cook
+                        {props.user.username}
                       </span>
                       <ChevronDownIcon aria-hidden="true" className="ml-2 size-5 text-gray-400" />
                     </span>

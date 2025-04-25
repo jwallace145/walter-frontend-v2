@@ -6,13 +6,13 @@ import { getCookie } from 'typescript-cookie';
 import { WALTER_API_TOKEN_NAME } from '@/pages/api/Constants';
 import dayjs from 'dayjs';
 import PaginatedTransactionsList from '@/components/transactions/PaginatedTransactionsList';
-import { Expense } from '@/lib/Expense';
+import { Expense } from '@/lib/models/Expense';
 import dynamic from 'next/dynamic';
 import TransactionStats from '@/components/transactions/TransactionsStats';
 import { PlusSmallIcon } from '@heroicons/react/20/solid';
 import AddTransactionForm from '@/components/transactions/AddTransactionForm';
 import { ChevronRightIcon, HomeIcon, ChartPieIcon } from '@heroicons/react/20/solid';
-import { ExpenseCategory, getExpenseCategory } from '@/lib/ExpenseCategory';
+import { ExpenseCategory, getExpenseCategory } from '@/lib/models/ExpenseCategory';
 
 const TransactionsCategoryPieChart = dynamic(
   () => import('@/components/transactions/TransactionsCategoryPieChart'),

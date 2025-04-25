@@ -8,7 +8,7 @@ import {
   DialogPanel,
   DialogTitle,
 } from '@headlessui/react';
-import { Expense } from '@/lib/Expense';
+import { Expense } from '@/lib/models/Expense';
 
 const EditTransactionModal: React.FC<{
   open: boolean;

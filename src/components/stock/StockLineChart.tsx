@@ -1,6 +1,6 @@
 import React from 'react';
 import LineChart from '../charts/LineChart';
-import { Price } from '@/lib/Price';
+import { Price } from '@/lib/models/Price';
 import LoadingSpinner from '@/components/loading/LoadingSpinner';
 
 const data: any = [

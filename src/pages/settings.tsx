@@ -3,8 +3,15 @@
 import AuthenticatedPageLayout from '@/layouts/AuthenticatedPageLayout';
 import React, { useRef } from 'react';
 import ChangeAvatarModal from '@/components/settings/ChangeAvatarModal';
+import { GetServerSideProps } from 'next';
+import { withAuth } from '@/lib/auth/Authentication';
+import LoadingSpinner from '@/components/loading/LoadingSpinner';
 
-export default function settings(): React.ReactElement {
+interface SettingsProps {
+  user: User;
+}
+
+const Settings: React.FC<SettingsProps> = ({ user }): React.ReactElement => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [openChangeAvatarModal, setOpenChangeAvatarModal] = React.useState(false);
 
@@ -30,7 +37,7 @@ export default function settings(): React.ReactElement {
                   <div className="col-span-full flex items-center gap-x-8">
                     <img
                       alt=""
-                      src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                      src={user.profile_picture_url}
                       className="size-24 flex-none rounded-lg bg-gray-200 object-cover"
                     />
                     <div>
@@ -132,5 +139,13 @@ export default function settings(): React.ReactElement {
     );
   };
 
-  return <AuthenticatedPageLayout pageName="settings" content={getContent()} />;
-}
+  return user ? (
+    <AuthenticatedPageLayout pageName="settings" user={user} content={getContent()} />
+  ) : (
+    <LoadingSpinner />
+  );
+};
+
+export const getServerSideProps: GetServerSideProps = withAuth();
+
+export default Settings;

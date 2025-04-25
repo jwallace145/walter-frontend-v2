@@ -3,7 +3,7 @@ import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult
 import { User } from '@/lib/models/User'; // Assume this is your GetUser function
 import { WALTER_API_ENDPOINT, WALTER_API_TOKEN_NAME } from '@/pages/api/Constants';
 
-export function withUnauthenticatedRedirect<T>(
+export function withUnauthenticatedRedirect<T extends Record<string, any>>(
   getServerSidePropsFunc?: GetServerSideProps<T>
 ): GetServerSideProps<T> {
   return async (context: GetServerSidePropsContext): Promise<GetServerSidePropsResult<T>> => {

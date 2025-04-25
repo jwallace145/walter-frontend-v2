@@ -1,13 +1,18 @@
 'use client';
 
-import { Serie } from '@nivo/line';
 import { ResponsivePie } from '@nivo/pie';
 import React from 'react';
 
 import { US_DOLLAR } from '@/lib/constants/Constants';
 
+export interface PieSlice {
+  id: string;
+  label: string;
+  value: number;
+}
+
 interface PieChartProps {
-  data: Serie[];
+  data: PieSlice[];
   onClick: (slice: string) => void;
 }
 

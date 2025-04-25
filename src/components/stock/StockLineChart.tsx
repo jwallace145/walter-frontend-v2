@@ -1,3 +1,4 @@
+import { Serie } from '@nivo/line';
 import React from 'react';
 
 import LoadingSpinner from '@/components/loading/LoadingSpinner';
@@ -282,7 +283,7 @@ const StockLineChart: React.FC<{ prices: Price[]; loading: boolean }> = ({
   prices,
   loading,
 }): React.ReactElement => {
-  const getStockPrices = () => {
+  const getStockPrices = (): Serie[] => {
     if (loading) {
       return [];
     }

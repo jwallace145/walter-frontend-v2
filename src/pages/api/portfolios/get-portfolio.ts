@@ -1,22 +1,11 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import axios, { AxiosResponse } from 'axios';
-import { WALTER_API_ENDPOINT } from '@/pages/api/Constants';
 
-async function getPortfolio(request: NextApiRequest) {
-  const token: string = request.cookies?.WALTER_API_TOKEN || '';
-  const response: AxiosResponse = await axios({
-    method: 'GET',
-    url: `${WALTER_API_ENDPOINT}/portfolios`,
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-  return response.data;
-}
+import { WalterAPI } from '@/lib/api/WalterAPI';
 
 export default async function handler(
   request: NextApiRequest,
   response: NextApiResponse
 ): Promise<void> {
-  response.status(200).json(await getPortfolio(request));
+  const token: string = request.cookies.WALTER_API_TOKEN || '';
+  response.status(200).json(await WalterAPI.getPortfolio(token));
 }

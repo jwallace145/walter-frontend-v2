@@ -1,18 +1,19 @@
 'use client';
 
-import AuthenticatedPageLayout from '@/layouts/AuthenticatedPageLayout';
+import { PlusSmallIcon } from '@heroicons/react/20/solid';
+import { GetServerSideProps } from 'next';
+import dynamic from 'next/dynamic';
 import React, { useEffect, useState } from 'react';
 import { getCookie } from 'typescript-cookie';
-import { WALTER_API_TOKEN_NAME } from '@/pages/api/Constants';
-import dynamic from 'next/dynamic';
+
+import AddPortfolioStockModal from '@/components/portfolio/AddPortfolioStockModal';
+import PortfolioStockCards from '@/components/portfolio/PortfolioStockCards';
+import AuthenticatedPageLayout from '@/layouts/AuthenticatedPageLayout';
+import { withAuthenticatedRedirect } from '@/lib/auth/AuthenticatedRedirect';
 import { PortfolioStock } from '@/lib/models/PortfolioStock';
 import { Price } from '@/lib/models/Price';
-import PortfolioStockCards from '@/components/portfolio/PortfolioStockCards';
-import { PlusSmallIcon } from '@heroicons/react/20/solid';
-import AddPortfolioStockModal from '@/components/portfolio/AddPortfolioStockModal';
 import { User } from '@/lib/models/User';
-import { withAuthenticatedRedirect } from '@/lib/auth/AuthenticatedRedirect';
-import { GetServerSideProps } from 'next';
+import { WALTER_API_TOKEN_NAME } from '@/pages/api/Constants';
 
 const PortfolioEquityPieChart = dynamic(
   () => import('@/components/portfolio/PortfolioEquityPieChart'),

@@ -6,6 +6,7 @@ import { IncomingMessage } from 'http';
 import { getCookie } from 'typescript-cookie';
 
 import { Expense } from '@/lib/models/Expense';
+import { Portfolio } from '@/lib/models/Portfolio';
 import { User } from '@/lib/models/User';
 
 /**
@@ -62,6 +63,16 @@ export class WalterAPI {
         ...formData.getHeaders(),
       },
       data: formData,
+    }).then((response: AxiosResponse) => response.data);
+  }
+
+  public static async getPortfolio(token: string): Promise<Portfolio> {
+    return axios({
+      method: 'GET',
+      url: `${this.ENDPOINT}/portfolios`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     }).then((response: AxiosResponse) => response.data);
   }
 

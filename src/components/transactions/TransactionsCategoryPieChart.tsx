@@ -4,7 +4,6 @@ import React from 'react';
 import PieChart from '../charts/PieChart';
 import LoadingSpinner from '../loading/LoadingSpinner';
 import { Expense } from '@/lib/models/Expense';
-import { ExpenseCategory } from '@/lib/models/ExpenseCategory';
 
 const TransactionsCategoryPieChart: React.FC<{
   loading: boolean;

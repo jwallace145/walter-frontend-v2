@@ -11,9 +11,8 @@ import PortfolioStockCards from '@/components/portfolio/PortfolioStockCards';
 import { PlusSmallIcon } from '@heroicons/react/20/solid';
 import AddPortfolioStockModal from '@/components/portfolio/AddPortfolioStockModal';
 import { User } from '@/lib/models/User';
-import { withAuth, withAuthenticatedRedirect } from '@/lib/auth/AuthenticatedRedirect';
+import { withAuthenticatedRedirect } from '@/lib/auth/AuthenticatedRedirect';
 import { GetServerSideProps } from 'next';
-import LoadingSpinner from '@/components/loading/LoadingSpinner';
 
 const PortfolioEquityPieChart = dynamic(
   () => import('@/components/portfolio/PortfolioEquityPieChart'),

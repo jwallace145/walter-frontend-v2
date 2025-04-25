@@ -26,6 +26,7 @@ import {
 import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/react/20/solid';
 import { User } from '@/lib/models/User';
 import LoadingSpinner from '@/components/loading/LoadingSpinner';
+import SignOutModal from '@/components/signout/SignOutModal';
 
 const AUTHENTICATED_PAGES = [
   { name: 'Dashboard', href: 'dashboard', icon: ChartBarIcon },
@@ -57,6 +58,7 @@ const AuthenticatedPageLayout: React.FC<AuthenticatedLayoutProps> = ({
   content,
 }): React.ReactElement => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [openSignOutModal, setOpenSignOutModal] = useState(false);
 
   const getNavigation = () => {
     return AUTHENTICATED_PAGES.map((item) => {
@@ -281,6 +283,7 @@ const AuthenticatedPageLayout: React.FC<AuthenticatedLayoutProps> = ({
                       <MenuItem key={item.name}>
                         <a
                           href={item.href}
+                          onClick={(): void => setOpenSignOutModal(true)}
                           className="block px-3 py-1 text-sm/6 text-gray-900 data-focus:bg-gray-50 data-focus:outline-hidden"
                         >
                           {item.name}
@@ -298,6 +301,7 @@ const AuthenticatedPageLayout: React.FC<AuthenticatedLayoutProps> = ({
           </main>
         </div>
       </div>
+      <SignOutModal open={openSignOutModal} setOpen={setOpenSignOutModal} />
     </>
   );
 };

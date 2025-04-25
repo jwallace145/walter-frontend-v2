@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
 import { EllipsisVerticalIcon } from '@heroicons/react/20/solid';
 import { Expense } from '@/lib/models/Expense';
-import { US_DOLLAR } from '@/pages/api/Constants';
+import { US_DOLLAR } from '@/lib/constants/Constants';
 import DeleteTransactionModal from '@/components/transactions/DeleteTransactionModal';
 import EditTransactionModal from '@/components/transactions/EditTransactionModal';
 

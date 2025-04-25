@@ -1,23 +1,19 @@
 'use client';
 
 import AuthenticatedPageLayout from '@/layouts/AuthenticatedPageLayout';
-import React, { useRef } from 'react';
+import React from 'react';
 import ChangeAvatarModal from '@/components/settings/ChangeAvatarModal';
 import { GetServerSideProps } from 'next';
-import { withAuth } from '@/lib/auth/AuthenticatedRedirect';
+import { withAuthenticatedRedirect } from '@/lib/auth/AuthenticatedRedirect';
 import LoadingSpinner from '@/components/loading/LoadingSpinner';
+import { User } from '@/lib/models/User';
 
 interface SettingsProps {
   user: User;
 }
 
 const Settings: React.FC<SettingsProps> = ({ user }): React.ReactElement => {
-  const fileInputRef = useRef<HTMLInputElement>(null);
   const [openChangeAvatarModal, setOpenChangeAvatarModal] = React.useState(false);
-
-  const handleFileUploadClick = () => {
-    fileInputRef.current?.click();
-  };
 
   const getContent: () => React.ReactElement = (): React.ReactElement => {
     return (
@@ -49,7 +45,6 @@ const Settings: React.FC<SettingsProps> = ({ user }): React.ReactElement => {
                         Change avatar
                       </button>
                       <p className="mt-2 text-xs/5 text-gray-500">JPG, GIF or PNG. 1MB max.</p>
-                      <input ref={fileInputRef} type="file" accept="image/*" className="hidden" />
                     </div>
                   </div>
                 </div>
@@ -146,6 +141,6 @@ const Settings: React.FC<SettingsProps> = ({ user }): React.ReactElement => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = withAuth();
+export const getServerSideProps: GetServerSideProps = withAuthenticatedRedirect();
 
 export default Settings;

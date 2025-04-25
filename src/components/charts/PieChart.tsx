@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { ResponsivePie } from '@nivo/pie';
-import { US_DOLLAR } from '@/pages/api/Constants';
+import { US_DOLLAR } from '@/lib/constants/Constants';
 
 interface PieChartProps {
   data: any;

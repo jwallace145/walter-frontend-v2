@@ -11,11 +11,10 @@ import dynamic from 'next/dynamic';
 import TransactionStats from '@/components/transactions/TransactionsStats';
 import { PlusSmallIcon } from '@heroicons/react/20/solid';
 import AddTransactionForm from '@/components/transactions/AddTransactionForm';
-import { ChevronRightIcon, HomeIcon, ChartPieIcon } from '@heroicons/react/20/solid';
+import { ChevronRightIcon, ChartPieIcon } from '@heroicons/react/20/solid';
 import { ExpenseCategory, getExpenseCategory } from '@/lib/models/ExpenseCategory';
 import { GetServerSideProps } from 'next';
-import { withAuth, withAuthenticatedRedirect } from '@/lib/auth/AuthenticatedRedirect';
-import LoadingSpinner from '@/components/loading/LoadingSpinner';
+import { withAuthenticatedRedirect } from '@/lib/auth/AuthenticatedRedirect';
 
 const TransactionsCategoryPieChart = dynamic(
   () => import('@/components/transactions/TransactionsCategoryPieChart'),

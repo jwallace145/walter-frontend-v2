@@ -3,7 +3,6 @@ import axios, { AxiosResponse } from 'axios';
 import { setCookie } from 'typescript-cookie';
 import { WALTER_API_TOKEN_NAME } from '@/pages/api/Constants';
 import { GetServerSideProps } from 'next';
-import { withAuthenticatedRedirect } from '@/lib/auth/AuthenticatedRedirect';
 import { withUnauthenticatedRedirect } from '@/lib/auth/UnauthenticatedRedirect';
 
 const SignIn: React.FC = (): React.ReactElement => {

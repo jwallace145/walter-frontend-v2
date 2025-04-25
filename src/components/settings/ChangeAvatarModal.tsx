@@ -10,6 +10,7 @@ import {
 } from '@headlessui/react';
 import Cropper from 'react-easy-crop';
 import { useDropzone } from 'react-dropzone';
+import { getCookie } from 'typescript-cookie';
 
 interface ChangeAvatarModalProps {
   open: boolean;
@@ -61,6 +62,9 @@ const ChangeAvatarModal: React.FC<ChangeAvatarModalProps> = ({
     fetch('/api/users/update-user', {
       method: 'PUT',
       body: formData,
+      headers: {
+        Authorization: `Bearer ${getCookie('WALTER_API_TOKEN')}`,
+      },
     })
       .then((response: Response) => response.json())
       .then((data): void => {

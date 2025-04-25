@@ -1,11 +1,10 @@
 'use client';
 
-import { Serie } from '@nivo/line';
 import React from 'react';
 
 import { Expense } from '@/lib/models/Expense';
 
-import PieChart from '../charts/PieChart';
+import PieChart, { PieSlice } from '../charts/PieChart';
 import LoadingSpinner from '../loading/LoadingSpinner';
 
 const TransactionsCategoryPieChart: React.FC<{
@@ -19,17 +18,20 @@ const TransactionsCategoryPieChart: React.FC<{
     }
 
     return Object.values(
-      transactions.reduce((categories: Record<string>, transaction: Expense): Serie[] => {
-        if (!categories[transaction.category]) {
-          categories[transaction.category] = {
-            id: transaction.category,
-            label: transaction.category,
-            value: transaction.amount,
-          };
-        }
-        categories[transaction.category].value += transaction.amount;
-        return categories;
-      }, {})
+      transactions.reduce(
+        (categories: Record<string, PieSlice>, transaction: Expense): Record<string, PieSlice> => {
+          if (!categories[transaction.category]) {
+            categories[transaction.category] = {
+              id: transaction.category,
+              label: transaction.category,
+              value: transaction.amount,
+            };
+          }
+          categories[transaction.category].value += transaction.amount;
+          return categories;
+        },
+        {}
+      )
     );
   };
 

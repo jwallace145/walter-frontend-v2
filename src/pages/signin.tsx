@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import axios, { AxiosResponse } from 'axios';
 import { setCookie } from 'typescript-cookie';
 import { WALTER_API_TOKEN_NAME } from '@/pages/api/Constants';
+import { GetServerSideProps } from 'next';
+import { withAuthenticatedRedirect } from '@/lib/auth/AuthenticatedRedirect';
+import { withUnauthenticatedRedirect } from '@/lib/auth/UnauthenticatedRedirect';
 
 const SignIn: React.FC = (): React.ReactElement => {
   const [loading, setLoading] = useState(false);
@@ -204,5 +207,7 @@ const SignIn: React.FC = (): React.ReactElement => {
     </>
   );
 };
+
+export const getServerSideProps: GetServerSideProps = withUnauthenticatedRedirect();
 
 export default SignIn;

@@ -13,6 +13,9 @@ import { PlusSmallIcon } from '@heroicons/react/20/solid';
 import AddTransactionForm from '@/components/transactions/AddTransactionForm';
 import { ChevronRightIcon, HomeIcon, ChartPieIcon } from '@heroicons/react/20/solid';
 import { ExpenseCategory, getExpenseCategory } from '@/lib/models/ExpenseCategory';
+import { GetServerSideProps } from 'next';
+import { withAuth, withAuthenticatedRedirect } from '@/lib/auth/AuthenticatedRedirect';
+import LoadingSpinner from '@/components/loading/LoadingSpinner';
 
 const TransactionsCategoryPieChart = dynamic(
   () => import('@/components/transactions/TransactionsCategoryPieChart'),
@@ -29,7 +32,11 @@ const pages = [
 const START_OF_THE_MONTH: string = dayjs().startOf('month').format('YYYY-MM-DD');
 const END_OF_THE_MONTH: string = dayjs().endOf('month').format('YYYY-MM-DD');
 
-export default function Transactions(): React.ReactElement {
+interface TransactionsProps {
+  user: User;
+}
+
+const Transactions: React.FC<TransactionsProps> = ({ user }): React.ReactElement => {
   const [loading, setLoading] = useState<boolean>(false);
   const [category, setCategory] = useState<ExpenseCategory | null>(null);
   const [currentDateRange, setCurrentDateRange] = useState<string>('This month');
@@ -149,5 +156,9 @@ export default function Transactions(): React.ReactElement {
     );
   };
 
-  return <AuthenticatedPageLayout pageName="transactions" content={getContent()} />;
-}
+  return <AuthenticatedPageLayout pageName="transactions" user={user} content={getContent()} />;
+};
+
+export const getServerSideProps: GetServerSideProps = withAuthenticatedRedirect();
+
+export default Transactions;

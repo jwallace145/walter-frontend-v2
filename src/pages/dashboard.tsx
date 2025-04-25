@@ -11,7 +11,7 @@ import PortfolioStockCards from '@/components/portfolio/PortfolioStockCards';
 import { PlusSmallIcon } from '@heroicons/react/20/solid';
 import AddPortfolioStockModal from '@/components/portfolio/AddPortfolioStockModal';
 import { User } from '@/lib/models/User';
-import { withAuth } from '@/lib/auth/Authentication';
+import { withAuth, withAuthenticatedRedirect } from '@/lib/auth/AuthenticatedRedirect';
 import { GetServerSideProps } from 'next';
 import LoadingSpinner from '@/components/loading/LoadingSpinner';
 
@@ -97,13 +97,9 @@ const Dashboard: React.FC<DashboardProps> = ({ user }): React.ReactElement => {
     );
   };
 
-  return user ? (
-    <AuthenticatedPageLayout pageName="dashboard" user={user} content={getContent()} />
-  ) : (
-    <LoadingSpinner />
-  );
+  return <AuthenticatedPageLayout pageName="dashboard" user={user} content={getContent()} />;
 };
 
-export const getServerSideProps: GetServerSideProps = withAuth();
+export const getServerSideProps: GetServerSideProps = withAuthenticatedRedirect();
 
 export default Dashboard;

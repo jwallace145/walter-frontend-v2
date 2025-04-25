@@ -25,6 +25,7 @@ import {
 } from '@heroicons/react/24/outline';
 import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/react/20/solid';
 import { User } from '@/lib/models/User';
+import LoadingSpinner from '@/components/loading/LoadingSpinner';
 
 const AUTHENTICATED_PAGES = [
   { name: 'Dashboard', href: 'dashboard', icon: ChartBarIcon },
@@ -50,19 +51,26 @@ interface AuthenticatedLayoutProps {
   content: React.ReactNode;
 }
 
-export default function AuthenticatedPageLayout(
-  props: AuthenticatedLayoutProps
-): React.ReactElement {
+const AuthenticatedPageLayout: React.FC<AuthenticatedLayoutProps> = ({
+  pageName,
+  user,
+  content,
+}): React.ReactElement => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const getNavigation = () => {
     return AUTHENTICATED_PAGES.map((item) => {
       return {
         ...item,
-        current: item.name.toLowerCase() === props.pageName.toLowerCase(),
+        current: item.name.toLowerCase() === pageName.toLowerCase(),
       };
     });
   };
+
+  // Display loading spinner until GetUser API has successfully returned an authenticated user
+  if (user === null || user === undefined) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <>
@@ -252,7 +260,7 @@ export default function AuthenticatedPageLayout(
                     <span className="sr-only">Open user menu</span>
                     <img
                       alt=""
-                      src={props.user.profile_picture_url}
+                      src={user.profile_picture_url}
                       className="size-8 rounded-full bg-gray-50"
                     />
                     <span className="hidden lg:flex lg:items-center">
@@ -260,7 +268,7 @@ export default function AuthenticatedPageLayout(
                         aria-hidden="true"
                         className="ml-4 text-sm/6 font-semibold text-gray-900"
                       >
-                        {props.user.username}
+                        {user.username}
                       </span>
                       <ChevronDownIcon aria-hidden="true" className="ml-2 size-5 text-gray-400" />
                     </span>
@@ -286,10 +294,12 @@ export default function AuthenticatedPageLayout(
           </div>
 
           <main className="py-10">
-            <div className="px-4 sm:px-6 lg:px-8">{props.content}</div>
+            <div className="px-4 sm:px-6 lg:px-8">{content}</div>
           </main>
         </div>
       </div>
     </>
   );
-}
+};
+
+export default AuthenticatedPageLayout;

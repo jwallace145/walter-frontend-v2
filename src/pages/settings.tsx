@@ -4,7 +4,7 @@ import AuthenticatedPageLayout from '@/layouts/AuthenticatedPageLayout';
 import React, { useRef } from 'react';
 import ChangeAvatarModal from '@/components/settings/ChangeAvatarModal';
 import { GetServerSideProps } from 'next';
-import { withAuth } from '@/lib/auth/Authentication';
+import { withAuth } from '@/lib/auth/AuthenticatedRedirect';
 import LoadingSpinner from '@/components/loading/LoadingSpinner';
 
 interface SettingsProps {

@@ -2,7 +2,7 @@ import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult
 import { User } from '@/lib/models/User';
 import { WALTER_API_ENDPOINT } from '@/pages/api/Constants';
 
-export function withAuth<T>(
+export function withAuthenticatedRedirect<T>(
   getServerSidePropsFunc?: GetServerSideProps<T & { user: User }>
 ): GetServerSideProps<T & { user: User }> {
   return async (

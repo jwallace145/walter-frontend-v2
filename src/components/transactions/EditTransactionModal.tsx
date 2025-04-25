@@ -15,7 +15,7 @@ const EditTransactionModal: React.FC<{
   open: boolean;
   setOpen: (open: boolean) => void;
   expense: Expense | null;
-}> = ({ open, setOpen, expense, onEditSuccess }): React.ReactElement => {
+}> = ({ open, setOpen, expense }): React.ReactElement => {
   const [date, setDate] = useState(expense?.date || '');
   const [vendor, setVendor] = useState(expense?.vendor || '');
   const [amount, setAmount] = useState(expense?.amount || '');

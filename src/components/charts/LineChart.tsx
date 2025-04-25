@@ -1,9 +1,9 @@
 'use client';
 
-import { ResponsiveLine } from '@nivo/line';
+import { ResponsiveLine, Serie } from '@nivo/line';
 import React from 'react';
 
-const LineChart = ({ data }): React.ReactElement => {
+const LineChart: React.FC<{ data: Serie[] }> = ({ data }): React.ReactElement => {
   return (
     <ResponsiveLine
       data={data}

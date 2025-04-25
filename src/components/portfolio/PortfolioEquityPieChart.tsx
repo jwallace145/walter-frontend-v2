@@ -25,7 +25,11 @@ const PortfolioEquityPieChart: React.FC<{ loading: boolean; stocks: PortfolioSto
 
   return (
     <div className="h-96 bg-white rounded-2xl p-6 shadow-md">
-      {loading ? <LoadingSpinner /> : <PieChart data={getPortfolioStockEquities()} />}
+      {loading ? (
+        <LoadingSpinner />
+      ) : (
+        <PieChart data={getPortfolioStockEquities()} onClick={(): void => console.log('clicked')} />
+      )}
     </div>
   );
 };

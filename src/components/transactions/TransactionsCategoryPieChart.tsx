@@ -1,5 +1,6 @@
 'use client';
 
+import { Serie } from '@nivo/line';
 import React from 'react';
 
 import { Expense } from '@/lib/models/Expense';
@@ -18,7 +19,7 @@ const TransactionsCategoryPieChart: React.FC<{
     }
 
     return Object.values(
-      transactions.reduce((categories, transaction) => {
+      transactions.reduce((categories: Record<string>, transaction: Expense): Serie[] => {
         if (!categories[transaction.category]) {
           categories[transaction.category] = {
             id: transaction.category,

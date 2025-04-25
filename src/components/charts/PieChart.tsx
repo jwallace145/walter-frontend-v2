@@ -1,20 +1,21 @@
 'use client';
 
+import { Serie } from '@nivo/line';
 import { ResponsivePie } from '@nivo/pie';
 import React from 'react';
 
 import { US_DOLLAR } from '@/lib/constants/Constants';
 
 interface PieChartProps {
-  data: any;
-  onClick: (slice) => void;
+  data: Serie[];
+  onClick: (slice: string) => void;
 }
 
 const PieChart: React.FC<PieChartProps> = ({ data, onClick }): React.ReactElement => {
   return (
     <ResponsivePie
       data={data}
-      onClick={(slice): void => onClick(slice.label)}
+      onClick={(slice): void => onClick(slice.label as string)}
       valueFormat={(value: number): string => `${US_DOLLAR.format(value)}`}
       colors={{ scheme: 'yellow_green_blue' }}
       margin={{ top: 40, right: 80, bottom: 80, left: 80 }}

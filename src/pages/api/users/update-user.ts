@@ -1,4 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
+
 import { WalterAPI } from '@/lib/api/WalterAPI';
 
 export const config = {

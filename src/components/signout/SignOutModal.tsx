@@ -1,13 +1,13 @@
 'use client';
 
-import React from 'react';
 import {
   Dialog,
   DialogBackdrop,
+  DialogDescription,
   DialogPanel,
   DialogTitle,
-  DialogDescription,
 } from '@headlessui/react';
+import React from 'react';
 import { removeCookie } from 'typescript-cookie';
 
 interface SignOutModalProps {
@@ -56,9 +56,9 @@ const SignOutModal: React.FC<SignOutModalProps> = ({ open, setOpen }): React.Rea
                 <button
                   type="button"
                   onClick={(): void => setOpen(false)}
-                  className="inline-flex w-full justify-center rounded-md bg-gray-200 px-4 py-2 text-sm font-semibold text-gray-800 shadow-sm hover:bg-gray-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-400"
+                  className="inline-flex w-full justify-center rounded-md bg-gray-200 px-4 py-2 text-sm font-semibold text-gray-800 shadow-sm hover:bg-gray-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-400 aria-label=Cancel sign-out action"
                 >
-                  aria-label="Cancel sign-out action" Cancel
+                  Cancel
                 </button>
               </div>
             </form>

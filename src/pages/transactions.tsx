@@ -1,20 +1,21 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
-import AuthenticatedPageLayout from '@/layouts/AuthenticatedPageLayout';
-import { getCookie } from 'typescript-cookie';
-import { WALTER_API_TOKEN_NAME } from '@/pages/api/Constants';
-import dayjs from 'dayjs';
-import PaginatedTransactionsList from '@/components/transactions/PaginatedTransactionsList';
-import { Expense } from '@/lib/models/Expense';
-import dynamic from 'next/dynamic';
-import TransactionStats from '@/components/transactions/TransactionsStats';
 import { PlusSmallIcon } from '@heroicons/react/20/solid';
-import AddTransactionForm from '@/components/transactions/AddTransactionForm';
-import { ChevronRightIcon, ChartPieIcon } from '@heroicons/react/20/solid';
-import { ExpenseCategory, getExpenseCategory } from '@/lib/models/ExpenseCategory';
+import { ChartPieIcon, ChevronRightIcon } from '@heroicons/react/20/solid';
+import dayjs from 'dayjs';
 import { GetServerSideProps } from 'next';
+import dynamic from 'next/dynamic';
+import React, { useEffect, useState } from 'react';
+import { getCookie } from 'typescript-cookie';
+
+import AddTransactionForm from '@/components/transactions/AddTransactionForm';
+import PaginatedTransactionsList from '@/components/transactions/PaginatedTransactionsList';
+import TransactionStats from '@/components/transactions/TransactionsStats';
+import AuthenticatedPageLayout from '@/layouts/AuthenticatedPageLayout';
 import { withAuthenticatedRedirect } from '@/lib/auth/AuthenticatedRedirect';
+import { Expense } from '@/lib/models/Expense';
+import { ExpenseCategory, getExpenseCategory } from '@/lib/models/ExpenseCategory';
+import { WALTER_API_TOKEN_NAME } from '@/pages/api/Constants';
 
 const TransactionsCategoryPieChart = dynamic(
   () => import('@/components/transactions/TransactionsCategoryPieChart'),

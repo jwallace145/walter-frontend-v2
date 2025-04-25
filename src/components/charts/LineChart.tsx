@@ -1,7 +1,7 @@
 'use client';
 
-import React from 'react';
 import { ResponsiveLine } from '@nivo/line';
+import React from 'react';
 
 const LineChart = ({ data }): React.ReactElement => {
   return (

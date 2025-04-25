@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
 import { EllipsisVerticalIcon } from '@heroicons/react/20/solid';
-import { Expense } from '@/lib/models/Expense';
-import { US_DOLLAR } from '@/lib/constants/Constants';
+import React, { useState } from 'react';
+
 import DeleteTransactionModal from '@/components/transactions/DeleteTransactionModal';
 import EditTransactionModal from '@/components/transactions/EditTransactionModal';
+import { US_DOLLAR } from '@/lib/constants/Constants';
+import { Expense } from '@/lib/models/Expense';
 
 const TransactionsList: React.FC<{ expenses: Expense[] }> = ({ expenses }): React.ReactElement => {
   const [selectedExpense, setSelectedExpense] = useState<Expense | null>(null);

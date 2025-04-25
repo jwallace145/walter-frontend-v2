@@ -1,4 +1,5 @@
 import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next';
+
 import { User } from '@/lib/models/User';
 import { WALTER_API_ENDPOINT } from '@/pages/api/Constants';
 

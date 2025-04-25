@@ -1,5 +1,6 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
 import axios, { AxiosResponse } from 'axios';
+import type { NextApiRequest, NextApiResponse } from 'next';
+
 import { WALTER_API_ENDPOINT } from '@/pages/api/Constants';
 
 async function getPrices(request: NextApiRequest) {

@@ -1,7 +1,9 @@
 import React from 'react';
-import LineChart from '../charts/LineChart';
-import { Price } from '@/lib/models/Price';
+
 import LoadingSpinner from '@/components/loading/LoadingSpinner';
+import { Price } from '@/lib/models/Price';
+
+import LineChart from '../charts/LineChart';
 
 const data: any = [
   {

@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
 import axios, { AxiosResponse } from 'axios';
 import { GetServerSideProps } from 'next';
+import React, { useState } from 'react';
+
 import { withUnauthenticatedRedirect } from '@/lib/auth/UnauthenticatedRedirect';
 
 const Registration: React.FC = (): React.ReactElement => {

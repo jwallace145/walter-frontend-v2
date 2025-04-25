@@ -1,6 +1,5 @@
 'use client';
 
-import React, { useState } from 'react';
 import {
   Dialog,
   DialogBackdrop,
@@ -8,6 +7,8 @@ import {
   DialogPanel,
   DialogTitle,
 } from '@headlessui/react';
+import React, { useState } from 'react';
+
 import { Expense } from '@/lib/models/Expense';
 
 const DeleteTransactionModal: React.FC<{

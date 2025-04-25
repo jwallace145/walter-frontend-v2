@@ -1,13 +1,14 @@
 'use client';
 
-import React, { useState } from 'react';
 import {
   Dialog,
   DialogBackdrop,
+  DialogDescription,
   DialogPanel,
   DialogTitle,
-  DialogDescription,
 } from '@headlessui/react';
+import React, { useState } from 'react';
+
 import { PortfolioStock } from '@/lib/models/PortfolioStock';
 
 interface DeletePortfolioStockModalProps {

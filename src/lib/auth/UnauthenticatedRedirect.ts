@@ -1,6 +1,7 @@
 import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next';
-import { WALTER_API_ENDPOINT, WALTER_API_TOKEN_NAME } from '@/pages/api/Constants';
+
 import { User } from '@/lib/models/User'; // Assume this is your GetUser function
+import { WALTER_API_ENDPOINT, WALTER_API_TOKEN_NAME } from '@/pages/api/Constants';
 
 export function withUnauthenticatedRedirect<T>(
   getServerSidePropsFunc?: GetServerSideProps<T>

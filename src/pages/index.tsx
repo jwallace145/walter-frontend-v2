@@ -1,9 +1,11 @@
 'use client';
 
-import React, { useState } from 'react';
 import { Dialog, DialogPanel } from '@headlessui/react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 import { GetServerSideProps } from 'next';
+import Link from 'next/link';
+import React, { useState } from 'react';
+
 import { withUnauthenticatedRedirect } from '@/lib/auth/UnauthenticatedRedirect';
 
 const navigation = [
@@ -48,9 +50,9 @@ const LandingPage: React.FC = (): React.ReactElement => {
             ))}
           </div>
           <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-            <a href="/signin" className="text-sm/6 font-semibold text-gray-900">
+            <Link href="/signin" className="text-sm/6 font-semibold text-gray-900">
               Sign in <span aria-hidden="true">&rarr;</span>
-            </a>
+            </Link>
           </div>
         </nav>
         <Dialog open={mobileMenuOpen} onClose={setMobileMenuOpen} className="lg:hidden">
@@ -125,12 +127,12 @@ const LandingPage: React.FC = (): React.ReactElement => {
               without lifting a finger.
             </p>
             <div className="mt-10 flex items-center justify-center gap-x-6">
-              <a
+              <Link
                 href="/registration"
                 className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
                 Get started
-              </a>
+              </Link>
               <a href="pricing" className="text-sm/6 font-semibold text-gray-900">
                 Learn more <span aria-hidden="true">→</span>
               </a>

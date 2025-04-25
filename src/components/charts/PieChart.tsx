@@ -1,7 +1,8 @@
 'use client';
 
-import React from 'react';
 import { ResponsivePie } from '@nivo/pie';
+import React from 'react';
+
 import { US_DOLLAR } from '@/lib/constants/Constants';
 
 interface PieChartProps {

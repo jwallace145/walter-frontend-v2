@@ -1,6 +1,5 @@
 'use client';
 
-import React, { useState } from 'react';
 import {
   Dialog,
   DialogBackdrop,
@@ -11,6 +10,7 @@ import {
   MenuItems,
   TransitionChild,
 } from '@headlessui/react';
+import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/react/20/solid';
 import {
   BanknotesIcon,
   Bars3Icon,
@@ -23,10 +23,11 @@ import {
   PresentationChartLineIcon,
   XMarkIcon,
 } from '@heroicons/react/24/outline';
-import { ChevronDownIcon, MagnifyingGlassIcon } from '@heroicons/react/20/solid';
-import { User } from '@/lib/models/User';
+import React, { useState } from 'react';
+
 import LoadingSpinner from '@/components/loading/LoadingSpinner';
 import SignOutModal from '@/components/signout/SignOutModal';
+import { User } from '@/lib/models/User';
 
 const AUTHENTICATED_PAGES = [
   { name: 'Dashboard', href: 'dashboard', icon: ChartBarIcon },

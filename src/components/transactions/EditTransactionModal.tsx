@@ -1,6 +1,5 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
 import {
   Dialog,
   DialogBackdrop,
@@ -8,6 +7,8 @@ import {
   DialogPanel,
   DialogTitle,
 } from '@headlessui/react';
+import React, { useEffect, useState } from 'react';
+
 import { Expense } from '@/lib/models/Expense';
 
 const EditTransactionModal: React.FC<{

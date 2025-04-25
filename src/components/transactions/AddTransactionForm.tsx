@@ -1,13 +1,13 @@
 'use client';
 
-import React, { useState } from 'react';
 import {
   Dialog,
   DialogBackdrop,
+  DialogDescription,
   DialogPanel,
   DialogTitle,
-  DialogDescription,
 } from '@headlessui/react';
+import React, { useState } from 'react';
 
 const AddTransactionForm: React.FC = (): React.ReactElement => {
   const [open, setOpen] = useState(true);

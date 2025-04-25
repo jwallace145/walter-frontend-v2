@@ -1,9 +1,11 @@
 'use client';
 
 import React from 'react';
+
+import { Expense } from '@/lib/models/Expense';
+
 import PieChart from '../charts/PieChart';
 import LoadingSpinner from '../loading/LoadingSpinner';
-import { Expense } from '@/lib/models/Expense';
 
 const TransactionsCategoryPieChart: React.FC<{
   loading: boolean;

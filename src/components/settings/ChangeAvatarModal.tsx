@@ -1,15 +1,15 @@
 'use client';
 
-import React, { useCallback, useState } from 'react';
 import {
   Dialog,
   DialogBackdrop,
+  DialogDescription,
   DialogPanel,
   DialogTitle,
-  DialogDescription,
 } from '@headlessui/react';
-import Cropper from 'react-easy-crop';
+import React, { useCallback, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
+import Cropper from 'react-easy-crop';
 import { getCookie } from 'typescript-cookie';
 
 interface ChangeAvatarModalProps {

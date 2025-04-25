@@ -1,8 +1,10 @@
 'use client';
 
 import React from 'react';
-import PieChart from '../charts/PieChart';
+
 import { PortfolioStock } from '@/lib/models/PortfolioStock';
+
+import PieChart from '../charts/PieChart';
 import LoadingSpinner from '../loading/LoadingSpinner';
 
 const PortfolioEquityPieChart: React.FC<{ loading: boolean; stocks: PortfolioStock[] }> = ({

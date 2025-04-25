@@ -1,11 +1,12 @@
 'use client';
 
-import AuthenticatedPageLayout from '@/layouts/AuthenticatedPageLayout';
-import React from 'react';
-import ChangeAvatarModal from '@/components/settings/ChangeAvatarModal';
 import { GetServerSideProps } from 'next';
-import { withAuthenticatedRedirect } from '@/lib/auth/AuthenticatedRedirect';
+import React from 'react';
+
 import LoadingSpinner from '@/components/loading/LoadingSpinner';
+import ChangeAvatarModal from '@/components/settings/ChangeAvatarModal';
+import AuthenticatedPageLayout from '@/layouts/AuthenticatedPageLayout';
+import { withAuthenticatedRedirect } from '@/lib/auth/AuthenticatedRedirect';
 import { User } from '@/lib/models/User';
 
 interface SettingsProps {

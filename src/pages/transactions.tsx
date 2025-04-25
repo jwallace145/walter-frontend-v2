@@ -15,6 +15,7 @@ import AuthenticatedPageLayout from '@/layouts/AuthenticatedPageLayout';
 import { withAuthenticatedRedirect } from '@/lib/auth/AuthenticatedRedirect';
 import { Expense } from '@/lib/models/Expense';
 import { ExpenseCategory, getExpenseCategory } from '@/lib/models/ExpenseCategory';
+import { User } from '@/lib/models/User';
 import { WALTER_API_TOKEN_NAME } from '@/pages/api/Constants';
 
 const TransactionsCategoryPieChart = dynamic(

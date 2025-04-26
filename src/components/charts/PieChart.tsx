@@ -1,9 +1,13 @@
 'use client';
 
-import { ResponsivePie } from '@nivo/pie';
+import dynamic from 'next/dynamic';
 import React from 'react';
 
 import { US_DOLLAR } from '@/lib/constants/Constants';
+
+const ResponsivePie = dynamic(() => import('@nivo/pie').then((mod) => mod.ResponsivePie), {
+  ssr: false,
+});
 
 export interface PieSlice {
   id: string;

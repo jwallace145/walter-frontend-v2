@@ -2,29 +2,19 @@
 
 import { PlusSmallIcon } from '@heroicons/react/20/solid';
 import { GetServerSideProps } from 'next';
-import dynamic from 'next/dynamic';
 import React, { useEffect, useState } from 'react';
 import { getCookie } from 'typescript-cookie';
 
 import AddPortfolioStockModal from '@/components/portfolio/AddPortfolioStockModal';
+import PortfolioEquityPieChart from '@/components/portfolio/PortfolioEquityPieChart';
 import PortfolioStockCards from '@/components/portfolio/PortfolioStockCards';
+import StockLineChart from '@/components/stock/StockLineChart';
 import AuthenticatedPageLayout from '@/layouts/AuthenticatedPageLayout';
 import { withAuthenticatedRedirect } from '@/lib/auth/AuthenticatedRedirect';
 import { PortfolioStock } from '@/lib/models/PortfolioStock';
 import { Price } from '@/lib/models/Price';
 import { User } from '@/lib/models/User';
 import { WALTER_API_TOKEN_NAME } from '@/pages/api/Constants';
-
-const PortfolioEquityPieChart = dynamic(
-  () => import('@/components/portfolio/PortfolioEquityPieChart'),
-  {
-    ssr: false,
-  }
-);
-
-const StockLineChart = dynamic(() => import('@/components/stock/StockLineChart'), {
-  ssr: false,
-});
 
 interface DashboardProps {
   user: User;

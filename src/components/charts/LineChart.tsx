@@ -1,7 +1,12 @@
 'use client';
 
-import { ResponsiveLine, Serie } from '@nivo/line';
+import { Serie } from '@nivo/line';
+import dynamic from 'next/dynamic';
 import React from 'react';
+
+const ResponsiveLine = dynamic(() => import('@nivo/line').then((mod) => mod.ResponsiveLine), {
+  ssr: false,
+});
 
 const LineChart: React.FC<{ data: Serie[] }> = ({ data }): React.ReactElement => {
   return (

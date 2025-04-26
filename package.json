@@ -13,10 +13,10 @@
   "dependencies": {
     "@headlessui/react": "^2.2.2",
     "@heroicons/react": "^2.2.0",
-    "@nivo/bar": "^0.89.1",
-    "@nivo/core": "^0.89.1",
-    "@nivo/line": "^0.89.1",
-    "@nivo/pie": "^0.89.1",
+    "@nivo/bar": "0.89.1",
+    "@nivo/core": "0.89.1",
+    "@nivo/line": "0.89.1",
+    "@nivo/pie": "0.89.1",
     "autoprefixer": "^10.4.21",
     "axios": "^1.8.4",
     "d3": "^7.9.0",
@@ -54,5 +54,11 @@
     "prettier": "^3.5.3",
     "tailwindcss": "^4.1.4",
     "typescript": "^5"
+  },
+  "pnpm": {
+    "overrides": {
+      "@types/react": "19.0.1",
+      "@types/react-dom": "19.0.2"
+    }
   }
 }

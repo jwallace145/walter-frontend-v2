@@ -1,28 +1,61 @@
-'use client';
-
 import { PlusSmallIcon } from '@heroicons/react/20/solid';
-import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next';
-import React, { useState } from 'react';
+import { GetServerSideProps } from 'next';
+import dynamic from 'next/dynamic';
+import React, { useEffect, useState } from 'react';
+import { getCookie } from 'typescript-cookie';
 
 import AddPortfolioStockModal from '@/components/portfolio/AddPortfolioStockModal';
-import PortfolioEquityPieChart from '@/components/portfolio/PortfolioEquityPieChart';
 import PortfolioStockCards from '@/components/portfolio/PortfolioStockCards';
 import StockLineChart from '@/components/stock/StockLineChart';
 import AuthenticatedPageLayout from '@/layouts/AuthenticatedPageLayout';
-import { WalterAPI } from '@/lib/api/WalterAPI';
 import { withAuthenticatedRedirect } from '@/lib/auth/AuthenticatedRedirect';
 import { WALTER_API_TOKEN_NAME } from '@/lib/constants/Constants';
-import { Portfolio } from '@/lib/models/Portfolio';
 import { PortfolioStock } from '@/lib/models/PortfolioStock';
 import { Price } from '@/lib/models/Price';
 import { User } from '@/lib/models/User';
 
-const Dashboard: React.FC<DashboardProps & { user: User }> = ({
-  user,
-  stocks,
-  prices,
-}): React.ReactElement => {
+const PortfolioEquityPieChart = dynamic(
+  () => import('@/components/portfolio/PortfolioEquityPieChart'),
+  { ssr: false }
+);
+
+const Dashboard: React.FC<{ user: User }> = ({ user }): React.ReactElement => {
+  const [getPortfolioLoading, setGetPortfolioLoading] = useState<boolean>(false);
+  const [getPricesLoading, setGetPricesLoading] = useState<boolean>(false);
+  const [stocks, setStocks] = useState<PortfolioStock[]>([]);
+  const [prices, setPrices] = useState<Price[]>([]);
   const [openAddStockModal, setOpenAddStockModal] = useState<boolean>(false);
+
+  useEffect((): void => {
+    getPortfolio();
+    getPrices();
+  }, []);
+
+  const getPortfolio: () => void = (): void => {
+    setGetPortfolioLoading(true);
+    fetch('/api/portfolios/get-portfolio', {
+      headers: {
+        Authorization: `Bearer ${getCookie(WALTER_API_TOKEN_NAME)}`,
+      },
+    })
+      .then((response: Response) => response.json())
+      .then((data): void => {
+        setStocks(data.stocks);
+      })
+      .catch((error): void => console.error('Error:', error))
+      .finally((): void => setGetPortfolioLoading(false));
+  };
+
+  const getPrices: () => void = (): void => {
+    setGetPricesLoading(true);
+    fetch('/api/prices/get-prices?stock=AAPL&start_date=2025-04-01&end_date=2025-04-30')
+      .then((response: Response) => response.json())
+      .then((data): void => {
+        setPrices(data.prices);
+      })
+      .catch((error: any): void => console.error('Error:', error))
+      .finally((): void => setGetPricesLoading(false));
+  };
 
   const getContent = (): React.ReactElement => (
     <>
@@ -30,10 +63,10 @@ const Dashboard: React.FC<DashboardProps & { user: User }> = ({
         <h1 className="text-2xl font-bold mb-4">Your Portfolio Allocation</h1>
         <div className="flex flex-col gap-6 md:flex-row">
           <div className="flex-1">
-            <PortfolioEquityPieChart stocks={stocks} loading={false} />
+            <PortfolioEquityPieChart stocks={stocks} loading={getPortfolioLoading} />
           </div>
           <div className="flex-1">
-            <StockLineChart prices={prices} loading={false} />
+            <StockLineChart prices={[]} loading={false} />
           </div>
         </div>
         <div className="pt-4">
@@ -54,26 +87,7 @@ const Dashboard: React.FC<DashboardProps & { user: User }> = ({
   return <AuthenticatedPageLayout pageName="dashboard" user={user} content={getContent()} />;
 };
 
-interface DashboardProps {
-  stocks: PortfolioStock[];
-  prices: Price[];
-}
-
-export const getServerSideProps: GetServerSideProps<DashboardProps & { user: User }> =
-  withAuthenticatedRedirect<DashboardProps>(
-    async (
-      context: GetServerSidePropsContext
-    ): Promise<GetServerSidePropsResult<DashboardProps & { user: User }>> => {
-      const token: string = context.req.cookies[WALTER_API_TOKEN_NAME] || '';
-      const portfolio: Portfolio = await WalterAPI.getPortfolio(token);
-      const prices: Price[] = await WalterAPI.getPrices('AAPL', '2025-04-01', '2025-04-25');
-      return {
-        props: {
-          stocks: portfolio.stocks,
-          prices: prices,
-        },
-      } as GetServerSidePropsResult<DashboardProps & { user: User }>;
-    }
-  );
+// TODO: Combine withAuthenticatedRedirect and withUnauthenticatedRedirect with boolean method arg for authenticated page
+export const getServerSideProps: GetServerSideProps = withAuthenticatedRedirect();
 
 export default Dashboard;

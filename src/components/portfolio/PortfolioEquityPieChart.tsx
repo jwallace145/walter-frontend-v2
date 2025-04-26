@@ -1,6 +1,6 @@
 'use client';
 
-import { ChartPieIcon } from '@heroicons/react/24/outline'; // Icon import
+import { ChartPieIcon } from '@heroicons/react/24/outline';
 import React, { useMemo } from 'react';
 
 import { PortfolioStock } from '@/lib/models/PortfolioStock';
@@ -12,7 +12,7 @@ const PortfolioEquityPieChart: React.FC<{ loading: boolean; stocks: PortfolioSto
   loading,
   stocks,
 }): React.ReactElement => {
-  const pieData: PieSlice[] = useMemo(() => {
+  const pieData: PieSlice[] = useMemo((): PieSlice[] => {
     if (loading || !stocks || stocks.length === 0) {
       return [];
     }
@@ -47,7 +47,7 @@ const PortfolioEquityPieChart: React.FC<{ loading: boolean; stocks: PortfolioSto
 
   return (
     <div className="h-96 bg-white rounded-2xl p-6 shadow-md">
-      <PieChart data={pieData} onClick={(): void => console.log('clicked')} />
+      <PieChart data={pieData} onClick={(): void => {}} />
     </div>
   );
 };

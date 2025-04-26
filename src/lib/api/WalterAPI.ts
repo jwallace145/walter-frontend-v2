@@ -7,6 +7,7 @@ import { getCookie } from 'typescript-cookie';
 
 import { Expense } from '@/lib/models/Expense';
 import { Portfolio } from '@/lib/models/Portfolio';
+import { Price } from '@/lib/models/Price';
 import { User } from '@/lib/models/User';
 
 /**
@@ -74,7 +75,23 @@ export class WalterAPI {
       headers: {
         Authorization: `Bearer ${token}`,
       },
-    }).then((response: AxiosResponse) => response.data);
+    }).then((response: AxiosResponse) => response.data.Data);
+  }
+
+  public static async getPrices(
+    stock: string,
+    startDate: string,
+    endDate: string
+  ): Promise<Price[]> {
+    return axios({
+      method: 'GET',
+      url: `${this.ENDPOINT}/prices`,
+      params: {
+        stock: stock,
+        start_date: startDate,
+        end_date: endDate,
+      },
+    }).then((response: AxiosResponse) => response.data.Data.prices);
   }
 
   public static async getTransactions(

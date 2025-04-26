@@ -5,6 +5,7 @@ import fs from 'fs';
 import { IncomingMessage } from 'http';
 import { getCookie } from 'typescript-cookie';
 
+import { WALTER_API_TOKEN_NAME } from '@/lib/constants/Constants';
 import { Expense } from '@/lib/models/Expense';
 import { Portfolio } from '@/lib/models/Portfolio';
 import { Price } from '@/lib/models/Price';
@@ -17,8 +18,7 @@ import { User } from '@/lib/models/User';
  * Next.js API routes use this class to route API requests to WalterBackend.
  */
 export class WalterAPI {
-  private static readonly ENDPOINT: string = process.env.NEXT_PUBLIC_WALTER_API_ENDPOINT as string;
-  static readonly TOKEN_NAME: string = 'WALTER_API_TOKEN';
+  static readonly ENDPOINT: string = process.env.NEXT_PUBLIC_WALTER_API_ENDPOINT as string;
 
   public static async authUser(email: string, password: string): Promise<any> {
     return axios({
@@ -31,14 +31,14 @@ export class WalterAPI {
     }).then((response: AxiosResponse) => response.data);
   }
 
-  public static async getUser(): Promise<User> {
+  public static async getUser(token: string): Promise<User> {
     return await axios({
       method: 'GET',
       url: `${this.ENDPOINT}/users`,
       headers: {
-        Authorization: `Bearer ${this.getToken()}`,
+        Authorization: `Bearer ${token}`,
       },
-    }).then((response: AxiosResponse) => response.data);
+    }).then((response: AxiosResponse) => response.data.Data);
   }
 
   public static async updateUser(request: IncomingMessage): Promise<any> {
@@ -160,7 +160,7 @@ export class WalterAPI {
     token: string,
     expenseId: string,
     date: string
-  ): Promise<any> {
+  ): Promise<void> {
     axios({
       method: 'DELETE',
       url: `${this.ENDPOINT}/expenses`,
@@ -170,6 +170,33 @@ export class WalterAPI {
       data: {
         date: date,
         expense_id: expenseId,
+      },
+    }).then((response: AxiosResponse) => response.data);
+  }
+
+  public static async addStock(token: string, stock: string, quantity: string): Promise<void> {
+    axios({
+      method: 'POST',
+      url: `${this.ENDPOINT}/stocks`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      data: {
+        stock: stock,
+        quantity: quantity,
+      },
+    }).then((response: AxiosResponse) => response.data);
+  }
+
+  public static async deleteStock(token: string, stock: string): Promise<void> {
+    axios({
+      method: 'DELETE',
+      url: `${this.ENDPOINT}/stocks`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      data: {
+        stock: stock,
       },
     }).then((response: AxiosResponse) => response.data);
   }
@@ -214,6 +241,6 @@ export class WalterAPI {
    * requests.
    */
   public static getToken(): string {
-    return getCookie(WalterAPI.TOKEN_NAME) || '';
+    return getCookie(WALTER_API_TOKEN_NAME) || '';
   }
 }

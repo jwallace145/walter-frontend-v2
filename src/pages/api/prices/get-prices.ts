@@ -1,25 +1,18 @@
-import axios, { AxiosResponse } from 'axios';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
-import { WALTER_API_ENDPOINT } from '@/pages/api/Constants';
-
-async function getPrices(request: NextApiRequest) {
-  const { stock, start_date, end_date } = request.query;
-  const response: AxiosResponse = await axios({
-    method: 'GET',
-    url: `${WALTER_API_ENDPOINT}/prices`,
-    params: {
-      stock: stock,
-      start_date: start_date,
-      end_date: end_date,
-    },
-  });
-  return response.data;
-}
+import { WalterAPI } from '@/lib/api/WalterAPI';
 
 export default async function handler(
   request: NextApiRequest,
   response: NextApiResponse
 ): Promise<void> {
-  response.status(200).json(await getPrices(request));
+  response
+    .status(200)
+    .json(
+      await WalterAPI.getPrices(
+        request.query.stock as string,
+        request.query.start_date as string,
+        request.query.end_date as string
+      )
+    );
 }

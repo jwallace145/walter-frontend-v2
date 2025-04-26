@@ -7,7 +7,8 @@ export default async function handler(
   response: NextApiResponse
 ): Promise<void> {
   try {
-    response.status(200).json(await WalterAPI.getUser());
+    const token: string = request.cookies.WALTER_API_TOKEN || '';
+    response.status(200).json(await WalterAPI.getUser(token));
   } catch (error) {
     console.error('Error while fetching user:', error);
     const status = (error as any).response?.status || 500;

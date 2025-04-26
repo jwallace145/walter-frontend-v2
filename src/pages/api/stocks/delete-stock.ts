@@ -1,31 +1,14 @@
-import axios, { AxiosResponse } from 'axios';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
-import { WALTER_API_ENDPOINT } from '@/pages/api/Constants';
-
-async function deleteStock(request: NextApiRequest) {
-  const token: string = request.cookies?.WALTER_API_TOKEN || '';
-  const response: AxiosResponse = await axios({
-    method: 'DELETE',
-    url: `${WALTER_API_ENDPOINT}/stocks`,
-    headers: {
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json',
-    },
-    data: {
-      stock: request.body.stock,
-    },
-  });
-  return response.data;
-}
+import { WalterAPI } from '@/lib/api/WalterAPI';
 
 export default async function handler(
   request: NextApiRequest,
   response: NextApiResponse
 ): Promise<void> {
   try {
-    const data = await deleteStock(request);
-    response.status(200).json(data);
+    const token: string = request.cookies.WALTER_API_TOKEN || '';
+    response.status(200).json(await WalterAPI.deleteStock(token, request.body.stock));
   } catch (error) {
     const status = (error as any).response?.status || 500;
     const message = (error as any).response?.data || 'Internal Server Error';

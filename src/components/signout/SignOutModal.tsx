@@ -10,12 +10,12 @@ import {
 import React from 'react';
 import { removeCookie } from 'typescript-cookie';
 
+import { WALTER_API_TOKEN_NAME } from '@/lib/constants/Constants';
+
 interface SignOutModalProps {
   open: boolean;
   setOpen: (open: boolean) => void;
 }
-
-const WALTER_API_TOKEN_NAME = 'WALTER_API_TOKEN';
 
 const SignOutModal: React.FC<SignOutModalProps> = ({ open, setOpen }): React.ReactElement => {
   const handleSignOut = (e: React.FormEvent) => {

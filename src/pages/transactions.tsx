@@ -13,10 +13,10 @@ import PaginatedTransactionsList from '@/components/transactions/PaginatedTransa
 import TransactionStats from '@/components/transactions/TransactionsStats';
 import AuthenticatedPageLayout from '@/layouts/AuthenticatedPageLayout';
 import { withAuthenticatedRedirect } from '@/lib/auth/AuthenticatedRedirect';
+import { WALTER_API_TOKEN_NAME } from '@/lib/constants/Constants';
 import { Expense } from '@/lib/models/Expense';
 import { ExpenseCategory, getExpenseCategory } from '@/lib/models/ExpenseCategory';
 import { User } from '@/lib/models/User';
-import { WALTER_API_TOKEN_NAME } from '@/pages/api/Constants';
 
 const TransactionsCategoryPieChart = dynamic(
   () => import('@/components/transactions/TransactionsCategoryPieChart'),

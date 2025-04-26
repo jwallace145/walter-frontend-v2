@@ -1,7 +1,7 @@
 'use client';
 
 import { PlusSmallIcon } from '@heroicons/react/20/solid';
-import { GetServerSideProps } from 'next';
+import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next';
 import React, { useState } from 'react';
 
 import AddPortfolioStockModal from '@/components/portfolio/AddPortfolioStockModal';
@@ -11,18 +11,17 @@ import StockLineChart from '@/components/stock/StockLineChart';
 import AuthenticatedPageLayout from '@/layouts/AuthenticatedPageLayout';
 import { WalterAPI } from '@/lib/api/WalterAPI';
 import { withAuthenticatedRedirect } from '@/lib/auth/AuthenticatedRedirect';
+import { WALTER_API_TOKEN_NAME } from '@/lib/constants/Constants';
 import { Portfolio } from '@/lib/models/Portfolio';
 import { PortfolioStock } from '@/lib/models/PortfolioStock';
 import { Price } from '@/lib/models/Price';
 import { User } from '@/lib/models/User';
 
-interface DashboardProps {
-  user: User;
-  stocks: PortfolioStock[];
-  prices: Price[];
-}
-
-const Dashboard: React.FC<DashboardProps> = ({ user, stocks, prices }): React.ReactElement => {
+const Dashboard: React.FC<DashboardProps & { user: User }> = ({
+  user,
+  stocks,
+  prices,
+}): React.ReactElement => {
   const [openAddStockModal, setOpenAddStockModal] = useState<boolean>(false);
 
   const getContent = (): React.ReactElement => (
@@ -55,16 +54,26 @@ const Dashboard: React.FC<DashboardProps> = ({ user, stocks, prices }): React.Re
   return <AuthenticatedPageLayout pageName="dashboard" user={user} content={getContent()} />;
 };
 
-export const getServerSideProps: GetServerSideProps = withAuthenticatedRedirect(async (context) => {
-  const token: string = context.req.cookies[WalterAPI.TOKEN_NAME] || '';
-  const portfolio: Portfolio = await WalterAPI.getPortfolio(token);
-  const prices: Price[] = await WalterAPI.getPrices('AAPL', '2025-04-01', '2025-04-25');
-  return {
-    props: {
-      stocks: portfolio.stocks,
-      prices: prices,
-    },
-  };
-});
+interface DashboardProps {
+  stocks: PortfolioStock[];
+  prices: Price[];
+}
+
+export const getServerSideProps: GetServerSideProps<DashboardProps & { user: User }> =
+  withAuthenticatedRedirect<DashboardProps>(
+    async (
+      context: GetServerSidePropsContext
+    ): Promise<GetServerSidePropsResult<DashboardProps & { user: User }>> => {
+      const token: string = context.req.cookies[WALTER_API_TOKEN_NAME] || '';
+      const portfolio: Portfolio = await WalterAPI.getPortfolio(token);
+      const prices: Price[] = await WalterAPI.getPrices('AAPL', '2025-04-01', '2025-04-25');
+      return {
+        props: {
+          stocks: portfolio.stocks,
+          prices: prices,
+        },
+      } as GetServerSidePropsResult<DashboardProps & { user: User }>;
+    }
+  );
 
 export default Dashboard;

@@ -1,5 +1,6 @@
 import axios, { AxiosResponse } from 'axios';
 import { GetServerSideProps } from 'next';
+import Link from 'next/link';
 import React, { useState } from 'react';
 
 import { withAuthenticationRedirect } from '@/lib/auth/AuthenticationRedirect';
@@ -52,11 +53,13 @@ const Registration: React.FC = (): React.ReactElement => {
   return (
     <div className="flex min-h-full flex-1 flex-col justify-center py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
-        <img
-          alt="Your Company"
-          src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600"
-          className="mx-auto h-10 w-auto"
-        />
+        <Link href="/">
+          <img
+            alt="Your Company"
+            src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600"
+            className="mx-auto h-10 w-auto"
+          />
+        </Link>
         <h2 className="mt-6 text-center text-2xl/9 font-bold tracking-tight text-gray-900">
           Create an account
         </h2>

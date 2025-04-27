@@ -36,7 +36,7 @@ const PieChart: React.FC<PieChartProps> = ({ data, onClick }): React.ReactElemen
       arcLinkLabelsTextColor="#333333"
       arcLinkLabelsThickness={2}
       arcLinkLabelsColor={{ from: 'color' }}
-      arcLabelsSkipAngle={20}
+      arcLabelsSkipAngle={30}
       arcLabelsTextColor={{ from: 'color', modifiers: [['darker', 2]] }}
     />
   );

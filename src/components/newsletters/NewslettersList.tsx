@@ -2,7 +2,9 @@ import React, { ReactElement } from 'react';
 
 import { Newsletter } from '@/lib/models/Newsletter';
 
-const NewslettersList: React.FC<{ newsletters: Newsletter }> = ({ newsletters }): ReactElement => {
+const NewslettersList: React.FC<{ newsletters: Newsletter[] }> = ({
+  newsletters,
+}): ReactElement => {
   const getModelBadge: (model: string) => ReactElement = (model: string): ReactElement => {
     switch (model.toLowerCase()) {
       case 'meta: llama3.3 70b':

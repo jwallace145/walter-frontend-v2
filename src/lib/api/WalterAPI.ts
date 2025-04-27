@@ -7,6 +7,7 @@ import { getCookie } from 'typescript-cookie';
 
 import { WALTER_API_TOKEN_NAME } from '@/lib/constants/Constants';
 import { Expense } from '@/lib/models/Expense';
+import { Newsletter } from '@/lib/models/Newsletter';
 import { Portfolio } from '@/lib/models/Portfolio';
 import { Price } from '@/lib/models/Price';
 import { User } from '@/lib/models/User';
@@ -199,6 +200,19 @@ export class WalterAPI {
         stock: stock,
       },
     }).then((response: AxiosResponse) => response.data);
+  }
+
+  public static async listNewsletters(token: string): Promise<Newsletter[]> {
+    return axios({
+      method: 'GET',
+      url: `${this.ENDPOINT}/newsletters`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      params: {
+        page: 1,
+      },
+    }).then((response: AxiosResponse) => response.data.Data.newsletters);
   }
 
   /**

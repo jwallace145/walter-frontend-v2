@@ -68,7 +68,7 @@ const Dashboard: React.FC<{ user: User }> = ({ user }): React.ReactElement => {
           </div>
           <div className="flex-1">
             <StockLineChart
-              stock={stocks.length > 0 ? stocks[0] : null}
+              stock={(stocks.length > 0 ? stocks[0] : null) as PortfolioStock | null}
               prices={prices}
               loading={getPricesLoading}
             />

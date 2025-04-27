@@ -8,11 +8,11 @@ import { Price } from '@/lib/models/Price';
 
 import LineChart from '../charts/LineChart';
 
-const StockLineChart: React.FC<{ stock: PortfolioStock; prices: Price[]; loading: boolean }> = ({
-  stock,
-  prices,
-  loading,
-}): React.ReactElement => {
+const StockLineChart: React.FC<{
+  stock: PortfolioStock | null;
+  prices: Price[];
+  loading: boolean;
+}> = ({ stock, prices, loading }): React.ReactElement => {
   const generateData: () => Serie[] = (): Serie[] => {
     if (!prices || prices.length === 0) return [];
     return [
@@ -49,7 +49,7 @@ const StockLineChart: React.FC<{ stock: PortfolioStock; prices: Price[]; loading
   const renderLineChart: () => React.ReactElement = (): React.ReactElement => {
     return (
       <div className="h-96 bg-white rounded-2xl p-6 shadow-md">
-        <div className="text-l font-bold mb-4 text-gray-900">{stock.symbol}</div>
+        <div className="text-l font-bold mb-4 text-gray-900">{stock?.symbol}</div>
         <LineChart data={data} />
       </div>
     );

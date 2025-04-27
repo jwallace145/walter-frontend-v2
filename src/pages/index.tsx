@@ -6,7 +6,7 @@ import { GetServerSideProps } from 'next';
 import Link from 'next/link';
 import React, { useState } from 'react';
 
-import { withUnauthenticatedRedirect } from '@/lib/auth/UnauthenticatedRedirect';
+import { withAuthenticationRedirect } from '@/lib/auth/AuthenticationRedirect';
 
 const navigation = [
   { name: 'Product', href: '#' },
@@ -156,6 +156,8 @@ const LandingPage: React.FC = (): React.ReactElement => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = withUnauthenticatedRedirect();
+export const getServerSideProps: GetServerSideProps = withAuthenticationRedirect({
+  authenticatedPage: false,
+});
 
 export default LandingPage;

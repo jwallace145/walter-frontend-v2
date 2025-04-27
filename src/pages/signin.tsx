@@ -3,7 +3,7 @@ import { GetServerSideProps } from 'next';
 import React, { useState } from 'react';
 import { setCookie } from 'typescript-cookie';
 
-import { withUnauthenticatedRedirect } from '@/lib/auth/UnauthenticatedRedirect';
+import { withAuthenticationRedirect } from '@/lib/auth/AuthenticationRedirect';
 import { WALTER_API_TOKEN_NAME } from '@/lib/constants/Constants';
 
 const SignIn: React.FC = (): React.ReactElement => {
@@ -208,6 +208,8 @@ const SignIn: React.FC = (): React.ReactElement => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = withUnauthenticatedRedirect();
+export const getServerSideProps: GetServerSideProps = withAuthenticationRedirect({
+  authenticatedPage: false,
+});
 
 export default SignIn;

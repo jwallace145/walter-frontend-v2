@@ -1,9 +1,7 @@
-// components/PieChart.tsx
-
 'use client';
 
 import dynamic from 'next/dynamic';
-import React, { useEffect } from 'react';
+import React from 'react';
 
 import { US_DOLLAR } from '@/lib/constants/Constants';
 
@@ -23,11 +21,6 @@ interface PieChartProps {
 }
 
 const PieChart: React.FC<PieChartProps> = ({ data, onClick }): React.ReactElement => {
-  useEffect((): void => {
-    console.log('v importante');
-    console.log(data);
-  }, [data]);
-
   return (
     <div style={{ height: '400px', width: '100%' }}>
       <ResponsivePie

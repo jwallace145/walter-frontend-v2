@@ -2,7 +2,7 @@ import axios, { AxiosResponse } from 'axios';
 import { GetServerSideProps } from 'next';
 import React, { useState } from 'react';
 
-import { withUnauthenticatedRedirect } from '@/lib/auth/UnauthenticatedRedirect';
+import { withAuthenticationRedirect } from '@/lib/auth/AuthenticationRedirect';
 
 const Registration: React.FC = (): React.ReactElement => {
   const [loading, setLoading] = useState(false);
@@ -194,6 +194,8 @@ const Registration: React.FC = (): React.ReactElement => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = withUnauthenticatedRedirect();
+export const getServerSideProps: GetServerSideProps = withAuthenticationRedirect({
+  authenticatedPage: false,
+});
 
 export default Registration;

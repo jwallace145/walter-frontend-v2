@@ -1,7 +1,6 @@
 'use client';
 
-import { PlusSmallIcon } from '@heroicons/react/20/solid';
-import { ChartPieIcon, ChevronRightIcon } from '@heroicons/react/20/solid';
+import { ChartPieIcon, ChevronRightIcon, PlusSmallIcon } from '@heroicons/react/20/solid';
 import dayjs from 'dayjs';
 import { GetServerSideProps } from 'next';
 import dynamic from 'next/dynamic';
@@ -12,7 +11,7 @@ import AddTransactionForm from '@/components/transactions/AddTransactionForm';
 import PaginatedTransactionsList from '@/components/transactions/PaginatedTransactionsList';
 import TransactionStats from '@/components/transactions/TransactionsStats';
 import AuthenticatedPageLayout from '@/layouts/AuthenticatedPageLayout';
-import { withAuthenticatedRedirect } from '@/lib/auth/AuthenticatedRedirect';
+import { withAuthenticationRedirect } from '@/lib/auth/AuthenticationRedirect';
 import { WALTER_API_TOKEN_NAME } from '@/lib/constants/Constants';
 import { Expense } from '@/lib/models/Expense';
 import { ExpenseCategory, getExpenseCategory } from '@/lib/models/ExpenseCategory';
@@ -160,6 +159,8 @@ const Transactions: React.FC<TransactionsProps> = ({ user }): React.ReactElement
   return <AuthenticatedPageLayout pageName="transactions" user={user} content={getContent()} />;
 };
 
-export const getServerSideProps: GetServerSideProps = withAuthenticatedRedirect();
+export const getServerSideProps: GetServerSideProps = withAuthenticationRedirect({
+  authenticatedPage: true,
+});
 
 export default Transactions;

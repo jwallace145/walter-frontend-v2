@@ -1,4 +1,7 @@
 import { CheckIcon } from '@heroicons/react/20/solid';
+import { GetServerSideProps } from 'next';
+
+import { withAuthenticationRedirect } from '@/lib/auth/AuthenticationRedirect';
 
 const includedFeatures = [
   'Weekly newsletter with personalized AI insights',
@@ -65,3 +68,7 @@ export default function Example() {
     </div>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = withAuthenticationRedirect({
+  authenticatedPage: false,
+});

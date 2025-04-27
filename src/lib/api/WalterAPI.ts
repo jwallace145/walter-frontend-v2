@@ -31,14 +31,14 @@ export class WalterAPI {
     }).then((response: AxiosResponse) => response.data);
   }
 
-  public static async getUser(token: string): Promise<User> {
+  public static async getUser(token: string): Promise<User | null> {
     return await axios({
       method: 'GET',
       url: `${this.ENDPOINT}/users`,
       headers: {
         Authorization: `Bearer ${token}`,
       },
-    }).then((response: AxiosResponse) => response.data.Data);
+    }).then((response: AxiosResponse): User | null => response.data.Data ?? null);
   }
 
   public static async updateUser(request: IncomingMessage): Promise<any> {

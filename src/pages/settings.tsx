@@ -6,7 +6,7 @@ import React from 'react';
 import LoadingSpinner from '@/components/loading/LoadingSpinner';
 import ChangeAvatarModal from '@/components/settings/ChangeAvatarModal';
 import AuthenticatedPageLayout from '@/layouts/AuthenticatedPageLayout';
-import { withAuthenticatedRedirect } from '@/lib/auth/AuthenticatedRedirect';
+import { withAuthenticationRedirect } from '@/lib/auth/AuthenticationRedirect';
 import { User } from '@/lib/models/User';
 
 interface SettingsProps {
@@ -142,6 +142,8 @@ const Settings: React.FC<SettingsProps> = ({ user }): React.ReactElement => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = withAuthenticatedRedirect();
+export const getServerSideProps: GetServerSideProps = withAuthenticationRedirect({
+  authenticatedPage: true,
+});
 
 export default Settings;

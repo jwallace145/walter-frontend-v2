@@ -42,6 +42,9 @@ importers:
       dayjs:
         specifier: ^1.11.13
         version: 1.11.13
+      form-data:
+        specifier: ^4.0.2
+        version: 4.0.2
       formidable:
         specifier: ^3.5.4
         version: 3.5.4
@@ -79,6 +82,9 @@ importers:
       '@tailwindcss/postcss':
         specifier: ^4.1.4
         version: 4.1.4
+      '@types/form-data':
+        specifier: ^2.5.2
+        version: 2.5.2
       '@types/formidable':
         specifier: ^3.4.5
         version: 3.4.5
@@ -767,6 +773,10 @@ packages:
 
   '@types/estree@1.0.7':
     resolution: {integrity: sha512-w28IoSUCJpidD/TGviZwwMJckNESJZXFu7NBZ5YJ4mEUnNraUn9Pm8HSZm/jDF1pDWYKspWE7oVphigUPRakIQ==}
+
+  '@types/form-data@2.5.2':
+    resolution: {integrity: sha512-tfmcyHn1Pp9YHAO5r40+UuZUPAZbUEgqTel3EuEKpmF9hPkXgR4l41853raliXnb4gwyPNoQOfvgGGlHN5WSog==}
+    deprecated: This is a stub types definition. form-data provides its own type definitions, so you do not need this installed.
 
   '@types/formidable@3.4.5':
     resolution: {integrity: sha512-s7YPsNVfnsng5L8sKnG/Gbb2tiwwJTY1conOkJzTMRvJAlLFW1nEua+ADsJQu8N1c0oTHx9+d5nqg10WuT9gHQ==}
@@ -3525,6 +3535,10 @@ snapshots:
   '@types/d3-time@3.0.4': {}
 
   '@types/estree@1.0.7': {}
+
+  '@types/form-data@2.5.2':
+    dependencies:
+      form-data: 4.0.2
 
   '@types/formidable@3.4.5':
     dependencies:

@@ -64,7 +64,7 @@ const DeletePortfolioStockModal: React.FC<DeletePortfolioStockModalProps> = ({
                 <>
                   Are you sure you want to delete the stock{' '}
                   <span className="font-semibold text-red-600">{stock.symbol}</span> from your
-                  portfolio? This action cannot be undone.
+                  portfolio?
                 </>
               ) : (
                 'No stock selected.'

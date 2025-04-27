@@ -25,9 +25,6 @@ const SignIn: React.FC = (): React.ReactElement => {
           alert(data.message);
         }
       })
-      .catch((error: any): void => {
-        console.log(error);
-      })
       .finally((): void => setLoading(false));
   };
 

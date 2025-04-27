@@ -19,7 +19,6 @@ const PaginatedTransactionsList: React.FC<{
   }, [transactions, currentPage, transactionsPerPage]);
 
   const handlePageChange: (page: number) => void = (page: number): void => {
-    console.log(`Changing to page ${page}`);
     setCurrentPage(page);
   };
 

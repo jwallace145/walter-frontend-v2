@@ -1,5 +1,6 @@
 'use client';
 
+import { ChartPieIcon } from '@heroicons/react/24/outline';
 import React from 'react';
 
 import { Expense } from '@/lib/models/Expense';
@@ -13,10 +14,7 @@ const TransactionsCategoryPieChart: React.FC<{
   setCategory: (category: string) => void;
 }> = ({ loading, transactions, setCategory }): React.ReactElement => {
   const getTransactionCategories = () => {
-    if (loading) {
-      return [];
-    }
-
+    if (loading) return [];
     return Object.values(
       transactions.reduce(
         (categories: Record<string, PieSlice>, transaction: Expense): Record<string, PieSlice> => {
@@ -35,15 +33,38 @@ const TransactionsCategoryPieChart: React.FC<{
     );
   };
 
-  return (
-    <div className="h-96 bg-white rounded-2xl p-6 shadow-md">
-      {loading ? (
+  const renderLoadingState: () => React.ReactElement = (): React.ReactElement => {
+    return (
+      <div className="h-96 bg-white rounded-2xl p-6 shadow-md flex items-center justify-center">
         <LoadingSpinner />
-      ) : (
-        <PieChart data={getTransactionCategories()} onClick={setCategory} />
-      )}
-    </div>
-  );
+      </div>
+    );
+  };
+
+  const renderEmptyState: () => React.ReactElement = (): React.ReactElement => {
+    return (
+      <div className="h-96 bg-white rounded-2xl p-6 shadow-md flex items-center justify-center text-gray-500">
+        <div className="flex flex-col items-center">
+          <ChartPieIcon className="h-12 w-12 mb-4" />
+          <p>No data available</p>
+        </div>
+      </div>
+    );
+  };
+
+  const renderPieChart: () => React.ReactElement = (): React.ReactElement => {
+    return (
+      <div className="h-96 bg-white rounded-2xl p-6 shadow-md">
+        <PieChart data={transactionCategories} onClick={setCategory} />
+      </div>
+    );
+  };
+
+  if (loading) return renderLoadingState();
+  const transactionCategories: PieSlice[] = getTransactionCategories();
+  if (transactionCategories.length === 0) return renderEmptyState();
+
+  return renderPieChart();
 };
 
 export default TransactionsCategoryPieChart;

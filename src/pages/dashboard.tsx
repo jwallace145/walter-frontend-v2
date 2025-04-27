@@ -46,7 +46,7 @@ const Dashboard: React.FC<{ user: User }> = ({ user }): React.ReactElement => {
     fetch('/api/prices/get-prices?stock=AAPL&start_date=2025-04-01&end_date=2025-04-30')
       .then((response: Response) => response.json())
       .then((data): void => {
-        setPrices(data.prices);
+        setPrices(data);
       })
       .catch((error: any): void => console.error('Error:', error))
       .finally((): void => setGetPricesLoading(false));
@@ -61,7 +61,7 @@ const Dashboard: React.FC<{ user: User }> = ({ user }): React.ReactElement => {
             <PortfolioEquityPieChart stocks={stocks} loading={getPortfolioLoading} />
           </div>
           <div className="flex-1">
-            <StockLineChart prices={[]} loading={false} />
+            <StockLineChart prices={prices} loading={getPricesLoading} />
           </div>
         </div>
         <div className="pt-4">

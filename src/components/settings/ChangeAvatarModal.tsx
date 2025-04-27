@@ -67,9 +67,6 @@ const ChangeAvatarModal: React.FC<ChangeAvatarModalProps> = ({
       },
     })
       .then((response: Response) => response.json())
-      .then((data): void => {
-        console.log(data);
-      })
       .finally((): void => setIsSubmitting(false));
   };
 

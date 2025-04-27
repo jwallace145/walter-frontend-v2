@@ -29,21 +29,20 @@ const LineChart: React.FC<{ data: Serie[] }> = ({ data }): React.ReactElement =>
       axisTop={null}
       axisRight={null}
       axisBottom={{
-        format: '%Y-%m-%d',
+        format: '%b, %d',
         tickValues: 'every 5 days',
         tickSize: 5,
         tickPadding: 5,
-        legend: 'Time',
         legendOffset: 36,
         legendPosition: 'middle',
       }}
       axisLeft={{
         tickSize: 5,
         tickPadding: 5,
-        legend: 'Price',
         legendOffset: -50,
         legendPosition: 'middle',
         format: (value) => `$${Number(value).toFixed(2)}`,
+        tickValues: 6,
       }}
       curve="monotoneX"
       pointSize={3}

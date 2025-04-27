@@ -18,6 +18,7 @@ const Dashboard: React.FC<{ user: User }> = ({ user }): React.ReactElement => {
   const [getPortfolioLoading, setGetPortfolioLoading] = useState<boolean>(false);
   const [getPricesLoading, setGetPricesLoading] = useState<boolean>(false);
   const [stocks, setStocks] = useState<PortfolioStock[]>([]);
+  const [equity, setEquity] = useState<number>(0);
   const [prices, setPrices] = useState<Price[]>([]);
   const [openAddStockModal, setOpenAddStockModal] = useState<boolean>(false);
 
@@ -36,6 +37,7 @@ const Dashboard: React.FC<{ user: User }> = ({ user }): React.ReactElement => {
       .then((response: Response) => response.json())
       .then((data): void => {
         setStocks(data.stocks);
+        setEquity(data.total_equity);
       })
       .catch((error): void => console.error('Error:', error))
       .finally((): void => setGetPortfolioLoading(false));
@@ -58,10 +60,18 @@ const Dashboard: React.FC<{ user: User }> = ({ user }): React.ReactElement => {
         <h1 className="text-2xl font-bold mb-4">Your Portfolio Allocation</h1>
         <div className="flex flex-col gap-6 md:flex-row">
           <div className="flex-1">
-            <PortfolioEquityPieChart stocks={stocks} loading={getPortfolioLoading} />
+            <PortfolioEquityPieChart
+              loading={getPortfolioLoading}
+              stocks={stocks}
+              equity={equity}
+            />
           </div>
           <div className="flex-1">
-            <StockLineChart prices={prices} loading={getPricesLoading} />
+            <StockLineChart
+              stock={stocks.length > 0 ? stocks[0] : null}
+              prices={prices}
+              loading={getPricesLoading}
+            />
           </div>
         </div>
         <div className="pt-4">

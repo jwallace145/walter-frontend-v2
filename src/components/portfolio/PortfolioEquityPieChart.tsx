@@ -4,14 +4,16 @@ import { ChartPieIcon } from '@heroicons/react/24/outline';
 import React from 'react';
 
 import PieChart, { PieSlice } from '@/components/charts/PieChart';
+import { US_DOLLAR } from '@/lib/constants/Constants';
 import { PortfolioStock } from '@/lib/models/PortfolioStock';
 
 import LoadingSpinner from '../loading/LoadingSpinner';
 
-const PortfolioEquityPieChart: React.FC<{ loading: boolean; stocks: PortfolioStock[] }> = ({
-  loading,
-  stocks,
-}): React.ReactElement => {
+const PortfolioEquityPieChart: React.FC<{
+  loading: boolean;
+  stocks: PortfolioStock[];
+  equity: number;
+}> = ({ loading, stocks, equity }): React.ReactElement => {
   const generateEquityPieSlices: () => PieSlice[] = (): PieSlice[] => {
     if (!stocks || stocks.length === 0) return [];
     return stocks.map(
@@ -45,6 +47,7 @@ const PortfolioEquityPieChart: React.FC<{ loading: boolean; stocks: PortfolioSto
   const renderPieChart: () => React.ReactElement = (): React.ReactElement => {
     return (
       <div className="h-96 bg-white rounded-2xl p-6 shadow-md">
+        <div className="text-l font-bold mb-4 text-gray-900">{US_DOLLAR.format(equity)}</div>
         <PieChart data={equityPieSlices} onClick={(): void => {}} />
       </div>
     );

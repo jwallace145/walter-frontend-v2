@@ -21,7 +21,7 @@ const SignOutModal: React.FC<SignOutModalProps> = ({ open, setOpen }): React.Rea
   const handleSignOut = (e: React.FormEvent) => {
     e.preventDefault();
     removeCookie(WALTER_API_TOKEN_NAME);
-    window.location.href = '/signin';
+    window.location.href = '/';
   };
 
   return (

@@ -82,7 +82,7 @@ const Dashboard: React.FC<{ user: User }> = ({ user }): React.ReactElement => {
             <PlusSmallIcon aria-hidden="true" className="-ml-1.5 size-5" />
             Add Stock
           </button>
-          <PortfolioStockCards stocks={stocks} />
+          <PortfolioStockCards loading={getPortfolioLoading} stocks={stocks} />
         </div>
       </main>
       <AddPortfolioStockModal open={openAddStockModal} setOpen={setOpenAddStockModal} />

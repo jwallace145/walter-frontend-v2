@@ -1,15 +1,54 @@
 import { PencilSquareIcon, TrashIcon } from '@heroicons/react/20/solid';
-import React, { useState } from 'react';
+import { CurrencyDollarIcon } from '@heroicons/react/24/outline';
+import React, { ReactElement, useState } from 'react';
 
+import LoadingSpinner from '@/components/loading/LoadingSpinner';
 import DeletePortfolioStockModal from '@/components/portfolio/DeletePortfolioStockModal';
 import { US_DOLLAR } from '@/lib/constants/Constants';
 import { PortfolioStock } from '@/lib/models/PortfolioStock';
 
-const PortfolioStockCards: React.FC<{ stocks: PortfolioStock[] }> = ({
+const PortfolioStockCards: React.FC<{ loading: boolean; stocks: PortfolioStock[] }> = ({
+  loading,
   stocks,
-}): React.ReactElement => {
+}): ReactElement => {
   const [selectedPortfolioStock, setSelectedPortfolioStock] = useState<PortfolioStock | null>(null);
   const [openDeletePortfolioStock, setOpenDeletePortfolioStock] = useState<boolean>(false);
+
+  const renderLoadingState: () => ReactElement = (): ReactElement => {
+    return (
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+        <div className="col-span-1 flex flex-col divide-y divide-gray-200 rounded-lg bg-white text-center shadow-sm">
+          <div className="flex flex-1 flex-col p-8">
+            <LoadingSpinner />
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  const renderEmptyState: () => ReactElement = (): ReactElement => {
+    return (
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+        <div className="col-span-1 flex flex-col divide-y divide-gray-200 rounded-lg bg-white text-center shadow-sm">
+          <div className="flex flex-1 flex-col p-8">
+            <button
+              type="button"
+              className="relative block w-full rounded-lg border-2 border-dashed border-gray-300 p-12 text-center hover:border-gray-400 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-hidden"
+            >
+              <CurrencyDollarIcon className="mx-auto h-12 w-12 text-gray-400" aria-hidden="true" />
+              <span className="mt-2 block text-sm font-semibold text-gray-900">
+                Add stock to your portfolio
+              </span>
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  };
+
+  if (loading) return renderLoadingState();
+
+  if (stocks.length === 0) return renderEmptyState();
 
   return (
     <>

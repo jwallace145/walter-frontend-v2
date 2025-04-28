@@ -1,4 +1,4 @@
-import { ChartPieIcon } from '@heroicons/react/24/outline';
+import { PresentationChartLineIcon } from '@heroicons/react/24/outline';
 import { Serie } from '@nivo/line';
 import React from 'react';
 
@@ -39,7 +39,7 @@ const StockLineChart: React.FC<{
     return (
       <div className="h-96 bg-white rounded-2xl p-6 shadow-md flex items-center justify-center text-gray-500">
         <div className="flex flex-col items-center">
-          <ChartPieIcon className="h-12 w-12 mb-4" />
+          <PresentationChartLineIcon className="h-12 w-12 mb-4" />
           <div className="text-gray-500 text-center">No data available</div>
         </div>
       </div>
@@ -55,7 +55,9 @@ const StockLineChart: React.FC<{
     );
   };
 
-  if (loading || !stock) return renderLoadingState();
+  if (loading) return renderLoadingState();
+
+  if (!stock) return renderEmptyState();
 
   const data: Serie[] = generateData();
   if (data.length === 0) return renderEmptyState();

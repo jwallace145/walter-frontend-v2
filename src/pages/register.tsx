@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 
 import { withAuthenticationRedirect } from '@/lib/auth/AuthenticationRedirect';
 
-const Registration: React.FC = (): React.ReactElement => {
+const Register: React.FC = (): React.ReactElement => {
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     email: '',
@@ -36,15 +36,8 @@ const Registration: React.FC = (): React.ReactElement => {
       .then((response: AxiosResponse): any => response.data)
       .then((data: any): void => {
         if (data['Status'].toLowerCase() === 'success') {
-          alert('Account created successfully. You can now log in.');
           window.location.href = '/signin';
-        } else {
-          alert(data.message);
         }
-      })
-      .catch((error: any): void => {
-        console.error(error);
-        alert('An error occurred during registration.');
       })
       .finally((): void => setLoading(false));
   };
@@ -244,4 +237,4 @@ export const getServerSideProps: GetServerSideProps = withAuthenticationRedirect
   authenticatedPage: false,
 });
 
-export default Registration;
+export default Register;

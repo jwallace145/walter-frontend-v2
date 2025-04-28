@@ -1,5 +1,8 @@
 const nextConfig = {
-  reactStrictMode: true, // (or false temporarily if debugging)
+  reactStrictMode: true,
+  images: {
+    domains: ['walterai-media-dev.s3.amazonaws.com'],
+  },
 };
 
 module.exports = nextConfig;

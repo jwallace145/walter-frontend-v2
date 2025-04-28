@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 import { WalterAPI } from '@/lib/api/WalterAPI';
+import { PortfolioStock } from '@/lib/models/PortfolioStock';
 
 export default async function handler(
   request: NextApiRequest,
@@ -8,9 +9,13 @@ export default async function handler(
 ): Promise<void> {
   try {
     const token: string = request.cookies.WALTER_API_TOKEN || '';
-    response
-      .status(200)
-      .json(await WalterAPI.addStock(token, request.body.stock, request.body.quantity));
+    const stock: PortfolioStock = await WalterAPI.addStock(
+      token,
+      request.body.stock,
+      request.body.quantity
+    );
+    console.log(stock);
+    response.status(200).json(stock);
   } catch (error) {
     const status = (error as any).response?.status || 500;
     const message = (error as any).response?.data || 'Internal Server Error';

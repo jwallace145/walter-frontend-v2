@@ -7,6 +7,7 @@ import {
   DialogPanel,
   DialogTitle,
 } from '@headlessui/react';
+import axios, { AxiosResponse } from 'axios';
 import React, { useState } from 'react';
 
 const AddPortfolioStockModal: React.FC<{ open: boolean; setOpen: (open: boolean) => void }> = ({
@@ -20,22 +21,19 @@ const AddPortfolioStockModal: React.FC<{ open: boolean; setOpen: (open: boolean)
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    fetch('/api/stocks/add-stock', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
+    axios
+      .post('/api/stocks/add-stock', {
         stock: stock,
         quantity: parseFloat(quantity),
-      }),
-    })
-      .then((response: Response) => response.json())
-      .then((data): void => {
+      })
+      .then((response: AxiosResponse): any => response.data)
+      .then((data: any): void => {
         if (data['Status'].toLowerCase() === 'success') {
           setStock('');
           setQuantity('');
           setOpen(false);
+        } else if (data['Status'].toLowerCase() === 'error') {
+          alert(data['Message']);
         }
       })
       .finally((): void => setIsSubmitting(false));

@@ -32,6 +32,24 @@ export class WalterAPI {
     }).then((response: AxiosResponse) => response.data);
   }
 
+  public static async createUser(
+    email: string,
+    firstName: string,
+    lastName: string,
+    password: string
+  ): Promise<any> {
+    return axios({
+      method: 'POST',
+      url: `${WalterAPI.ENDPOINT}/users`,
+      data: {
+        email: email,
+        first_name: firstName,
+        last_name: lastName,
+        password: password,
+      },
+    }).then((response: AxiosResponse): any => response.data);
+  }
+
   public static async getUser(token: string): Promise<User | null> {
     return await axios({
       method: 'GET',
@@ -143,7 +161,7 @@ export class WalterAPI {
     vendor: string,
     amount: number
   ): Promise<any> {
-    return axios({
+    return await axios({
       method: 'POST',
       url: `${this.ENDPOINT}/expenses`,
       headers: {
@@ -162,7 +180,7 @@ export class WalterAPI {
     expenseId: string,
     date: string
   ): Promise<void> {
-    axios({
+    return await axios({
       method: 'DELETE',
       url: `${this.ENDPOINT}/expenses`,
       headers: {
@@ -175,8 +193,8 @@ export class WalterAPI {
     }).then((response: AxiosResponse) => response.data);
   }
 
-  public static async addStock(token: string, stock: string, quantity: string): Promise<void> {
-    axios({
+  public static async addStock(token: string, stock: string, quantity: string): Promise<any> {
+    return await axios({
       method: 'POST',
       url: `${this.ENDPOINT}/stocks`,
       headers: {
@@ -190,7 +208,7 @@ export class WalterAPI {
   }
 
   public static async deleteStock(token: string, stock: string): Promise<void> {
-    axios({
+    return await axios({
       method: 'DELETE',
       url: `${this.ENDPOINT}/stocks`,
       headers: {

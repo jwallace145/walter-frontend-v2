@@ -23,9 +23,10 @@ import {
   PresentationChartLineIcon,
   XMarkIcon,
 } from '@heroicons/react/24/outline';
-import React, { useState } from 'react';
+import Image from 'next/image';
+import React, { ReactElement, ReactNode, useState } from 'react';
+import Avatar from 'react-avatar';
 
-import LoadingSpinner from '@/components/loading/LoadingSpinner';
 import SignOutModal from '@/components/signout/SignOutModal';
 import { User } from '@/lib/models/User';
 
@@ -50,14 +51,14 @@ function classNames(...classes: string[]): string {
 interface AuthenticatedLayoutProps {
   pageName: string;
   user: User;
-  content: React.ReactNode;
+  content: ReactNode;
 }
 
 const AuthenticatedPageLayout: React.FC<AuthenticatedLayoutProps> = ({
   pageName,
   user,
   content,
-}): React.ReactElement => {
+}): ReactElement => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [openSignOutModal, setOpenSignOutModal] = useState(false);
 
@@ -70,10 +71,21 @@ const AuthenticatedPageLayout: React.FC<AuthenticatedLayoutProps> = ({
     });
   };
 
-  // Display loading spinner until GetUser API has successfully returned an authenticated user
-  if (user === null || user === undefined) {
-    return <LoadingSpinner />;
-  }
+  const getUserAvatar: () => ReactElement = (): ReactElement => {
+    if (!user.profile_picture_url) {
+      // If the user doesn't have a profile picture, use the Avatar component with name initials
+      return <Avatar name={`${user.first_name} ${user.last_name}`} size="35" round={true} />;
+    }
+    return (
+      <Image
+        alt={`${user.first_name} ${user.last_name}'s profile picture`} // Better alt text for accessibility
+        src={user.profile_picture_url} // The URL for the user's profile picture
+        className="rounded-full bg-gray-50"
+        width={35} // Ensure width is specified
+        height={35} // Ensure height is specified
+      />
+    );
+  };
 
   return (
     <>
@@ -261,17 +273,13 @@ const AuthenticatedPageLayout: React.FC<AuthenticatedLayoutProps> = ({
                 <Menu as="div" className="relative">
                   <MenuButton className="-m-1.5 flex items-center p-1.5">
                     <span className="sr-only">Open user menu</span>
-                    <img
-                      alt=""
-                      src={user.profile_picture_url}
-                      className="size-8 rounded-full bg-gray-50"
-                    />
+                    {getUserAvatar()}
                     <span className="hidden lg:flex lg:items-center">
                       <span
                         aria-hidden="true"
                         className="ml-4 text-sm/6 font-semibold text-gray-900"
                       >
-                        {user.username}
+                        {user.first_name} {user.last_name}
                       </span>
                       <ChevronDownIcon aria-hidden="true" className="ml-2 size-5 text-gray-400" />
                     </span>

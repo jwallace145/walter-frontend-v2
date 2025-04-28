@@ -26,6 +26,7 @@
     "next": "15.3.1",
     "postcss": "^8.5.3",
     "react": "^19.0.0",
+    "react-avatar": "^5.0.3",
     "react-dom": "^19.0.0",
     "react-dropzone": "^14.3.8",
     "react-easy-crop": "^5.4.1",

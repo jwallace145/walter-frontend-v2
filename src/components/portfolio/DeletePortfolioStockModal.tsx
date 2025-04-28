@@ -7,6 +7,7 @@ import {
   DialogPanel,
   DialogTitle,
 } from '@headlessui/react';
+import axios from 'axios';
 import React, { useState } from 'react';
 
 import { PortfolioStock } from '@/lib/models/PortfolioStock';
@@ -29,18 +30,14 @@ const DeletePortfolioStockModal: React.FC<DeletePortfolioStockModalProps> = ({
     if (stock === null) return;
 
     setIsSubmitting(true);
-    fetch('/api/stocks/delete-stock', {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        stock: stock.symbol,
-      }),
-    })
-      .then((response: Response) => response.json())
-      .then((data): void => {
-        if (data['Status']?.toLowerCase() === 'success') {
+    axios
+      .delete('/api/stocks/delete-stock', {
+        data: {
+          stock: stock.symbol,
+        },
+      })
+      .then((response): void => {
+        if (response.data['Status']?.toLowerCase() === 'success') {
           setOpen(false);
         }
       })

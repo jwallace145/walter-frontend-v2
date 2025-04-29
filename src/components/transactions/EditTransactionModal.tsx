@@ -40,8 +40,10 @@ const transactionCategories: TransactionCategoryId[] = generateTransactionCatego
 const EditTransactionModal: React.FC<{
   open: boolean;
   setOpen: (open: boolean) => void;
+  refresh: () => void;
   transaction: Transaction | null;
-}> = ({ open, setOpen, transaction }): ReactElement => {
+  onUpdateTransactionSuccess: () => void;
+}> = ({ open, setOpen, refresh, transaction, onUpdateTransactionSuccess }): ReactElement => {
   const [date, setDate] = useState(transaction?.date || '');
   const [vendor, setVendor] = useState(transaction?.vendor || '');
   const [amount, setAmount] = useState(transaction?.amount || '');
@@ -84,6 +86,8 @@ const EditTransactionModal: React.FC<{
       .then((data: any): void => {
         if (data['Status'].toLowerCase() === 'success') {
           setOpen(false);
+          onUpdateTransactionSuccess();
+          refresh();
         } else if (data['Status'].toLowerCase() === 'error') {
           alert(data['Message']);
         }

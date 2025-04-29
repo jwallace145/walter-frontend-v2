@@ -5,7 +5,15 @@ import EditTransactionModal from '@/components/transactions/EditTransactionModal
 import TransactionListItem from '@/components/transactions/TransactionListItem';
 import { Transaction } from '@/lib/models/Transaction';
 
-const TransactionsList: React.FC<{ transactions: Transaction[] }> = ({
+const TransactionsList: React.FC<{
+  refresh: () => void;
+  onUpdateTransactionSuccess: () => void;
+  onDeleteTransactionSuccess: () => void;
+  transactions: Transaction[];
+}> = ({
+  refresh,
+  onUpdateTransactionSuccess,
+  onDeleteTransactionSuccess,
   transactions,
 }): React.ReactElement => {
   const [selectedTransaction, setSelectedTransaction] = useState<Transaction | null>(null);
@@ -37,12 +45,16 @@ const TransactionsList: React.FC<{ transactions: Transaction[] }> = ({
       <EditTransactionModal
         open={openEditTransactionModal}
         setOpen={setOpenEditTransactionModal}
+        refresh={refresh}
         transaction={selectedTransaction}
+        onUpdateTransactionSuccess={onUpdateTransactionSuccess}
       />
       <DeleteTransactionModal
         open={openDeleteTransactionModal}
         setOpen={setOpenDeleteTransactionModal}
+        refresh={refresh}
         transaction={selectedTransaction}
+        onDeleteTransactionSuccess={onDeleteTransactionSuccess}
       />
     </>
   );

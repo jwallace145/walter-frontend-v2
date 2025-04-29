@@ -10,6 +10,7 @@ import React, { useEffect, useState } from 'react';
 import { getCookie } from 'typescript-cookie';
 
 import SuccessAlert from '@/components/alerts/SuccessAlert';
+import WarningAlert from '@/components/alerts/WarningAlert';
 import AddExpenseModal from '@/components/transactions/AddExpenseModal';
 import AddIncomeModal from '@/components/transactions/AddIncomeModal';
 import PaginatedTransactionsList from '@/components/transactions/PaginatedTransactionsList';
@@ -43,6 +44,10 @@ const Transactions: React.FC<{ user: User }> = ({ user }): React.ReactElement =>
   const [refresh, setRefresh] = useState<boolean>(false);
   const [openAddIncomeSuccessAlert, setOpenAddIncomeSuccessAlert] = useState<boolean>(false);
   const [openAddExpenseSuccessAlert, setOpenAddExpenseSuccessAlert] = useState<boolean>(false);
+  const [openEditTransactionSuccessAlert, setOpenEditTransactionSuccessAlert] =
+    useState<boolean>(false);
+  const [openDeleteTransactionSuccessAlert, setOpenDeleteTransactionSuccessAlert] =
+    useState<boolean>(false);
 
   useEffect((): void => {
     getTransactions(startDate, endDate, category);
@@ -86,12 +91,22 @@ const Transactions: React.FC<{ user: User }> = ({ user }): React.ReactElement =>
         <SuccessAlert
           open={openAddIncomeSuccessAlert}
           setOpen={setOpenAddIncomeSuccessAlert}
-          message={'Income added successfully!'}
+          message={'Income added!'}
         />
         <SuccessAlert
           open={openAddExpenseSuccessAlert}
           setOpen={setOpenAddExpenseSuccessAlert}
-          message={'Expense added successfully!'}
+          message={'Expense added!'}
+        />
+        <SuccessAlert
+          open={openEditTransactionSuccessAlert}
+          setOpen={setOpenEditTransactionSuccessAlert}
+          message={'Updated transaction'}
+        />
+        <WarningAlert
+          open={openDeleteTransactionSuccessAlert}
+          setOpen={setOpenDeleteTransactionSuccessAlert}
+          message={'Deleted transaction'}
         />
 
         <main className="p-8">
@@ -170,7 +185,13 @@ const Transactions: React.FC<{ user: User }> = ({ user }): React.ReactElement =>
             </div>
 
             <div className="flex-1">
-              <PaginatedTransactionsList transactions={transactions} transactionsPerPage={8} />
+              <PaginatedTransactionsList
+                refresh={(): void => setRefresh(!refresh)}
+                onUpdateTransactionSuccess={(): void => setOpenEditTransactionSuccessAlert(true)}
+                onDeleteTransactionSuccess={(): void => setOpenDeleteTransactionSuccessAlert(true)}
+                transactions={transactions}
+                transactionsPerPage={8}
+              />
             </div>
           </div>
         </main>

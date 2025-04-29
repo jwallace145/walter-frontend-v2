@@ -15,8 +15,10 @@ import { Transaction } from '@/lib/models/Transaction';
 const DeleteTransactionModal: React.FC<{
   open: boolean;
   setOpen: (open: boolean) => void;
+  refresh: () => void;
   transaction: Transaction | null;
-}> = ({ open, setOpen, transaction }): React.ReactElement => {
+  onDeleteTransactionSuccess: () => void;
+}> = ({ open, setOpen, refresh, transaction, onDeleteTransactionSuccess }): React.ReactElement => {
   const [isDeleting, setIsDeleting] = useState(false);
 
   const handleDelete = async () => {
@@ -36,11 +38,13 @@ const DeleteTransactionModal: React.FC<{
       .then((data: any) => {
         if (data['Status'].toLowerCase() === 'success') {
           setOpen(false);
+          onDeleteTransactionSuccess();
+          refresh();
         } else {
           alert(data['Message']);
         }
       })
-      .finally(() => setIsDeleting(false));
+      .finally((): void => setIsDeleting(false));
   };
 
   return (

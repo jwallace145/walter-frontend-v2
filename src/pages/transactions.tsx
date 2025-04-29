@@ -9,6 +9,7 @@ import dynamic from 'next/dynamic';
 import React, { useEffect, useState } from 'react';
 import { getCookie } from 'typescript-cookie';
 
+import SuccessAlert from '@/components/alerts/SuccessAlert';
 import AddExpenseModal from '@/components/transactions/AddExpenseModal';
 import AddIncomeModal from '@/components/transactions/AddIncomeModal';
 import PaginatedTransactionsList from '@/components/transactions/PaginatedTransactionsList';
@@ -39,10 +40,13 @@ const Transactions: React.FC<{ user: User }> = ({ user }): React.ReactElement =>
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [openAddIncomeModal, setOpenAddIncomeModal] = useState<boolean>(false);
   const [openAddTransactionForm, setOpenAddTransactionForm] = useState<boolean>(false);
+  const [refresh, setRefresh] = useState<boolean>(false);
+  const [openAddIncomeSuccessAlert, setOpenAddIncomeSuccessAlert] = useState<boolean>(false);
+  const [openAddExpenseSuccessAlert, setOpenAddExpenseSuccessAlert] = useState<boolean>(false);
 
   useEffect((): void => {
     getTransactions(startDate, endDate, category);
-  }, [startDate, endDate, category]);
+  }, [startDate, endDate, category, refresh]);
 
   const getTransactions: (
     startDate: string,
@@ -78,6 +82,18 @@ const Transactions: React.FC<{ user: User }> = ({ user }): React.ReactElement =>
   const getContent: () => React.ReactElement = (): React.ReactElement => {
     return (
       <>
+        {/* Alerts */}
+        <SuccessAlert
+          open={openAddIncomeSuccessAlert}
+          setOpen={setOpenAddIncomeSuccessAlert}
+          message={'Income added successfully!'}
+        />
+        <SuccessAlert
+          open={openAddExpenseSuccessAlert}
+          setOpen={setOpenAddExpenseSuccessAlert}
+          message={'Expense added successfully!'}
+        />
+
         <main className="p-8">
           <h1 className="text-2xl font-bold mb-4">Your Transactions</h1>
           <header className="pt-6 pb-4 sm:pb-6">
@@ -164,13 +180,19 @@ const Transactions: React.FC<{ user: User }> = ({ user }): React.ReactElement =>
           open={openAddIncomeModal}
           setOpen={setOpenAddIncomeModal}
           onClose={(): void => setOpenAddIncomeModal(false)}
-          onIncomeAdded={(): void => console.log('Income added')}
+          onIncomeAdded={(): void => {
+            setRefresh(!refresh);
+            setOpenAddIncomeSuccessAlert(true);
+          }}
         />
         <AddExpenseModal
           open={openAddTransactionForm}
           setOpen={setOpenAddTransactionForm}
           onClose={(): void => setOpenAddTransactionForm(false)}
-          onExpenseAdded={(): void => console.log('Expense added')}
+          onExpenseAdded={(): void => {
+            setRefresh(!refresh);
+            setOpenAddExpenseSuccessAlert(true);
+          }}
         />
       </>
     );

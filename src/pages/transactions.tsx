@@ -1,6 +1,7 @@
 'use client';
 
-import { ChartPieIcon, ChevronRightIcon, PlusSmallIcon } from '@heroicons/react/20/solid';
+import { ChartPieIcon, ChevronRightIcon } from '@heroicons/react/20/solid';
+import { BanknotesIcon, CreditCardIcon } from '@heroicons/react/24/outline';
 import axios from 'axios';
 import dayjs from 'dayjs';
 import { GetServerSideProps } from 'next';
@@ -123,8 +124,8 @@ const Transactions: React.FC<{ user: User }> = ({ user }): React.ReactElement =>
                   onClick={(): void => setOpenAddIncomeModal(true)}
                   className="flex items-center gap-x-1 rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                 >
-                  <PlusSmallIcon aria-hidden="true" className="-ml-1.5 size-5" />
-                  Add Income
+                  <BanknotesIcon aria-hidden="true" className="-ml-1.5 size-5" />
+                  <span className="hidden md:inline">Income</span>
                 </button>
 
                 <button
@@ -132,8 +133,8 @@ const Transactions: React.FC<{ user: User }> = ({ user }): React.ReactElement =>
                   onClick={(): void => setOpenAddTransactionForm(true)}
                   className="flex items-center gap-x-1 rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                 >
-                  <PlusSmallIcon aria-hidden="true" className="-ml-1.5 size-5" />
-                  Add Expense
+                  <CreditCardIcon aria-hidden="true" className="-ml-1.5 size-5" />
+                  <span className="hidden md:inline">Expense</span>
                 </button>
               </div>
             </div>

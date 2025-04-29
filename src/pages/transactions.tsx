@@ -8,7 +8,8 @@ import dynamic from 'next/dynamic';
 import React, { useEffect, useState } from 'react';
 import { getCookie } from 'typescript-cookie';
 
-import AddTransactionForm from '@/components/transactions/AddTransactionForm';
+import AddExpenseModal from '@/components/transactions/AddExpenseModal';
+import AddIncomeModal from '@/components/transactions/AddIncomeModal';
 import PaginatedTransactionsList from '@/components/transactions/PaginatedTransactionsList';
 import TransactionStats from '@/components/transactions/TransactionsStats';
 import AuthenticatedPageLayout from '@/layouts/AuthenticatedPageLayout';
@@ -35,6 +36,7 @@ const Transactions: React.FC<{ user: User }> = ({ user }): React.ReactElement =>
   const [startDate, setStartDate] = useState<string>(START_OF_THE_MONTH);
   const [endDate, setEndDate] = useState<string>(END_OF_THE_MONTH);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [openAddIncomeModal, setOpenAddIncomeModal] = useState<boolean>(false);
   const [openAddTransactionForm, setOpenAddTransactionForm] = useState<boolean>(false);
 
   useEffect((): void => {
@@ -78,7 +80,8 @@ const Transactions: React.FC<{ user: User }> = ({ user }): React.ReactElement =>
         <main className="p-8">
           <h1 className="text-2xl font-bold mb-4">Your Transactions</h1>
           <header className="pt-6 pb-4 sm:pb-6">
-            <div className="mx-auto flex max-w-7xl flex-wrap items-center gap-6 px-4 sm:flex-nowrap sm:px-6 lg:px-8">
+            <div className="mx-auto flex max-w-7xl justify-between items-center px-4 sm:px-6 lg:px-8">
+              {/* Category Breadcrumbs */}
               <nav aria-label="Breadcrumb" className="flex">
                 <ol role="list" className="flex items-center space-x-4">
                   <li>
@@ -112,16 +115,31 @@ const Transactions: React.FC<{ user: User }> = ({ user }): React.ReactElement =>
                   ))}
                 </ol>
               </nav>
-              <button
-                type="button"
-                onClick={(): void => setOpenAddTransactionForm(true)}
-                className="ml-auto flex items-center gap-x-1 rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-              >
-                <PlusSmallIcon aria-hidden="true" className="-ml-1.5 size-5" />
-                Add Transaction
-              </button>
+
+              {/* Action Buttons */}
+              <div className="flex gap-4">
+                <button
+                  type="button"
+                  onClick={(): void => setOpenAddIncomeModal(true)}
+                  className="flex items-center gap-x-1 rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                >
+                  <PlusSmallIcon aria-hidden="true" className="-ml-1.5 size-5" />
+                  Add Income
+                </button>
+
+                <button
+                  type="button"
+                  onClick={(): void => setOpenAddTransactionForm(true)}
+                  className="flex items-center gap-x-1 rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                >
+                  <PlusSmallIcon aria-hidden="true" className="-ml-1.5 size-5" />
+                  Add Expense
+                </button>
+              </div>
             </div>
           </header>
+
+          {/* Page Content */}
           <div className="flex flex-col gap-6 md:flex-row">
             <div className="flex-1 flex flex-col gap-6">
               <TransactionStats transactions={transactions} />
@@ -133,12 +151,26 @@ const Transactions: React.FC<{ user: User }> = ({ user }): React.ReactElement =>
                 }}
               />
             </div>
+
             <div className="flex-1">
               <PaginatedTransactionsList transactions={transactions} transactionsPerPage={8} />
             </div>
           </div>
         </main>
-        {openAddTransactionForm && <AddTransactionForm />}
+
+        {/* Modals */}
+        <AddIncomeModal
+          open={openAddIncomeModal}
+          setOpen={setOpenAddIncomeModal}
+          onClose={(): void => setOpenAddIncomeModal(false)}
+          onIncomeAdded={(): void => console.log('Income added')}
+        />
+        <AddExpenseModal
+          open={openAddTransactionForm}
+          setOpen={setOpenAddTransactionForm}
+          onClose={(): void => setOpenAddTransactionForm(false)}
+          onExpenseAdded={(): void => console.log('Expense added')}
+        />
       </>
     );
   };

@@ -7,25 +7,65 @@ import {
   DialogPanel,
   DialogTitle,
 } from '@headlessui/react';
-import React, { useState } from 'react';
+import axios, { AxiosResponse } from 'axios';
+import React, { FormEvent, ReactElement, useState } from 'react';
 
-const AddTransactionForm: React.FC = (): React.ReactElement => {
-  const [open, setOpen] = useState(true);
+interface AddExpenseModalProps {
+  open: boolean;
+  setOpen: (open: boolean) => void;
+  onClose: () => void;
+  onExpenseAdded: () => void;
+}
+
+const AddExpenseModal: React.FC<AddExpenseModalProps> = ({
+  open,
+  setOpen,
+  onClose,
+  onExpenseAdded,
+}): ReactElement => {
   const [date, setDate] = useState('');
   const [vendor, setVendor] = useState('');
   const [amount, setAmount] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    fetch('/api/transactions/add-transaction', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ date, vendor, amount }),
-    })
-      .then((response: Response) => response.json())
-      .then((data): void => console.log(data));
+  const handleSubmit: (event: FormEvent) => Promise<void> = async (
+    event: FormEvent
+  ): Promise<void> => {
+    event.preventDefault();
+
+    // ensure all form fields are set
+    if (!date || !vendor || !amount) {
+      console.log('All fields are required.');
+      return;
+    }
+
+    // ensure amount is positive and a valid number
+    const parsedAmount: number = parseFloat(amount);
+    if (isNaN(parsedAmount) || parsedAmount <= 0) {
+      console.log('Amount must be a positive number.');
+      return;
+    }
+
+    // attempt to add expense for user to db
+    setLoading(true);
+    await axios
+      .post('/api/transactions/add-transaction', {
+        date: date,
+        vendor: vendor,
+        amount: -1 * parsedAmount, // expenses are always negative in the db
+      })
+      .then((response: AxiosResponse): any => response.data)
+      .then((data: any): void => {
+        console.log(data);
+        setOpen(false);
+        onExpenseAdded();
+        onClose();
+      })
+      .catch((err: any) => console.log(err))
+      .finally(() => {
+        setLoading(false);
+        setOpen(false);
+      });
   };
 
   return (
@@ -39,10 +79,10 @@ const AddTransactionForm: React.FC = (): React.ReactElement => {
             className="relative transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-sm sm:p-6"
           >
             <DialogTitle as="h3" className="text-lg font-semibold leading-6 text-gray-900">
-              Add New Transaction
+              Add Expense
             </DialogTitle>
             <DialogDescription className="mt-1 text-sm text-gray-500">
-              Fill out the form below to add a new transaction.
+              Add a new expense with the following details.
             </DialogDescription>
 
             <form onSubmit={handleSubmit} className="mt-4 space-y-4">
@@ -94,9 +134,10 @@ const AddTransactionForm: React.FC = (): React.ReactElement => {
               <div className="pt-4">
                 <button
                   type="submit"
-                  className="inline-flex w-full justify-center rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                  disabled={loading}
+                  className="inline-flex w-full justify-center rounded-md bg-red-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  Save Transaction
+                  {loading ? 'Adding...' : 'Add Expense'}
                 </button>
               </div>
             </form>
@@ -107,4 +148,4 @@ const AddTransactionForm: React.FC = (): React.ReactElement => {
   );
 };
 
-export default AddTransactionForm;
+export default AddExpenseModal;

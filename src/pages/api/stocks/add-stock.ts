@@ -14,7 +14,6 @@ export default async function handler(
       request.body.stock,
       request.body.quantity
     );
-    console.log(stock);
     response.status(200).json(stock);
   } catch (error) {
     const status = (error as any).response?.status || 500;

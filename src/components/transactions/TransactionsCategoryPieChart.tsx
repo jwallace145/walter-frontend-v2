@@ -50,7 +50,7 @@ const TransactionsCategoryPieChart: React.FC<{
       <div className="h-96 bg-white rounded-2xl p-6 shadow-md flex items-center justify-center text-gray-500">
         <div className="flex flex-col items-center">
           <ChartPieIcon className="h-12 w-12 mb-4" />
-          <p>No data available</p>
+          <p>No transactions found</p>
         </div>
       </div>
     );

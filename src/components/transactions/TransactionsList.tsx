@@ -16,17 +16,21 @@ const TransactionsList: React.FC<{ transactions: Transaction[] }> = ({
     <>
       {/* Transaction List Items */}
       <ul role="list" className="divide-y divide-gray-100">
-        {transactions.map((transaction: Transaction): ReactElement => {
-          return (
-            <TransactionListItem
-              key={transaction.transaction_id}
-              transaction={transaction}
-              setSelectedTransaction={setSelectedTransaction}
-              setOpenEditTransactionModal={setOpenEditTransactionModal}
-              setOpenDeleteTransactionModal={setOpenDeleteTransactionModal}
-            />
-          );
-        })}
+        {transactions.length === 0 ? (
+          <li className="p-4 text-center text-gray-500">No transactions found</li>
+        ) : (
+          transactions.map((transaction: Transaction): ReactElement => {
+            return (
+              <TransactionListItem
+                key={transaction.transaction_id}
+                transaction={transaction}
+                setSelectedTransaction={setSelectedTransaction}
+                setOpenEditTransactionModal={setOpenEditTransactionModal}
+                setOpenDeleteTransactionModal={setOpenDeleteTransactionModal}
+              />
+            );
+          })
+        )}
       </ul>
 
       {/* Modals */}

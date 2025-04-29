@@ -52,7 +52,7 @@ const TransactionStats: React.FC<{ transactions: Transaction[] }> = ({
               cashFlow < 0 ? 'text-red-600' : 'text-green-600'
             }`}
           >
-            {US_DOLLAR.format(cashFlow > 0 ? cashFlow : -1 * cashFlow)}
+            {US_DOLLAR.format(cashFlow >= 0 ? cashFlow : -1 * cashFlow)}
           </dd>
         </div>
 
@@ -74,7 +74,7 @@ const TransactionStats: React.FC<{ transactions: Transaction[] }> = ({
         >
           <dt className="truncate text-sm font-medium text-gray-500">Total Expenses</dt>
           <dd className="mt-1 text-3xl font-semibold tracking-tight">
-            {US_DOLLAR.format(-1 * totalExpenses)}
+            {US_DOLLAR.format(totalExpenses > 0 ? -1 * totalExpenses : totalExpenses)}
           </dd>
         </div>
       </dl>

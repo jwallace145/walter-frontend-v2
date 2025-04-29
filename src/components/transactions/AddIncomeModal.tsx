@@ -76,7 +76,7 @@ const AddIncomeModal: React.FC<AddIncomeModalProps> = ({
               Add Income
             </DialogTitle>
             <DialogDescription className="mt-2 text-sm text-gray-500">
-              Add a new income transaction.
+              Payday! Add a new income transaction with the following details.
             </DialogDescription>
 
             <form onSubmit={handleSubmit} className="mt-4 space-y-4">

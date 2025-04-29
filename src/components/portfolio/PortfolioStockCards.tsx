@@ -50,6 +50,8 @@ const PortfolioStockCards: React.FC<{ loading: boolean; stocks: PortfolioStock[]
 
   if (stocks.length === 0) return renderEmptyState();
 
+  console.log(stocks[0].logo_url);
+
   return (
     <>
       <ul
@@ -63,11 +65,7 @@ const PortfolioStockCards: React.FC<{ loading: boolean; stocks: PortfolioStock[]
               className="col-span-1 flex flex-col divide-y divide-gray-200 rounded-lg bg-white text-center shadow-sm"
             >
               <div className="flex flex-1 flex-col p-8">
-                <img
-                  alt=""
-                  src={`https://assets.parqet.com/logos/symbol/${stock.symbol.toUpperCase()}`}
-                  className="mx-auto size-32 shrink-0 rounded-full"
-                />
+                <object type="image/svg+xml" data={stock.logo_url} className="mx-auto w-32 h-32" />
                 <h3 className="mt-6 text-sm font-medium text-gray-900">{stock.company}</h3>
                 <dl className="mt-1 flex grow flex-col justify-between">
                   <dt className="sr-only">Title</dt>

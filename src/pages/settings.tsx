@@ -49,14 +49,14 @@ const Settings: React.FC<{ user: User }> = ({ user }): React.ReactElement => {
             <nav className="flex overflow-x-auto py-4">
               <ul
                 role="list"
-                className="flex min-w-full flex-none gap-x-6 px-4 text-sm/6 font-semibold text-gray-400 sm:px-6 lg:px-8"
+                className="flex min-w-full flex-none gap-x-6 px-4 text-sm/6 font-semibold text-gray-500 sm:px-6 lg:px-8"
               >
                 {getSettingsNavigation().map((item) => (
                   <li key={item.name}>
                     <a
                       href={item.href}
                       onClick={(): void => setCurrentPage(item.name)}
-                      className={item.current ? 'text-indigo-400' : ''}
+                      className={item.current ? 'text-gray-900' : ''}
                     >
                       {item.name}
                     </a>

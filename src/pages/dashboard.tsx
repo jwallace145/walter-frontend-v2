@@ -36,6 +36,7 @@ const Dashboard: React.FC<{ user: User }> = ({ user }): React.ReactElement => {
     })
       .then((response: Response) => response.json())
       .then((data): void => {
+        console.log(data.stocks);
         setStocks(data.stocks);
         setEquity(data.total_equity);
       })

@@ -5,4 +5,6 @@ export interface PortfolioStock {
   price: number;
   quantity: number;
   sector: string;
+  icon_url: string;
+  logo_url: string;
 }

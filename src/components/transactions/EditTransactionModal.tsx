@@ -6,11 +6,36 @@ import {
   DialogDescription,
   DialogPanel,
   DialogTitle,
+  Label,
+  Listbox,
+  ListboxButton,
+  ListboxOption,
+  ListboxOptions,
 } from '@headlessui/react';
+import { ChevronUpDownIcon } from '@heroicons/react/16/solid';
+import { CheckIcon } from '@heroicons/react/20/solid';
 import axios, { AxiosResponse } from 'axios';
 import React, { ReactElement, useEffect, useState } from 'react';
 
-import { Transaction } from '@/lib/models/Transaction';
+import { Transaction, TransactionCategory } from '@/lib/models/Transaction';
+import { getTransactionCategory } from '@/lib/utils/Utils';
+
+interface TransactionCategoryId {
+  id: number;
+  name: TransactionCategory;
+}
+
+const generateTransactionCategories: () => TransactionCategoryId[] =
+  (): TransactionCategoryId[] => {
+    return Object.values(TransactionCategory).map(
+      (category: TransactionCategory, index: number): TransactionCategoryId => ({
+        id: index + 1,
+        name: category,
+      })
+    );
+  };
+
+const transactionCategories: TransactionCategoryId[] = generateTransactionCategories();
 
 const EditTransactionModal: React.FC<{
   open: boolean;
@@ -20,15 +45,26 @@ const EditTransactionModal: React.FC<{
   const [date, setDate] = useState(transaction?.date || '');
   const [vendor, setVendor] = useState(transaction?.vendor || '');
   const [amount, setAmount] = useState(transaction?.amount || '');
-  const [category, setCategory] = useState(transaction?.category || '');
+  const [category, setCategory] = useState<TransactionCategoryId>(transactionCategories[0]);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect((): void => {
     setDate(transaction?.date || '');
     setVendor(transaction?.vendor || '');
     setAmount(transaction?.amount || '');
-    setCategory(transaction?.category || '');
+    setCategory(
+      transactionCategories.find((category) => category.name === getCategory()) ||
+        transactionCategories[0]
+    );
   }, [transaction]);
+
+  const getCategory: () => TransactionCategory = (): TransactionCategory => {
+    return (
+      transaction?.category
+        ? getTransactionCategory(transaction.category)
+        : TransactionCategory.BILLS
+    ) as TransactionCategory;
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -42,7 +78,7 @@ const EditTransactionModal: React.FC<{
         date,
         vendor,
         amount,
-        category,
+        category: category.name as TransactionCategory,
       })
       .then((response: AxiosResponse): void => response.data)
       .then((data: any): void => {
@@ -118,20 +154,41 @@ const EditTransactionModal: React.FC<{
                 />
               </div>
 
-              <div>
-                <label htmlFor="category" className="block text-sm font-medium text-gray-700">
-                  Category
-                </label>
-                <input
-                  id="category"
-                  type="text"
-                  value={category}
-                  onChange={(e) => setCategory(e.target.value)}
-                  required
-                  placeholder="e.g. Food"
-                  className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                />
-              </div>
+              <Listbox value={category} onChange={setCategory}>
+                <Label className="block text-sm/6 font-medium text-gray-900">Category</Label>
+                <div className="relative mt-2">
+                  <ListboxButton className="grid w-full cursor-default grid-cols-1 rounded-md bg-white py-1.5 pr-2 pl-3 text-left text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
+                    <span className="col-start-1 row-start-1 truncate pr-6">{category.name}</span>
+                    <ChevronUpDownIcon
+                      aria-hidden="true"
+                      className="col-start-1 row-start-1 size-5 self-center justify-self-end text-gray-500 sm:size-4"
+                    />
+                  </ListboxButton>
+
+                  <ListboxOptions
+                    transition
+                    className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-hidden data-leave:transition data-leave:duration-100 data-leave:ease-in data-closed:data-leave:opacity-0 sm:text-sm"
+                  >
+                    {transactionCategories.map(
+                      (transactionCategory): ReactElement => (
+                        <ListboxOption
+                          key={transactionCategory.id}
+                          value={transactionCategory}
+                          className="group relative cursor-default py-2 pr-9 pl-3 text-gray-900 select-none data-focus:bg-indigo-600 data-focus:text-white data-focus:outline-hidden"
+                        >
+                          <span className="block truncate font-normal group-data-selected:font-semibold">
+                            {transactionCategory.name}
+                          </span>
+
+                          <span className="absolute inset-y-0 right-0 flex items-center pr-4 text-indigo-600 group-not-data-selected:hidden group-data-focus:text-white">
+                            <CheckIcon aria-hidden="true" className="size-5" />
+                          </span>
+                        </ListboxOption>
+                      )
+                    )}
+                  </ListboxOptions>
+                </div>
+              </Listbox>
 
               <div className="pt-4">
                 <button

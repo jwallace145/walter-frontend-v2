@@ -60,7 +60,7 @@ const Transactions: React.FC<{ user: User }> = ({ user }): React.ReactElement =>
         },
       })
       .then((response): void => {
-        setTransactions(response.data.Data.transactions);
+        setTransactions(response.data);
       })
       .catch((error): void => console.error('Error:', error))
       .finally((): void => setLoading(false));

@@ -9,8 +9,9 @@ import { WALTER_API_TOKEN_NAME } from '@/lib/constants/Constants';
 import { Newsletter } from '@/lib/models/Newsletter';
 import { Portfolio } from '@/lib/models/Portfolio';
 import { Price } from '@/lib/models/Price';
-import { Transaction } from '@/lib/models/Transaction';
+import { Transaction, TransactionCategory } from '@/lib/models/Transaction';
 import { User } from '@/lib/models/User';
+import { getTransactionCategory } from '@/lib/utils/Utils';
 
 /**
  * WalterAPI
@@ -128,7 +129,28 @@ export class WalterAPI {
         start_date: startDate,
         end_date: endDate,
       },
-    }).then((response: AxiosResponse) => response.data);
+    })
+      .then((response: AxiosResponse) => response.data)
+      .then((data) => data['Data']['transactions'])
+      .then((transactions) => {
+        return transactions.map(
+          (transaction: {
+            date: string;
+            transaction_id: string;
+            vendor: string;
+            amount: number;
+            category: string;
+          }): Transaction => {
+            return {
+              date: transaction.date,
+              transaction_id: transaction.transaction_id,
+              vendor: transaction.vendor,
+              amount: transaction.amount,
+              category: getTransactionCategory(transaction.category) as TransactionCategory,
+            };
+          }
+        );
+      }) as Promise<Transaction[]>;
   }
 
   public static async editTransaction(

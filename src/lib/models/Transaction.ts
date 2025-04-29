@@ -1,6 +1,6 @@
-export interface Expense {
+export interface Transaction {
   date: string;
-  expense_id: string;
+  transaction_id: string;
   vendor: string;
   amount: number;
   category: string;

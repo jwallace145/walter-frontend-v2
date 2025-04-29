@@ -6,10 +6,10 @@ import { IncomingMessage } from 'http';
 import { getCookie } from 'typescript-cookie';
 
 import { WALTER_API_TOKEN_NAME } from '@/lib/constants/Constants';
-import { Expense } from '@/lib/models/Expense';
 import { Newsletter } from '@/lib/models/Newsletter';
 import { Portfolio } from '@/lib/models/Portfolio';
 import { Price } from '@/lib/models/Price';
+import { Transaction } from '@/lib/models/Transaction';
 import { User } from '@/lib/models/User';
 
 /**
@@ -117,10 +117,10 @@ export class WalterAPI {
     token: string,
     startDate: string,
     endDate: string
-  ): Promise<Expense[]> {
+  ): Promise<Transaction[]> {
     return axios({
       method: 'GET',
-      url: `${WalterAPI.ENDPOINT}/expenses`,
+      url: `${WalterAPI.ENDPOINT}/transactions`,
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -133,7 +133,7 @@ export class WalterAPI {
 
   public static async editTransaction(
     token: string,
-    expense_id: string,
+    transaction_id: string,
     date: string,
     vendor: string,
     amount: number,
@@ -141,13 +141,13 @@ export class WalterAPI {
   ): Promise<any> {
     return axios({
       method: 'PUT',
-      url: `${WalterAPI.ENDPOINT}/expenses`,
+      url: `${WalterAPI.ENDPOINT}/transactions`,
       headers: {
         Authorization: `Bearer ${token}`,
       },
       data: {
         date: date,
-        expense_id: expense_id,
+        transaction_id: transaction_id,
         vendor: vendor,
         amount: amount,
         category: category,
@@ -163,7 +163,7 @@ export class WalterAPI {
   ): Promise<any> {
     return await axios({
       method: 'POST',
-      url: `${this.ENDPOINT}/expenses`,
+      url: `${this.ENDPOINT}/transactions`,
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -177,18 +177,18 @@ export class WalterAPI {
 
   public static async deleteTransaction(
     token: string,
-    expenseId: string,
+    transactionId: string,
     date: string
   ): Promise<void> {
     return await axios({
       method: 'DELETE',
-      url: `${this.ENDPOINT}/expenses`,
+      url: `${this.ENDPOINT}/transactions`,
       headers: {
         Authorization: `Bearer ${token}`,
       },
       data: {
         date: date,
-        expense_id: expenseId,
+        transaction_id: transactionId,
       },
     }).then((response: AxiosResponse) => response.data);
   }

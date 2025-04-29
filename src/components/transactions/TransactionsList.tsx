@@ -5,10 +5,12 @@ import React, { useState } from 'react';
 import DeleteTransactionModal from '@/components/transactions/DeleteTransactionModal';
 import EditTransactionModal from '@/components/transactions/EditTransactionModal';
 import { US_DOLLAR } from '@/lib/constants/Constants';
-import { Expense } from '@/lib/models/Expense';
+import { Transaction } from '@/lib/models/Transaction';
 
-const TransactionsList: React.FC<{ expenses: Expense[] }> = ({ expenses }): React.ReactElement => {
-  const [selectedExpense, setSelectedExpense] = useState<Expense | null>(null);
+const TransactionsList: React.FC<{ transactions: Transaction[] }> = ({
+  transactions,
+}): React.ReactElement => {
+  const [selectedTransaction, setSelectedTransaction] = useState<Transaction | null>(null);
   const [openEditTransactionModal, setOpenEditTransactionModal] = useState<boolean>(false);
   const [openDeleteTransactionModal, setOpenDeleteTransactionModal] = useState<boolean>(false);
 
@@ -64,10 +66,10 @@ const TransactionsList: React.FC<{ expenses: Expense[] }> = ({ expenses }): Reac
   return (
     <>
       <ul role="list" className="divide-y divide-gray-100">
-        {expenses.map(
-          (expense: Expense): React.ReactElement => (
+        {transactions.map(
+          (transaction: Transaction): React.ReactElement => (
             <li
-              key={`${expense.date}#${expense.expense_id}`}
+              key={`${transaction.date}#${transaction.transaction_id}`}
               className="flex justify-between gap-x-6 py-5"
             >
               <div className="flex min-w-0 gap-x-4">
@@ -75,21 +77,21 @@ const TransactionsList: React.FC<{ expenses: Expense[] }> = ({ expenses }): Reac
                   <div className="flex items-start gap-x-3">
                     <p className="text-sm/6 font-semibold text-gray-900">
                       <a href="#" className="hover:underline">
-                        {expense.vendor}
+                        {transaction.vendor}
                       </a>
                     </p>
-                    {getExpenseCategoryBadge(expense.category)}
+                    {getExpenseCategoryBadge(transaction.category)}
                   </div>
                   <p className="mt-1 flex text-xs/5 text-gray-500">
                     <a href="#" className="truncate hover:underline">
-                      {expense.date}
+                      {transaction.date}
                     </a>
                   </p>
                 </div>
               </div>
               <div className="flex shrink-0 items-center gap-x-6">
                 <div className="hidden sm:flex sm:flex-col sm:items-end">
-                  <p className="text-sm/6 text-gray-900">{US_DOLLAR.format(expense.amount)}</p>
+                  <p className="text-sm/6 text-gray-900">{US_DOLLAR.format(transaction.amount)}</p>
                 </div>
                 <Menu as="div" className="relative flex-none">
                   <MenuButton className="-m-2.5 block p-2.5 text-gray-500 hover:text-gray-900">
@@ -103,23 +105,23 @@ const TransactionsList: React.FC<{ expenses: Expense[] }> = ({ expenses }): Reac
                     <MenuItem>
                       <a
                         onClick={(): void => {
-                          setSelectedExpense(expense);
+                          setSelectedTransaction(transaction);
                           setOpenEditTransactionModal(true);
                         }}
                         className="block px-3 py-1 text-sm/6 text-gray-900 data-focus:bg-gray-50 data-focus:outline-hidden"
                       >
-                        Edit<span className="sr-only">, {expense.category}</span>
+                        Edit
                       </a>
                     </MenuItem>
                     <MenuItem>
                       <a
                         onClick={(): void => {
-                          setSelectedExpense(expense);
+                          setSelectedTransaction(transaction);
                           setOpenDeleteTransactionModal(true);
                         }}
                         className="block px-3 py-1 text-sm/6 text-gray-900 data-focus:bg-gray-50 data-focus:outline-hidden"
                       >
-                        Delete<span className="sr-only">, {expense.expense_id}</span>
+                        Delete
                       </a>
                     </MenuItem>
                   </MenuItems>
@@ -132,12 +134,12 @@ const TransactionsList: React.FC<{ expenses: Expense[] }> = ({ expenses }): Reac
       <DeleteTransactionModal
         open={openDeleteTransactionModal}
         setOpen={setOpenDeleteTransactionModal}
-        expense={selectedExpense}
+        transaction={selectedTransaction}
       />
       <EditTransactionModal
         open={openEditTransactionModal}
         setOpen={setOpenEditTransactionModal}
-        expense={selectedExpense}
+        transaction={selectedTransaction}
       />
     </>
   );

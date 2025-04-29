@@ -13,7 +13,7 @@ export default async function handler(
       .json(
         await WalterAPI.editTransaction(
           token,
-          request.body.expense_id,
+          request.body.transaction_id,
           request.body.date,
           request.body.vendor,
           request.body.amount,

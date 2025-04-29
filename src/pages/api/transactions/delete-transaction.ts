@@ -9,5 +9,5 @@ export default async function handler(
   const token: string = request.cookies.WALTER_API_TOKEN || '';
   response
     .status(200)
-    .json(await WalterAPI.deleteTransaction(token, request.body.expense_id, request.body.date));
+    .json(await WalterAPI.deleteTransaction(token, request.body.transaction_id, request.body.date));
 }

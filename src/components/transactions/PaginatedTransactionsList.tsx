@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react';
 
 import Pagination from '@/components/pagination/Pagination';
-import { Expense } from '@/lib/models/Expense';
+import { Transaction } from '@/lib/models/Transaction';
 
 import TransactionsList from './TransactionsList';
 
 const PaginatedTransactionsList: React.FC<{
-  transactions: Expense[];
+  transactions: Transaction[];
   transactionsPerPage: number;
 }> = ({ transactions, transactionsPerPage }): React.ReactElement => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [currentTransactions, setCurrentTransactions] = useState<Expense[]>([]);
+  const [currentTransactions, setCurrentTransactions] = useState<Transaction[]>([]);
   const totalPages: number = Math.ceil(transactions.length / transactionsPerPage);
 
   useEffect((): void => {
@@ -25,7 +25,7 @@ const PaginatedTransactionsList: React.FC<{
   return (
     <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg">
       <div className="px-4 py-5 sm:p-6">
-        <TransactionsList expenses={currentTransactions} />
+        <TransactionsList transactions={currentTransactions} />
         <Pagination
           currentPage={currentPage}
           totalPages={totalPages}

@@ -1,15 +1,15 @@
 import React from 'react';
 
 import { US_DOLLAR } from '@/lib/constants/Constants';
-import { Expense } from '@/lib/models/Expense';
+import { Transaction } from '@/lib/models/Transaction';
 
-const TransactionStats: React.FC<{ transactions: Expense[] }> = ({
+const TransactionStats: React.FC<{ transactions: Transaction[] }> = ({
   transactions,
 }): React.ReactElement => {
   const getStats = () => {
     // get sum of expenses
     const totalExpenses: number = transactions.reduce(
-      (total: number, transaction: Expense): number => {
+      (total: number, transaction: Transaction): number => {
         return total + transaction.amount;
       },
       0
@@ -17,12 +17,12 @@ const TransactionStats: React.FC<{ transactions: Expense[] }> = ({
 
     // get largest expense to display
     const largestExpense: number = Math.max(
-      ...transactions.map((transaction: Expense): number => transaction.amount)
+      ...transactions.map((transaction: Transaction): number => transaction.amount)
     );
 
     // get expense category totals to find largest category
     const categories: Record<string, number> = transactions.reduce(
-      (acc: Record<string, number>, transaction: Expense): Record<string, number> => {
+      (acc: Record<string, number>, transaction: Transaction): Record<string, number> => {
         acc[transaction.category] = (acc[transaction.category] || 0) + transaction.amount;
         return acc;
       },
@@ -38,8 +38,6 @@ const TransactionStats: React.FC<{ transactions: Expense[] }> = ({
 
     // get largest expense category name and percentage
     const largestExpenseCategoryName: string = largestExpenseCategory[0];
-    const largestExpenseCategoryPercentage: number =
-      (largestExpenseCategory[1] / totalExpenses) * 100;
 
     return [
       {

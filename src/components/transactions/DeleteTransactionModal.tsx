@@ -7,39 +7,40 @@ import {
   DialogPanel,
   DialogTitle,
 } from '@headlessui/react';
+import axios, { AxiosResponse } from 'axios';
 import React, { useState } from 'react';
 
-import { Expense } from '@/lib/models/Expense';
+import { Transaction } from '@/lib/models/Transaction';
 
 const DeleteTransactionModal: React.FC<{
   open: boolean;
   setOpen: (open: boolean) => void;
-  expense: Expense | null;
-}> = ({ open, setOpen, expense }): React.ReactElement => {
+  transaction: Transaction | null;
+}> = ({ open, setOpen, transaction }): React.ReactElement => {
   const [isDeleting, setIsDeleting] = useState(false);
 
   const handleDelete = async () => {
-    if (expense === null) {
-      return;
-    }
+    if (transaction === null) return;
 
-    const expenseToDelete = expense as Expense;
+    const transactionToDelete: Transaction = transaction as Transaction;
 
     setIsDeleting(true);
-    fetch(`/api/transactions/delete-transaction`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ date: expenseToDelete.date, expense_id: expenseToDelete.expense_id }),
-    })
-      .then((response: Response) => response.json())
-      .then((data): void => {
+    axios
+      .delete('/api/transactions/delete-transaction', {
+        data: {
+          date: transactionToDelete.date,
+          transaction_id: transactionToDelete.transaction_id,
+        },
+      })
+      .then((response: AxiosResponse) => response.data)
+      .then((data: any) => {
         if (data['Status'].toLowerCase() === 'success') {
           setOpen(false);
+        } else {
+          alert(data['Message']);
         }
       })
-      .finally((): void => setIsDeleting(false));
+      .finally(() => setIsDeleting(false));
   };
 
   return (

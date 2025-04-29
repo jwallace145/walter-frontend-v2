@@ -1,6 +1,7 @@
 'use client';
 
 import { ChartPieIcon, ChevronRightIcon, PlusSmallIcon } from '@heroicons/react/20/solid';
+import axios from 'axios';
 import dayjs from 'dayjs';
 import { GetServerSideProps } from 'next';
 import dynamic from 'next/dynamic';
@@ -13,8 +14,8 @@ import TransactionStats from '@/components/transactions/TransactionsStats';
 import AuthenticatedPageLayout from '@/layouts/AuthenticatedPageLayout';
 import { withAuthenticationRedirect } from '@/lib/auth/AuthenticationRedirect';
 import { WALTER_API_TOKEN_NAME } from '@/lib/constants/Constants';
-import { Expense } from '@/lib/models/Expense';
 import { ExpenseCategory, getExpenseCategory } from '@/lib/models/ExpenseCategory';
+import { Transaction } from '@/lib/models/Transaction';
 import { User } from '@/lib/models/User';
 
 const TransactionsCategoryPieChart = dynamic(
@@ -24,25 +25,16 @@ const TransactionsCategoryPieChart = dynamic(
   }
 );
 
-const pages = [
-  { name: 'Categories', href: '#', current: false },
-  { name: 'Transportation', href: '#', current: true },
-];
-
 const START_OF_THE_MONTH: string = dayjs().startOf('month').format('YYYY-MM-DD');
 const END_OF_THE_MONTH: string = dayjs().endOf('month').format('YYYY-MM-DD');
 
-interface TransactionsProps {
-  user: User;
-}
-
-const Transactions: React.FC<TransactionsProps> = ({ user }): React.ReactElement => {
+const Transactions: React.FC<{ user: User }> = ({ user }): React.ReactElement => {
   const [loading, setLoading] = useState<boolean>(false);
   const [category, setCategory] = useState<ExpenseCategory | null>(null);
   const [currentDateRange, setCurrentDateRange] = useState<string>('This month');
   const [startDate, setStartDate] = useState<string>(START_OF_THE_MONTH);
   const [endDate, setEndDate] = useState<string>(END_OF_THE_MONTH);
-  const [expenses, setExpenses] = useState<Expense[]>([]);
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [openAddTransactionForm, setOpenAddTransactionForm] = useState<boolean>(false);
 
   useEffect((): void => {
@@ -55,23 +47,18 @@ const Transactions: React.FC<TransactionsProps> = ({ user }): React.ReactElement
     category: ExpenseCategory | null
   ) => void = (startDate: string, endDate: string): void => {
     setLoading(true);
-    fetch(`/api/transactions/get-transactions?start_date=${startDate}&end_date=${endDate}`, {
-      headers: {
-        Authorization: `Bearer ${getCookie(WALTER_API_TOKEN_NAME)}`,
-      },
-    })
-      .then((response: Response) => response.json())
-      .then((data): void => {
-        const expenses: Expense[] = data['Data']['expenses'];
-
-        if (category === null) {
-          setExpenses(expenses);
-        } else {
-          const filteredExpenses: Expense[] = expenses.filter(
-            (expense: Expense): boolean => expense.category.toLowerCase() === category.toLowerCase()
-          );
-          setExpenses(filteredExpenses);
-        }
+    axios
+      .get(`/api/transactions/get-transactions`, {
+        params: {
+          start_date: startDate,
+          end_date: endDate,
+        },
+        headers: {
+          Authorization: `Bearer ${getCookie(WALTER_API_TOKEN_NAME)}`,
+        },
+      })
+      .then((response): void => {
+        setTransactions(response.data.Data.transactions);
       })
       .catch((error): void => console.error('Error:', error))
       .finally((): void => setLoading(false));
@@ -137,17 +124,17 @@ const Transactions: React.FC<TransactionsProps> = ({ user }): React.ReactElement
           </header>
           <div className="flex flex-col gap-6 md:flex-row">
             <div className="flex-1 flex flex-col gap-6">
-              <TransactionStats transactions={expenses} />
+              <TransactionStats transactions={transactions} />
               <TransactionsCategoryPieChart
                 loading={loading}
-                transactions={expenses}
+                transactions={transactions}
                 setCategory={(category: string): void => {
                   setCategory(getExpenseCategory(category) as ExpenseCategory);
                 }}
               />
             </div>
             <div className="flex-1">
-              <PaginatedTransactionsList transactions={expenses} transactionsPerPage={8} />
+              <PaginatedTransactionsList transactions={transactions} transactionsPerPage={8} />
             </div>
           </div>
         </main>

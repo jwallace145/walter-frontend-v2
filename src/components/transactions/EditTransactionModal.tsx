@@ -7,59 +7,52 @@ import {
   DialogPanel,
   DialogTitle,
 } from '@headlessui/react';
-import React, { useEffect, useState } from 'react';
+import axios, { AxiosResponse } from 'axios';
+import React, { ReactElement, useEffect, useState } from 'react';
 
-import { Expense } from '@/lib/models/Expense';
+import { Transaction } from '@/lib/models/Transaction';
 
 const EditTransactionModal: React.FC<{
   open: boolean;
   setOpen: (open: boolean) => void;
-  expense: Expense | null;
-}> = ({ open, setOpen, expense }): React.ReactElement => {
-  const [date, setDate] = useState(expense?.date || '');
-  const [vendor, setVendor] = useState(expense?.vendor || '');
-  const [amount, setAmount] = useState(expense?.amount || '');
-  const [category, setCategory] = useState(expense?.category || '');
+  transaction: Transaction | null;
+}> = ({ open, setOpen, transaction }): ReactElement => {
+  const [date, setDate] = useState(transaction?.date || '');
+  const [vendor, setVendor] = useState(transaction?.vendor || '');
+  const [amount, setAmount] = useState(transaction?.amount || '');
+  const [category, setCategory] = useState(transaction?.category || '');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect((): void => {
-    setDate(expense?.date || '');
-    setVendor(expense?.vendor || '');
-    setAmount(expense?.amount || '');
-    setCategory(expense?.category || '');
-  }, [expense]);
+    setDate(transaction?.date || '');
+    setVendor(transaction?.vendor || '');
+    setAmount(transaction?.amount || '');
+    setCategory(transaction?.category || '');
+  }, [transaction]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (expense === null || !expense.expense_id) {
-      return;
-    }
+    if (transaction === null || !transaction.transaction_id) return;
 
+    // transaction is set and non-null, attempt to delete from db
     setIsSubmitting(true);
-    try {
-      const response = await fetch(`/api/transactions/edit-transaction`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          expense_id: expense.expense_id,
-          date,
-          vendor,
-          amount,
-          category,
-        }),
-      });
-      const data = await response.json();
-
-      if (data['Status']?.toLowerCase() === 'success') {
-        setOpen(false);
-      }
-    } catch (error) {
-      console.error('Error updating transaction:', error);
-    } finally {
-      setIsSubmitting(false);
-    }
+    axios
+      .put('/api/transactions/edit-transaction', {
+        transaction_id: transaction.transaction_id,
+        date,
+        vendor,
+        amount,
+        category,
+      })
+      .then((response: AxiosResponse): void => response.data)
+      .then((data: any): void => {
+        if (data['Status'].toLowerCase() === 'success') {
+          setOpen(false);
+        } else if (data['Status'].toLowerCase() === 'error') {
+          alert(data['Message']);
+        }
+      })
+      .finally((): void => setIsSubmitting(false));
   };
 
   return (

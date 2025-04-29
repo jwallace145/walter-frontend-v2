@@ -9,25 +9,23 @@ const SuccessAlert: React.FC<{
   if (!open) return <></>;
 
   return (
-    <div className="rounded-md bg-green-50 p-4">
-      <div className="flex">
-        <div className="shrink-0">
+    <div className="fixed top-4 right-4 z-50 w-full max-w-sm rounded-md bg-green-50 p-4 shadow-lg">
+      <div className="flex items-start">
+        <div className="shrink-0 pt-0.5">
           <CheckCircleIcon aria-hidden="true" className="size-5 text-green-400" />
         </div>
-        <div className="ml-3">
+        <div className="ml-3 flex-1">
           <p className="text-sm font-medium text-green-800">{message}</p>
         </div>
-        <div className="ml-auto pl-3">
-          <div className="-mx-1.5 -my-1.5">
-            <button
-              type="button"
-              onClick={() => setOpen(false)}
-              className="inline-flex rounded-md bg-green-50 p-1.5 text-green-500 hover:bg-green-100 focus:ring-2 focus:ring-green-600 focus:ring-offset-2 focus:ring-offset-green-50 focus:outline-hidden"
-            >
-              <span className="sr-only">Dismiss</span>
-              <XMarkIcon aria-hidden="true" className="size-5" />
-            </button>
-          </div>
+        <div className="ml-4 flex-shrink-0">
+          <button
+            type="button"
+            onClick={() => setOpen(false)}
+            className="inline-flex rounded-md bg-green-50 p-1.5 text-green-500 hover:bg-green-100 focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-offset-2"
+          >
+            <span className="sr-only">Dismiss</span>
+            <XMarkIcon aria-hidden="true" className="size-5" />
+          </button>
         </div>
       </div>
     </div>

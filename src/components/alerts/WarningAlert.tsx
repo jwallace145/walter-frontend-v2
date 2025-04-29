@@ -10,25 +10,23 @@ const WarningAlert: React.FC<{
   if (!open) return <></>;
 
   return (
-    <div className="rounded-md bg-yellow-50 p-4">
-      <div className="flex">
-        <div className="shrink-0">
+    <div className="fixed top-4 right-4 z-50 w-full max-w-sm rounded-md bg-yellow-50 p-4 shadow-lg">
+      <div className="flex items-start">
+        <div className="shrink-0 pt-0.5">
           <ExclamationTriangleIcon aria-hidden="true" className="size-5 text-yellow-400" />
         </div>
-        <div className="ml-3">
+        <div className="ml-3 flex-1">
           <h3 className="text-sm font-medium text-yellow-800">{message}</h3>
         </div>
-        <div className="ml-auto pl-3">
-          <div className="-mx-1.5 -my-1.5">
-            <button
-              type="button"
-              onClick={(): void => setOpen(false)}
-              className="inline-flex rounded-md bg-yellow-50 p-1.5 text-yellow-400 hover:bg-yellow-100 focus:ring-2 focus:ring-yellow-600 focus:ring-offset-2 focus:ring-offset-yellow-50 focus:outline-hidden"
-            >
-              <span className="sr-only">Dismiss</span>
-              <XMarkIcon aria-hidden="true" className="size-5" />
-            </button>
-          </div>
+        <div className="ml-4 flex-shrink-0">
+          <button
+            type="button"
+            onClick={() => setOpen(false)}
+            className="inline-flex rounded-md bg-yellow-50 p-1.5 text-yellow-400 hover:bg-yellow-100 focus:outline-none focus:ring-2 focus:ring-yellow-600 focus:ring-offset-2"
+          >
+            <span className="sr-only">Dismiss</span>
+            <XMarkIcon aria-hidden="true" className="size-5" />
+          </button>
         </div>
       </div>
     </div>

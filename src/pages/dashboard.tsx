@@ -1,3 +1,6 @@
+import { Listbox, ListboxButton, ListboxOption, ListboxOptions } from '@headlessui/react';
+import { ChevronUpDownIcon } from '@heroicons/react/16/solid';
+import { CheckIcon } from '@heroicons/react/20/solid';
 import { BanknotesIcon, GlobeAltIcon } from '@heroicons/react/24/outline';
 import { GetServerSideProps } from 'next';
 import React, { ReactElement, useEffect, useState } from 'react';
@@ -14,6 +17,12 @@ import { PortfolioStock } from '@/lib/models/PortfolioStock';
 import { Price } from '@/lib/models/Price';
 import { User } from '@/lib/models/User';
 
+export interface PortfolioStockPage {
+  id: string;
+  name: string;
+  current: boolean;
+}
+
 const Dashboard: React.FC<{ user: User }> = ({ user }): React.ReactElement => {
   const [getPortfolioLoading, setGetPortfolioLoading] = useState<boolean>(false);
   const [getPricesLoading, setGetPricesLoading] = useState<boolean>(false);
@@ -21,7 +30,11 @@ const Dashboard: React.FC<{ user: User }> = ({ user }): React.ReactElement => {
   const [equity, setEquity] = useState<number>(0);
   const [prices, setPrices] = useState<Price[]>([]);
   const [openAddStockModal, setOpenAddStockModal] = useState<boolean>(false);
-  const [page, setCurrentPage] = useState<string>('equity');
+  const [currentPage, setCurrentPage] = useState<PortfolioStockPage>({
+    id: 'equity',
+    name: 'Equity',
+    current: true,
+  });
 
   useEffect((): void => {
     getPortfolio();
@@ -56,14 +69,15 @@ const Dashboard: React.FC<{ user: User }> = ({ user }): React.ReactElement => {
       .finally((): void => setGetPricesLoading(false));
   };
 
-  const getPortfolioNavigation: () => { name: string; current: boolean }[] = (): {
+  const getPortfolioNavigation: () => { id: string; name: string; current: boolean }[] = (): {
+    id: string;
     name: string;
     current: boolean;
   }[] => {
     return [
-      { name: 'Equity', current: page.toLowerCase() === 'equity' },
-      { name: 'Shares', current: page.toLowerCase() === 'shares' },
-      { name: 'Price', current: page.toLowerCase() === 'price' },
+      { id: 'equity', name: 'Equity', current: currentPage.name.toLowerCase() === 'equity' },
+      { id: 'shares', name: 'Shares', current: currentPage.name.toLowerCase() === 'shares' },
+      { id: 'price', name: 'Price', current: currentPage.name.toLowerCase() === 'price' },
     ];
   };
 
@@ -90,25 +104,72 @@ const Dashboard: React.FC<{ user: User }> = ({ user }): React.ReactElement => {
 
         <div className="pt-4">
           <div className="flex items-center justify-between border-b border-white/5">
-            {/* Secondary navigation */}
+            {/* Page List Options */}
             <nav className="flex overflow-x-auto py-4">
-              <ul
-                role="list"
-                className="flex flex-none gap-x-6 px-4 text-sm/6 font-semibold text-gray-500 sm:px-6 lg:px-8"
-              >
-                {getPortfolioNavigation().map(
-                  (item): ReactElement => (
-                    <li key={item.name}>
-                      <a
-                        onClick={(): void => setCurrentPage(item.name)}
-                        className={`cursor-pointer hover:text-gray-600 ${item.current ? 'text-gray-900' : ''}`}
-                      >
-                        {item.name}
-                      </a>
-                    </li>
-                  )
-                )}
-              </ul>
+              {/* Mobile List Options */}
+              <div className="w-full sm:hidden">
+                <Listbox value={currentPage} onChange={setCurrentPage}>
+                  <div className="relative mt-2">
+                    <ListboxButton className="grid w-full cursor-default grid-cols-1 rounded-md bg-white py-1.5 pr-2 pl-3 text-left text-gray-900 outline-1 -outline-offset-1 outline-gray-300 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6">
+                      <span className="col-start-1 row-start-1 truncate pr-6">
+                        {currentPage.name}
+                      </span>
+                      <ChevronUpDownIcon
+                        aria-hidden="true"
+                        className="col-start-1 row-start-1 size-5 self-center justify-self-end text-gray-500 sm:size-4"
+                      />
+                    </ListboxButton>
+
+                    <ListboxOptions
+                      transition
+                      className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-hidden data-leave:transition data-leave:duration-100 data-leave:ease-in data-closed:data-leave:opacity-0 sm:text-sm"
+                    >
+                      {getPortfolioNavigation().map(
+                        (portfolioNavigation: {
+                          id: string;
+                          name: string;
+                          current: boolean;
+                        }): ReactElement => (
+                          <ListboxOption
+                            key={portfolioNavigation.id}
+                            value={portfolioNavigation}
+                            className="group relative cursor-default py-2 pr-9 pl-3 text-gray-900 select-none data-focus:bg-indigo-600 data-focus:text-white data-focus:outline-hidden"
+                          >
+                            <span className="block truncate font-normal group-data-selected:font-semibold">
+                              {portfolioNavigation.name}
+                            </span>
+
+                            <span className="absolute inset-y-0 right-0 flex items-center pr-4 text-indigo-600 group-not-data-selected:hidden group-data-focus:text-white">
+                              <CheckIcon aria-hidden="true" className="size-5" />
+                            </span>
+                          </ListboxOption>
+                        )
+                      )}
+                    </ListboxOptions>
+                  </div>
+                </Listbox>
+              </div>
+
+              {/* Desktop Row Options */}
+              <div className="hidden sm:block">
+                <ul
+                  role="list"
+                  className="flex flex-none gap-x-6 px-4 text-sm/6 font-semibold text-gray-500 sm:px-6 lg:px-8"
+                >
+                  {getPortfolioNavigation().map(
+                    (item: PortfolioStockPage): ReactElement => (
+                      <li key={item.name}>
+                        <a
+                          onClick={(): void => setCurrentPage({ ...item, current: true })}
+                          className={`cursor-pointer hover:text-gray-600 ${item.current ? 'text-gray-900' : ''}`}
+                        >
+                          {item.name}
+                        </a>
+                      </li>
+                    )
+                  )}
+                </ul>
+              </div>
             </nav>
 
             {/* Action Buttons */}
@@ -131,7 +192,7 @@ const Dashboard: React.FC<{ user: User }> = ({ user }): React.ReactElement => {
           </div>
 
           {/* Portfolio Stock Cards */}
-          <PortfolioStockCards loading={getPortfolioLoading} stocks={stocks} page={page} />
+          <PortfolioStockCards loading={getPortfolioLoading} stocks={stocks} page={currentPage} />
         </div>
       </main>
       <AddPortfolioStockModal open={openAddStockModal} setOpen={setOpenAddStockModal} />

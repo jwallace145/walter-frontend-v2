@@ -6,11 +6,12 @@ import LoadingSpinner from '@/components/loading/LoadingSpinner';
 import DeletePortfolioStockModal from '@/components/portfolio/DeletePortfolioStockModal';
 import { US_DOLLAR } from '@/lib/constants/Constants';
 import { PortfolioStock } from '@/lib/models/PortfolioStock';
+import { PortfolioStockPage } from '@/pages/dashboard';
 
 const PortfolioStockCards: React.FC<{
   loading: boolean;
   stocks: PortfolioStock[];
-  page: string;
+  page: PortfolioStockPage;
 }> = ({ loading, stocks, page }): ReactElement => {
   const [selectedPortfolioStock, setSelectedPortfolioStock] = useState<PortfolioStock | null>(null);
   const [openDeletePortfolioStock, setOpenDeletePortfolioStock] = useState<boolean>(false);
@@ -47,22 +48,10 @@ const PortfolioStockCards: React.FC<{
     );
   };
 
-  const getPortfolioNavigation: () => { name: string; href: string; current: boolean }[] = (): {
-    name: string;
-    href: string;
-    current: boolean;
-  }[] => {
-    return [
-      { name: 'Equity', href: '#', current: page.toLowerCase() === 'equity' },
-      { name: 'Shares', href: '#', current: page.toLowerCase() === 'shares' },
-      { name: 'Price', href: '#', current: page.toLowerCase() === 'price' },
-    ];
-  };
-
   const getPortfolioStockCardValue: (stock: PortfolioStock) => string = (
     stock: PortfolioStock
   ): string => {
-    switch (page.toLowerCase()) {
+    switch (page.name.toLowerCase()) {
       case 'equity':
         return US_DOLLAR.format(stock.equity);
       case 'shares':

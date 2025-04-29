@@ -7,10 +7,11 @@ import DeletePortfolioStockModal from '@/components/portfolio/DeletePortfolioSto
 import { US_DOLLAR } from '@/lib/constants/Constants';
 import { PortfolioStock } from '@/lib/models/PortfolioStock';
 
-const PortfolioStockCards: React.FC<{ loading: boolean; stocks: PortfolioStock[] }> = ({
-  loading,
-  stocks,
-}): ReactElement => {
+const PortfolioStockCards: React.FC<{
+  loading: boolean;
+  stocks: PortfolioStock[];
+  page: string;
+}> = ({ loading, stocks, page }): ReactElement => {
   const [selectedPortfolioStock, setSelectedPortfolioStock] = useState<PortfolioStock | null>(null);
   const [openDeletePortfolioStock, setOpenDeletePortfolioStock] = useState<boolean>(false);
 
@@ -46,11 +47,36 @@ const PortfolioStockCards: React.FC<{ loading: boolean; stocks: PortfolioStock[]
     );
   };
 
+  const getPortfolioNavigation: () => { name: string; href: string; current: boolean }[] = (): {
+    name: string;
+    href: string;
+    current: boolean;
+  }[] => {
+    return [
+      { name: 'Equity', href: '#', current: page.toLowerCase() === 'equity' },
+      { name: 'Shares', href: '#', current: page.toLowerCase() === 'shares' },
+      { name: 'Price', href: '#', current: page.toLowerCase() === 'price' },
+    ];
+  };
+
+  const getPortfolioStockCardValue: (stock: PortfolioStock) => string = (
+    stock: PortfolioStock
+  ): string => {
+    switch (page.toLowerCase()) {
+      case 'equity':
+        return US_DOLLAR.format(stock.equity);
+      case 'shares':
+        return `${stock.quantity} Shares`;
+      case 'price':
+        return US_DOLLAR.format(stock.price);
+      default:
+        return 'ERROR';
+    }
+  };
+
   if (loading) return renderLoadingState();
 
   if (stocks.length === 0) return renderEmptyState();
-
-  console.log(stocks[0].logo_url);
 
   return (
     <>
@@ -72,7 +98,7 @@ const PortfolioStockCards: React.FC<{ loading: boolean; stocks: PortfolioStock[]
                   <dd className="text-sm text-gray-500">{stock.symbol}</dd>
                   <dt className="mt-3 sr-only">Equity</dt>
                   <dd className="mt-1 text-sm font-medium text-gray-700">
-                    {US_DOLLAR.format(stock.equity)}
+                    {getPortfolioStockCardValue(stock)}
                   </dd>
                 </dl>
               </div>

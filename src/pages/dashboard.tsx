@@ -1,6 +1,6 @@
-import { PlusSmallIcon } from '@heroicons/react/20/solid';
+import { BanknotesIcon, GlobeAltIcon } from '@heroicons/react/24/outline';
 import { GetServerSideProps } from 'next';
-import React, { useEffect, useState } from 'react';
+import React, { ReactElement, useEffect, useState } from 'react';
 import { getCookie } from 'typescript-cookie';
 
 import AddPortfolioStockModal from '@/components/portfolio/AddPortfolioStockModal';
@@ -21,6 +21,7 @@ const Dashboard: React.FC<{ user: User }> = ({ user }): React.ReactElement => {
   const [equity, setEquity] = useState<number>(0);
   const [prices, setPrices] = useState<Price[]>([]);
   const [openAddStockModal, setOpenAddStockModal] = useState<boolean>(false);
+  const [page, setCurrentPage] = useState<string>('equity');
 
   useEffect((): void => {
     getPortfolio();
@@ -55,6 +56,17 @@ const Dashboard: React.FC<{ user: User }> = ({ user }): React.ReactElement => {
       .finally((): void => setGetPricesLoading(false));
   };
 
+  const getPortfolioNavigation: () => { name: string; current: boolean }[] = (): {
+    name: string;
+    current: boolean;
+  }[] => {
+    return [
+      { name: 'Equity', current: page.toLowerCase() === 'equity' },
+      { name: 'Shares', current: page.toLowerCase() === 'shares' },
+      { name: 'Price', current: page.toLowerCase() === 'price' },
+    ];
+  };
+
   const getContent = (): React.ReactElement => (
     <>
       <main className="p-8">
@@ -75,15 +87,51 @@ const Dashboard: React.FC<{ user: User }> = ({ user }): React.ReactElement => {
             />
           </div>
         </div>
+
         <div className="pt-4">
-          <button
-            onClick={(): void => setOpenAddStockModal(true)}
-            className="mb-4 inline-flex items-center rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-          >
-            <PlusSmallIcon aria-hidden="true" className="-ml-1.5 size-5" />
-            Add Stock
-          </button>
-          <PortfolioStockCards loading={getPortfolioLoading} stocks={stocks} />
+          <div className="flex items-center justify-between border-b border-white/5">
+            {/* Secondary navigation */}
+            <nav className="flex overflow-x-auto py-4">
+              <ul
+                role="list"
+                className="flex flex-none gap-x-6 px-4 text-sm/6 font-semibold text-gray-500 sm:px-6 lg:px-8"
+              >
+                {getPortfolioNavigation().map(
+                  (item): ReactElement => (
+                    <li key={item.name}>
+                      <a
+                        onClick={(): void => setCurrentPage(item.name)}
+                        className={`cursor-pointer hover:text-gray-600 ${item.current ? 'text-gray-900' : ''}`}
+                      >
+                        {item.name}
+                      </a>
+                    </li>
+                  )
+                )}
+              </ul>
+            </nav>
+
+            {/* Action Buttons */}
+            <div className="flex gap-4 py-4 px-4 sm:px-6 lg:px-8">
+              <button
+                onClick={(): void => setOpenAddStockModal(true)}
+                className="flex items-center gap-x-1 rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              >
+                <BanknotesIcon aria-hidden="true" className="-ml-1.5 size-5" />
+                <span className="hidden md:inline">Stocks</span>
+              </button>
+              <button
+                onClick={(): void => console.log('Crypto')}
+                className="flex items-center gap-x-1 rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              >
+                <GlobeAltIcon aria-hidden="true" className="-ml-1.5 size-5" />
+                <span className="hidden md:inline">Crypto</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Portfolio Stock Cards */}
+          <PortfolioStockCards loading={getPortfolioLoading} stocks={stocks} page={page} />
         </div>
       </main>
       <AddPortfolioStockModal open={openAddStockModal} setOpen={setOpenAddStockModal} />

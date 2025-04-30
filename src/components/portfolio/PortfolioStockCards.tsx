@@ -2,17 +2,17 @@ import { PencilSquareIcon, TrashIcon } from '@heroicons/react/20/solid';
 import { CurrencyDollarIcon } from '@heroicons/react/24/outline';
 import React, { ReactElement, useState } from 'react';
 
+import { AssetViewOption } from '@/components/investments/InvestmentsAssetsViewOptions';
 import LoadingSpinner from '@/components/loading/LoadingSpinner';
 import DeletePortfolioStockModal from '@/components/portfolio/DeletePortfolioStockModal';
 import { US_DOLLAR } from '@/lib/constants/Constants';
 import { PortfolioStock } from '@/lib/models/PortfolioStock';
-import { PortfolioStockPage } from '@/pages/dashboard';
 
 const PortfolioStockCards: React.FC<{
   loading: boolean;
   stocks: PortfolioStock[];
-  page: PortfolioStockPage;
-}> = ({ loading, stocks, page }): ReactElement => {
+  assetViewOption: AssetViewOption;
+}> = ({ loading, stocks, assetViewOption }): ReactElement => {
   const [selectedPortfolioStock, setSelectedPortfolioStock] = useState<PortfolioStock | null>(null);
   const [openDeletePortfolioStock, setOpenDeletePortfolioStock] = useState<boolean>(false);
 
@@ -51,7 +51,7 @@ const PortfolioStockCards: React.FC<{
   const getPortfolioStockCardValue: (stock: PortfolioStock) => string = (
     stock: PortfolioStock
   ): string => {
-    switch (page.name.toLowerCase()) {
+    switch (assetViewOption.name.toLowerCase()) {
       case 'equity':
         return US_DOLLAR.format(stock.equity);
       case 'shares':

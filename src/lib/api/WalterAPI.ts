@@ -33,6 +33,16 @@ export class WalterAPI {
     }).then((response: AxiosResponse) => response.data);
   }
 
+  public static async getUser(token: string): Promise<User | null> {
+    return await axios({
+      method: 'GET',
+      url: `${this.ENDPOINT}/users`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }).then((response: AxiosResponse): User | null => response.data.Data ?? null);
+  }
+
   public static async createUser(
     email: string,
     firstName: string,
@@ -51,14 +61,22 @@ export class WalterAPI {
     }).then((response: AxiosResponse): any => response.data);
   }
 
-  public static async getUser(token: string): Promise<User | null> {
+  public static async updatePassword(
+    token: string,
+    currentPassword: string,
+    newPassword: string
+  ): Promise<any> {
     return await axios({
-      method: 'GET',
-      url: `${this.ENDPOINT}/users`,
+      method: 'POST',
+      url: `${this.ENDPOINT}/passwords`,
       headers: {
         Authorization: `Bearer ${token}`,
       },
-    }).then((response: AxiosResponse): User | null => response.data.Data ?? null);
+      data: {
+        current_password: currentPassword,
+        new_password: newPassword,
+      },
+    }).then((response: AxiosResponse): any => response.data);
   }
 
   public static async updateUser(request: IncomingMessage): Promise<any> {

@@ -6,8 +6,10 @@ export default async function handler(
   request: NextApiRequest,
   response: NextApiResponse
 ): Promise<void> {
-  const { email, firstName, lastName, password } = request.body;
+  const token: string = request.cookies.WALTER_API_TOKEN || '';
   return response
     .status(200)
-    .json(await WalterAPI.createUser(email, firstName, lastName, password));
+    .json(
+      await WalterAPI.updatePassword(token, request.body.currentPassword, request.body.newPassword)
+    );
 }

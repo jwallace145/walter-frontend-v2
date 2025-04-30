@@ -9,8 +9,8 @@ import dynamic from 'next/dynamic';
 import React, { useEffect, useState } from 'react';
 import { getCookie } from 'typescript-cookie';
 
-import SuccessAlert from '@/components/alerts/SuccessAlert';
-import WarningAlert from '@/components/alerts/WarningAlert';
+import SuccessNotification from '@/components/notifications/SuccessNotification';
+import WarningNotification from '@/components/notifications/WarningNotification';
 import AddExpenseModal from '@/components/transactions/AddExpenseModal';
 import AddIncomeModal from '@/components/transactions/AddIncomeModal';
 import PaginatedTransactionsList from '@/components/transactions/PaginatedTransactionsList';
@@ -87,26 +87,36 @@ const Transactions: React.FC<{ user: User }> = ({ user }): React.ReactElement =>
   const getContent: () => React.ReactElement = (): React.ReactElement => {
     return (
       <>
-        {/* Alerts */}
-        <SuccessAlert
-          open={openAddIncomeSuccessAlert}
-          setOpen={setOpenAddIncomeSuccessAlert}
-          message={'Income added!'}
+        {/* Notifications */}
+        <SuccessNotification
+          show={openAddIncomeSuccessAlert}
+          setShow={setOpenAddIncomeSuccessAlert}
+          title={'Income added!'}
+          message={
+            'Income successfully added to your account. You can now view it in your transactions.'
+          }
         />
-        <SuccessAlert
-          open={openAddExpenseSuccessAlert}
-          setOpen={setOpenAddExpenseSuccessAlert}
-          message={'Expense added!'}
+        <SuccessNotification
+          show={openAddExpenseSuccessAlert}
+          setShow={setOpenAddExpenseSuccessAlert}
+          title={'Expense added!'}
+          message={
+            'Expense successfully added to your account. You can now view it in your transactions.'
+          }
         />
-        <SuccessAlert
-          open={openEditTransactionSuccessAlert}
-          setOpen={setOpenEditTransactionSuccessAlert}
-          message={'Updated transaction'}
+        <SuccessNotification
+          show={openEditTransactionSuccessAlert}
+          setShow={setOpenEditTransactionSuccessAlert}
+          title={'Transaction updated!'}
+          message={
+            'The transaction has been updated in your account. You can now view it in your transactions.'
+          }
         />
-        <WarningAlert
-          open={openDeleteTransactionSuccessAlert}
-          setOpen={setOpenDeleteTransactionSuccessAlert}
-          message={'Deleted transaction'}
+        <WarningNotification
+          show={openDeleteTransactionSuccessAlert}
+          setShow={setOpenDeleteTransactionSuccessAlert}
+          title={'Deleted transaction'}
+          message={'The transaction has been deleted from your account.'}
         />
 
         <main className="p-8">

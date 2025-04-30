@@ -4,6 +4,8 @@ import Link from 'next/link';
 import React, { useState } from 'react';
 import { setCookie } from 'typescript-cookie';
 
+import ErrorNotification from '@/components/notifications/ErrorNotification';
+import SuccessNotification from '@/components/notifications/SuccessNotification';
 import { withAuthenticationRedirect } from '@/lib/auth/AuthenticationRedirect';
 import { WALTER_API_TOKEN_NAME } from '@/lib/constants/Constants';
 
@@ -11,6 +13,11 @@ const SignIn: React.FC = (): React.ReactElement => {
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [success, setSuccess] = useState('');
+  const [showError, setShowError] = useState(false);
+  const [error, setError] = useState('');
+  const [message, setMessage] = useState('');
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -20,11 +27,21 @@ const SignIn: React.FC = (): React.ReactElement => {
       .then((response: AxiosResponse): any => response.data)
       .then((data: any): void => {
         if (data['Status'].toLowerCase() === 'success') {
+          setShowSuccess(true);
+          setSuccess(data['Message']);
+          setMessage('User successfully signed in! Redirecting to dashboard...');
           setCookie(WALTER_API_TOKEN_NAME, data['Data']['token']);
           window.location.href = '/dashboard';
         } else {
-          alert(data.message);
+          setShowError(true);
+          setError(data['Message']);
+          setMessage('Unable to sign in. Please try again or contact support.');
         }
+      })
+      .catch((error: Error): void => {
+        setShowError(true);
+        setError(error.message);
+        setMessage('Unexpected error occurred! Please try again or contact support.');
       })
       .finally((): void => setLoading(false));
   };
@@ -215,6 +232,15 @@ const SignIn: React.FC = (): React.ReactElement => {
           </p>
         </div>
       </div>
+
+      {/* Sign In Notifications */}
+      <SuccessNotification
+        show={showSuccess}
+        setShow={setShowSuccess}
+        title={success}
+        message={message}
+      />
+      <ErrorNotification show={showError} setShow={setShowError} title={error} message={message} />
     </>
   );
 };

@@ -27,6 +27,13 @@ const SettingsChangePassword: React.FC = (): React.ReactElement => {
       return;
     }
 
+    if (newPassword === currentPassword) {
+      setShowError(true);
+      setError('New password cannot be the same as the current password!');
+      setMessage('Please make sure the new password is different from the current password.');
+      return;
+    }
+
     setChangingPassword(true);
     axios('/api/users/update-password', {
       method: 'POST',

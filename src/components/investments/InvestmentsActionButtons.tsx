@@ -3,7 +3,9 @@ import React from 'react';
 
 import AddPortfolioStockModal from '@/components/portfolio/AddPortfolioStockModal';
 
-const InvestmentsActionButtons: React.FC = (): React.ReactElement => {
+const InvestmentsActionButtons: React.FC<{ refresh: () => void }> = ({
+  refresh,
+}): React.ReactElement => {
   const [openAddStockModal, setOpenAddStockModal] = React.useState<boolean>(false);
   const [openAddCryptoModal, setOpenAddCryptoModal] = React.useState<boolean>(false);
 
@@ -27,8 +29,16 @@ const InvestmentsActionButtons: React.FC = (): React.ReactElement => {
       </div>
 
       {/* Portfolio Modals */}
-      <AddPortfolioStockModal open={openAddStockModal} setOpen={setOpenAddStockModal} />
-      <AddPortfolioStockModal open={openAddCryptoModal} setOpen={setOpenAddCryptoModal} />
+      <AddPortfolioStockModal
+        open={openAddStockModal}
+        setOpen={setOpenAddStockModal}
+        refresh={refresh}
+      />
+      <AddPortfolioStockModal
+        open={openAddCryptoModal}
+        setOpen={setOpenAddCryptoModal}
+        refresh={refresh}
+      />
     </>
   );
 };

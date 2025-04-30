@@ -10,10 +10,11 @@ import {
 import axios, { AxiosResponse } from 'axios';
 import React, { useState } from 'react';
 
-const AddPortfolioStockModal: React.FC<{ open: boolean; setOpen: (open: boolean) => void }> = ({
-  open,
-  setOpen,
-}): React.ReactElement => {
+const AddPortfolioStockModal: React.FC<{
+  open: boolean;
+  setOpen: (open: boolean) => void;
+  refresh: () => void;
+}> = ({ open, setOpen, refresh }): React.ReactElement => {
   const [stock, setStock] = useState('');
   const [quantity, setQuantity] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -32,6 +33,7 @@ const AddPortfolioStockModal: React.FC<{ open: boolean; setOpen: (open: boolean)
           setStock('');
           setQuantity('');
           setOpen(false);
+          refresh();
         } else if (data['Status'].toLowerCase() === 'error') {
           alert(data['Message']);
         }

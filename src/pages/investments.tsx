@@ -19,6 +19,7 @@ import { User } from '@/lib/models/User';
 import { getWalterAPIToken } from '@/lib/utils/Utils';
 
 const Investments: React.FC<{ user: User }> = ({ user }): React.ReactElement => {
+  const [refresh, setRefresh] = React.useState<boolean>(false);
   const [stocks, setStocks] = React.useState<PortfolioStock[]>([]);
   const [equity, setEquity] = React.useState<number>(0);
   const [prices, setPrices] = React.useState<Price[]>([]);
@@ -62,7 +63,7 @@ const Investments: React.FC<{ user: User }> = ({ user }): React.ReactElement => 
       })
       .catch((error): void => console.error('Error:', error))
       .finally((): void => setLoadingPrices(false));
-  }, []);
+  }, [refresh]);
 
   const getContent: () => React.ReactElement = (): React.ReactElement => {
     return (
@@ -92,7 +93,7 @@ const Investments: React.FC<{ user: User }> = ({ user }): React.ReactElement => 
                 assetViewOption={assetViewOption}
                 setAssetViewOption={setAssetViewOption}
               />
-              <InvestmentsActionButtons />
+              <InvestmentsActionButtons refresh={(): void => setRefresh(!refresh)} />
             </div>
 
             {/* Portfolio Stock Cards */}
@@ -100,6 +101,7 @@ const Investments: React.FC<{ user: User }> = ({ user }): React.ReactElement => 
               stocks={stocks}
               assetViewOption={assetViewOption}
               loading={loadingPortfolio}
+              refresh={(): void => setRefresh(!refresh)}
             />
           </div>
         </main>

@@ -16,12 +16,14 @@ interface DeletePortfolioStockModalProps {
   open: boolean;
   setOpen: (open: boolean) => void;
   stock: PortfolioStock | null;
+  refresh: () => void;
 }
 
 const DeletePortfolioStockModal: React.FC<DeletePortfolioStockModalProps> = ({
   open,
   setOpen,
   stock,
+  refresh,
 }): React.ReactElement => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -39,6 +41,7 @@ const DeletePortfolioStockModal: React.FC<DeletePortfolioStockModalProps> = ({
       .then((response): void => {
         if (response.data['Status']?.toLowerCase() === 'success') {
           setOpen(false);
+          refresh();
         }
       })
       .finally((): void => setIsSubmitting(false));

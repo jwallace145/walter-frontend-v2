@@ -12,7 +12,8 @@ const PortfolioStockCards: React.FC<{
   loading: boolean;
   stocks: PortfolioStock[];
   assetViewOption: AssetViewOption;
-}> = ({ loading, stocks, assetViewOption }): ReactElement => {
+  refresh: () => void;
+}> = ({ loading, stocks, assetViewOption, refresh }): ReactElement => {
   const [selectedPortfolioStock, setSelectedPortfolioStock] = useState<PortfolioStock | null>(null);
   const [openDeletePortfolioStock, setOpenDeletePortfolioStock] = useState<boolean>(false);
 
@@ -120,10 +121,13 @@ const PortfolioStockCards: React.FC<{
           )
         )}
       </ul>
+
+      {/* Modals */}
       <DeletePortfolioStockModal
         open={openDeletePortfolioStock}
         setOpen={setOpenDeletePortfolioStock}
         stock={selectedPortfolioStock}
+        refresh={refresh}
       />
     </>
   );

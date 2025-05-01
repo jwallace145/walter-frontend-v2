@@ -1,12 +1,7 @@
-import {
-  Dialog,
-  DialogBackdrop,
-  DialogDescription,
-  DialogPanel,
-  DialogTitle,
-} from '@headlessui/react';
 import React from 'react';
 
+import Modal from '@/components/modals/Modal';
+import ErrorNotification from '@/components/notifications/ErrorNotification';
 import SuccessNotification from '@/components/notifications/SuccessNotification';
 import { Transaction } from '@/lib/models/Transaction';
 import { downloadTransactionsAsCSV } from '@/lib/utils/Utils';
@@ -16,9 +11,36 @@ const TransactionsDownloadModal: React.FC<{
   setOpen: (open: boolean) => void;
   transactions: Transaction[];
 }> = ({ open, setOpen, transactions }): React.ReactElement => {
+  const [error, setError] = React.useState(false);
   const [success, setSuccess] = React.useState(false);
 
+  const getContent: () => React.ReactElement = (): React.ReactElement => {
+    return (
+      <div className="flex flex-col space-y-2 pt-4">
+        <button
+          type="button"
+          onClick={handleDownload}
+          className="inline-flex w-full justify-center rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+        >
+          Download
+        </button>
+        <button
+          type="button"
+          onClick={(): void => setOpen(false)}
+          className="w-full inline-flex justify-center rounded-md bg-gray-200 px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
+        >
+          Cancel
+        </button>
+      </div>
+    );
+  };
+
   const handleDownload: () => void = (): void => {
+    if (transactions.length === 0) {
+      setError(true);
+      setOpen(false);
+      return;
+    }
     downloadTransactionsAsCSV(transactions);
     setSuccess(true);
     setOpen(false);
@@ -27,33 +49,13 @@ const TransactionsDownloadModal: React.FC<{
   return (
     <>
       {/* Download Transactions Modal */}
-      <Dialog open={open} onClose={setOpen} className="relative z-10">
-        <DialogBackdrop transition className="fixed inset-0 bg-gray-500/75 transition-opacity" />
-        <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
-          <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
-            <DialogPanel
-              transition
-              className="relative transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-sm sm:p-6"
-            >
-              <DialogTitle as="h3" className="text-lg font-semibold leading-6 text-gray-900">
-                Download Transactions
-              </DialogTitle>
-              <DialogDescription className="mt-2 text-sm text-gray-500">
-                Download your transactions as a CSV file.
-              </DialogDescription>
-              <div className="pt-4">
-                <button
-                  type="button"
-                  onClick={handleDownload}
-                  className="inline-flex w-full justify-center rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                >
-                  Download
-                </button>
-              </div>
-            </DialogPanel>
-          </div>
-        </div>
-      </Dialog>
+      <Modal
+        open={open}
+        setOpen={setOpen}
+        title="Download Transactions"
+        description="Download your transactions as a CSV file."
+        content={getContent()}
+      />
 
       {/* Download Transactions Modal Alerts */}
       <SuccessNotification
@@ -61,6 +63,12 @@ const TransactionsDownloadModal: React.FC<{
         setShow={setSuccess}
         title="Transactions downloaded!"
         message="Your transactions have been downloaded to your computer."
+      />
+      <ErrorNotification
+        show={error}
+        setShow={setError}
+        title="No transactions to download!"
+        message="You do not have any transactions to download."
       />
     </>
   );

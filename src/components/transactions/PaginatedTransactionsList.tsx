@@ -1,8 +1,12 @@
+import { MagnifyingGlassIcon } from '@heroicons/react/20/solid';
 import { ArrowDownTrayIcon } from '@heroicons/react/24/outline';
+import { TagIcon } from '@heroicons/react/24/outline';
 import React from 'react';
 
 import Pagination from '@/components/pagination/Pagination';
 import TransactionsDownloadModal from '@/components/transactions/TransactionsDownloadModal';
+import TransactionsSearchModal from '@/components/transactions/TransactionsSearchModal';
+import TransactionsTagModal from '@/components/transactions/TransactionsTagModal';
 import { Transaction } from '@/lib/models/Transaction';
 
 import TransactionsList from './TransactionsList';
@@ -22,6 +26,10 @@ const PaginatedTransactionsList: React.FC<{
 }): React.ReactElement => {
   const [currentPage, setCurrentPage] = React.useState(1);
   const [currentTransactions, setCurrentTransactions] = React.useState<Transaction[]>([]);
+  const [openSearchTransactionsModal, setOpenSearchTransactionsModal] =
+    React.useState<boolean>(false);
+  const [openCreateTransactionTagModal, setOpenCreateTransactionTagModal] =
+    React.useState<boolean>(false);
   const [openDownloadTransactionsModal, setOpenDownloadTransactionsModal] =
     React.useState<boolean>(false);
   const totalPages: number = Math.ceil(transactions.length / transactionsPerPage);
@@ -40,7 +48,15 @@ const PaginatedTransactionsList: React.FC<{
       {/* Transactions List */}
       <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg">
         <div className="px-4 py-5 sm:p-6">
-          <div className="flex justify-end">
+          <div className="flex justify-end gap-2">
+            <MagnifyingGlassIcon
+              onClick={(): void => setOpenSearchTransactionsModal(true)}
+              className="size-5 text-gray-500 cursor-pointer hover:text-gray-700"
+            />
+            <TagIcon
+              onClick={(): void => setOpenCreateTransactionTagModal(true)}
+              className="size-5 text-gray-500 cursor-pointer hover:text-gray-700"
+            />
             <ArrowDownTrayIcon
               onClick={(): void => setOpenDownloadTransactionsModal(true)}
               className="size-5 text-gray-500 cursor-pointer hover:text-gray-700"
@@ -61,6 +77,16 @@ const PaginatedTransactionsList: React.FC<{
       </div>
 
       {/* Download Transactions Modal */}
+      <TransactionsSearchModal
+        open={openSearchTransactionsModal}
+        setOpen={setOpenSearchTransactionsModal}
+        onSearch={(): void => console.log('search!')}
+        onClose={(): void => setOpenSearchTransactionsModal(false)}
+      />
+      <TransactionsTagModal
+        open={openCreateTransactionTagModal}
+        setOpen={setOpenCreateTransactionTagModal}
+      />
       <TransactionsDownloadModal
         open={openDownloadTransactionsModal}
         setOpen={setOpenDownloadTransactionsModal}

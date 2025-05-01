@@ -4,6 +4,8 @@ import { GetServerSideProps } from 'next';
 import Link from 'next/link';
 import React, { ReactElement } from 'react';
 
+import LogoCloud from '@/components/marketing/LogoCloud';
+import Testimonials from '@/components/marketing/Testimonials';
 import UnauthenticatedPageLayout from '@/layouts/UnauthenticatedPageLayout';
 import { withAuthenticationRedirect } from '@/lib/auth/AuthenticationRedirect';
 
@@ -46,6 +48,10 @@ const LandingPage: React.FC = (): React.ReactElement => {
             </div>
           </div>
         </div>
+
+        <Testimonials />
+        <LogoCloud />
+
         <div
           aria-hidden="true"
           className="absolute inset-x-0 top-[calc(100%-13rem)] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-30rem)]"

@@ -3,7 +3,6 @@ import axios from 'axios';
 import { GetServerSideProps } from 'next';
 import React from 'react';
 
-import AddPortfolioStockModal from '@/components/portfolio/AddPortfolioStockModal';
 import PortfolioEquityPieChart from '@/components/portfolio/PortfolioEquityPieChart';
 import StockLineChart from '@/components/stock/StockLineChart';
 import AuthenticatedPageLayout from '@/layouts/AuthenticatedPageLayout';
@@ -116,9 +115,6 @@ const Dashboard: React.FC<{ user: User }> = ({ user }): React.ReactElement => {
           </div>
         </div>
       </main>
-
-      {/* Portfolio Modals */}
-      <AddPortfolioStockModal open={openAddStockModal} setOpen={setOpenAddStockModal} />
     </>
   );
 

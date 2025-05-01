@@ -12,13 +12,18 @@ import WarningNotification from '@/components/notifications/WarningNotification'
 import AddExpenseModal from '@/components/transactions/AddExpenseModal';
 import AddIncomeModal from '@/components/transactions/AddIncomeModal';
 import PaginatedTransactionsList from '@/components/transactions/PaginatedTransactionsList';
+import TransactionsCashFlowLineChart from '@/components/transactions/TransactionsCashFlowLineChart';
+import TransactionsChartOptions, {
+  TransactionsChartOption,
+} from '@/components/transactions/TransactionsChartOptions';
+import TransactionsExpensesBarChart from '@/components/transactions/TransactionsExpensesBarChart';
 import TransactionsHeader from '@/components/transactions/TransactionsHeader';
+import TransactionsIncomeBarChart from '@/components/transactions/TransactionsIncomeBarChart';
 import TransactionStats from '@/components/transactions/TransactionsStats';
 import AuthenticatedPageLayout from '@/layouts/AuthenticatedPageLayout';
 import { withAuthenticationRedirect } from '@/lib/auth/AuthenticationRedirect';
 import { WALTER_API_TOKEN_NAME } from '@/lib/constants/Constants';
-import { ExpenseCategory, getExpenseCategory } from '@/lib/models/ExpenseCategory';
-import { Transaction } from '@/lib/models/Transaction';
+import { Transaction, TransactionCategory } from '@/lib/models/Transaction';
 import { User } from '@/lib/models/User';
 
 const TransactionsCategoryPieChart = dynamic(
@@ -33,7 +38,7 @@ const END_OF_THE_MONTH: string = dayjs().endOf('month').format('YYYY-MM-DD');
 
 const Transactions: React.FC<{ user: User }> = ({ user }): React.ReactElement => {
   const [loading, setLoading] = useState<boolean>(false);
-  const [category, setCategory] = useState<ExpenseCategory | null>(null);
+  const [category, setCategory] = useState<TransactionCategory | null>(null);
   const [startDate, setStartDate] = useState<string>(START_OF_THE_MONTH);
   const [endDate, setEndDate] = useState<string>(END_OF_THE_MONTH);
   const [transactions, setTransactions] = useState<Transaction[]>([]);
@@ -46,6 +51,11 @@ const Transactions: React.FC<{ user: User }> = ({ user }): React.ReactElement =>
     useState<boolean>(false);
   const [openDeleteTransactionSuccessAlert, setOpenDeleteTransactionSuccessAlert] =
     useState<boolean>(false);
+  const [transactionsChartOption, setTransactionsChartOption] = useState<TransactionsChartOption>({
+    id: 'cash flow',
+    name: 'Cash Flow',
+    current: true,
+  });
 
   useEffect((): void => {
     getTransactions(startDate, endDate, category);
@@ -54,24 +64,65 @@ const Transactions: React.FC<{ user: User }> = ({ user }): React.ReactElement =>
   const getTransactions: (
     startDate: string,
     endDate: string,
-    category: ExpenseCategory | null
+    category: TransactionCategory | null
   ) => void = (startDate: string, endDate: string): void => {
     setLoading(true);
-    axios
-      .get(`/api/transactions/get-transactions`, {
-        params: {
-          start_date: startDate,
-          end_date: endDate,
-        },
-        headers: {
-          Authorization: `Bearer ${getCookie(WALTER_API_TOKEN_NAME)}`,
-        },
-      })
+    axios(`/api/transactions/get-transactions`, {
+      method: 'GET',
+      params: {
+        start_date: startDate,
+        end_date: endDate,
+      },
+      headers: {
+        Authorization: `Bearer ${getCookie(WALTER_API_TOKEN_NAME)}`,
+      },
+    })
       .then((response): void => {
         setTransactions(response.data);
       })
       .catch((error): void => console.error('Error:', error))
       .finally((): void => setLoading(false));
+  };
+
+  const generateTransactionsChartOptions: () => TransactionsChartOption[] =
+    (): TransactionsChartOption[] => {
+      return [
+        { id: 'cash flow', name: 'Cash Flow', current: transactionsChartOption.id === 'cash flow' },
+        { id: 'income', name: 'Income', current: transactionsChartOption.id === 'income' },
+        { id: 'expense', name: 'Expense', current: transactionsChartOption.id === 'expense' },
+        {
+          id: 'categories',
+          name: 'Categories',
+          current: transactionsChartOption.id === 'categories',
+        },
+      ];
+    };
+
+  const renderTransactionsChart: () => React.ReactElement = (): React.ReactElement => {
+    switch (transactionsChartOption.id) {
+      case 'cash flow':
+        return <TransactionsCashFlowLineChart loading={loading} transactions={transactions} />;
+      case 'income':
+        return <TransactionsIncomeBarChart loading={loading} transactions={transactions} />;
+      case 'expense':
+        return <TransactionsExpensesBarChart loading={loading} transactions={transactions} />;
+      case 'categories':
+        return (
+          <TransactionsCategoryPieChart
+            loading={loading}
+            transactions={transactions}
+            setCategory={(category: string): void => console.log(category)}
+          />
+        );
+      default:
+        return (
+          <TransactionsCategoryPieChart
+            loading={loading}
+            transactions={transactions}
+            setCategory={(category: string): void => console.log(category)}
+          />
+        );
+    }
   };
 
   const getContent: () => React.ReactElement = (): React.ReactElement => {
@@ -124,17 +175,17 @@ const Transactions: React.FC<{ user: User }> = ({ user }): React.ReactElement =>
 
           {/* Transactions Page Content */}
           <div className="flex flex-col gap-6 md:flex-row">
+            {/* Transactions Charts */}
             <div className="flex-1 flex flex-col gap-6">
-              <TransactionStats transactions={transactions} />
-              <TransactionsCategoryPieChart
-                loading={loading}
-                transactions={transactions}
-                setCategory={(category: string): void => {
-                  setCategory(getExpenseCategory(category) as ExpenseCategory);
-                }}
+              <TransactionsChartOptions
+                transactionChartOptions={generateTransactionsChartOptions()}
+                setTransactionsChartOption={setTransactionsChartOption}
               />
+              <TransactionStats transactions={transactions} />
+              {renderTransactionsChart()}
             </div>
 
+            {/* Transactions List */}
             <div className="flex-1">
               <PaginatedTransactionsList
                 refresh={(): void => setRefresh(!refresh)}

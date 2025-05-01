@@ -1,6 +1,5 @@
 import { MagnifyingGlassIcon } from '@heroicons/react/20/solid';
-import { ArrowDownTrayIcon } from '@heroicons/react/24/outline';
-import { TagIcon } from '@heroicons/react/24/outline';
+import { ArrowDownTrayIcon, TagIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import React from 'react';
 
 import Pagination from '@/components/pagination/Pagination';
@@ -16,12 +15,14 @@ const PaginatedTransactionsList: React.FC<{
   onUpdateTransactionSuccess: () => void;
   onDeleteTransactionSuccess: () => void;
   transactions: Transaction[];
+  setTransactions: (transactions: Transaction[]) => void;
   transactionsPerPage: number;
 }> = ({
   refresh,
   onUpdateTransactionSuccess,
   onDeleteTransactionSuccess,
   transactions,
+  setTransactions,
   transactionsPerPage,
 }): React.ReactElement => {
   const [currentPage, setCurrentPage] = React.useState(1);
@@ -32,6 +33,7 @@ const PaginatedTransactionsList: React.FC<{
     React.useState<boolean>(false);
   const [openDownloadTransactionsModal, setOpenDownloadTransactionsModal] =
     React.useState<boolean>(false);
+  const [search, setSearch] = React.useState<string>('');
   const totalPages: number = Math.ceil(transactions.length / transactionsPerPage);
 
   React.useEffect((): void => {
@@ -43,24 +45,61 @@ const PaginatedTransactionsList: React.FC<{
     setCurrentPage(page);
   };
 
+  const handleSearch: (searchTerm: string) => void = (searchTerm: string): void => {
+    if (!searchTerm) {
+      setTransactions(transactions);
+      return;
+    }
+
+    const searchTermLower: string = searchTerm.toLowerCase();
+    const filteredTransactions: Transaction[] = transactions.filter(
+      (transaction: Transaction): boolean => {
+        return (
+          transaction.vendor.toLowerCase().includes(searchTermLower) ||
+          transaction.category.toLowerCase().includes(searchTermLower) ||
+          transaction.date.toLowerCase().includes(searchTermLower)
+        );
+      }
+    );
+
+    setSearch(searchTerm);
+    setTransactions(filteredTransactions);
+  };
+
   return (
     <>
       {/* Transactions List */}
       <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg">
         <div className="px-4 py-5 sm:p-6">
-          <div className="flex justify-end gap-2">
-            <MagnifyingGlassIcon
-              onClick={(): void => setOpenSearchTransactionsModal(true)}
-              className="size-5 text-gray-500 cursor-pointer hover:text-gray-700"
-            />
-            <TagIcon
-              onClick={(): void => setOpenCreateTransactionTagModal(true)}
-              className="size-5 text-gray-500 cursor-pointer hover:text-gray-700"
-            />
-            <ArrowDownTrayIcon
-              onClick={(): void => setOpenDownloadTransactionsModal(true)}
-              className="size-5 text-gray-500 cursor-pointer hover:text-gray-700"
-            />
+          <div className="flex justify-between items-center">
+            <div>
+              {search && (
+                <div className="flex items-center gap-1">
+                  <XMarkIcon
+                    onClick={(): void => {
+                      setSearch('');
+                      refresh();
+                    }}
+                    className="size-5 text-gray-500 cursor-pointer hover:text-gray-700"
+                  />
+                  <span className="text-sm text-gray-500">{search}</span>
+                </div>
+              )}
+            </div>
+            <div className="flex gap-2">
+              <MagnifyingGlassIcon
+                onClick={(): void => setOpenSearchTransactionsModal(true)}
+                className="size-5 text-gray-500 cursor-pointer hover:text-gray-700"
+              />
+              <TagIcon
+                onClick={(): void => setOpenCreateTransactionTagModal(true)}
+                className="size-5 text-gray-500 cursor-pointer hover:text-gray-700"
+              />
+              <ArrowDownTrayIcon
+                onClick={(): void => setOpenDownloadTransactionsModal(true)}
+                className="size-5 text-gray-500 cursor-pointer hover:text-gray-700"
+              />
+            </div>
           </div>
           <TransactionsList
             refresh={refresh}
@@ -80,7 +119,7 @@ const PaginatedTransactionsList: React.FC<{
       <TransactionsSearchModal
         open={openSearchTransactionsModal}
         setOpen={setOpenSearchTransactionsModal}
-        onSearch={(): void => console.log('search!')}
+        onSearch={(query: string): void => handleSearch(query)}
         onClose={(): void => setOpenSearchTransactionsModal(false)}
       />
       <TransactionsTagModal

@@ -212,6 +212,7 @@ const Transactions: React.FC<{ user: User }> = ({ user }): React.ReactElement =>
                 onUpdateTransactionSuccess={(): void => setOpenEditTransactionSuccessAlert(true)}
                 onDeleteTransactionSuccess={(): void => setOpenDeleteTransactionSuccessAlert(true)}
                 transactions={transactions}
+                setTransactions={setTransactions}
                 transactionsPerPage={8}
               />
             </div>

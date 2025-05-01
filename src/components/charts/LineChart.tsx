@@ -4,6 +4,8 @@ import { Serie } from '@nivo/line';
 import dynamic from 'next/dynamic';
 import React from 'react';
 
+import { US_DOLLAR } from '@/lib/constants/Constants';
+
 const ResponsiveLine = dynamic(() => import('@nivo/line').then((mod) => mod.ResponsiveLine), {
   ssr: false,
 });
@@ -41,9 +43,11 @@ const LineChart: React.FC<{ data: Serie[] }> = ({ data }): React.ReactElement =>
         tickPadding: 5,
         legendOffset: -50,
         legendPosition: 'middle',
-        format: (value) => `$${Number(value).toFixed(2)}`,
+        format: (value) => `${US_DOLLAR.format(value as number)}`,
         tickValues: 6,
       }}
+      enableGridX={false}
+      enableGridY={false}
       curve="monotoneX"
       pointSize={3}
       pointColor={{ theme: 'background' }}
@@ -62,8 +66,13 @@ const LineChart: React.FC<{ data: Serie[] }> = ({ data }): React.ReactElement =>
           }}
         >
           {slice.points.map((point) => (
-            <div key={point.id}>
-              <strong>{point.serieId}</strong>: ${Number(point.data.yFormatted).toFixed(2)}
+            <div
+              key={point.id}
+              style={{
+                color: (point.data.y as number) < 0 ? 'red' : 'black',
+              }}
+            >
+              <strong>{point.serieId}</strong>: {US_DOLLAR.format(point.data.y as number)}
             </div>
           ))}
         </div>

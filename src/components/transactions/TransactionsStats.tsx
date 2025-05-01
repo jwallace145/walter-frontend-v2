@@ -73,7 +73,7 @@ const TransactionStats: React.FC<{ transactions: Transaction[] }> = ({
           className="overflow-hidden rounded-lg bg-white px-4 py-5 shadow-sm sm:p-6"
         >
           <dt className="truncate text-sm font-medium text-gray-500">Total Expenses</dt>
-          <dd className="mt-1 text-3xl font-semibold tracking-tight">
+          <dd className="mt-1 text-3xl font-semibold tracking-tight text-red-600">
             {US_DOLLAR.format(totalExpenses > 0 ? -1 * totalExpenses : totalExpenses)}
           </dd>
         </div>

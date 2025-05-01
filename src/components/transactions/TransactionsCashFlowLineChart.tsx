@@ -49,7 +49,7 @@ const TransactionsCashFlowLineChart: React.FC<{
         data: cashFlowData,
       },
       {
-        id: 'Baseline',
+        id: 'Net Zero',
         color: 'hsl(0, 0%, 70%)',
         data: baselineData,
       },

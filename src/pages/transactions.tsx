@@ -101,26 +101,47 @@ const Transactions: React.FC<{ user: User }> = ({ user }): React.ReactElement =>
   const renderTransactionsChart: () => React.ReactElement = (): React.ReactElement => {
     switch (transactionsChartOption.id) {
       case 'cash flow':
-        return <TransactionsCashFlowLineChart loading={loading} transactions={transactions} />;
+        return (
+          <>
+            <TransactionStats transactions={transactions} />
+            <TransactionsCashFlowLineChart loading={loading} transactions={transactions} />
+          </>
+        );
       case 'income':
-        return <TransactionsIncomeBarChart loading={loading} transactions={transactions} />;
+        return (
+          <>
+            <TransactionStats transactions={transactions} />
+            <TransactionsIncomeBarChart loading={loading} transactions={transactions} />;
+          </>
+        );
       case 'expense':
-        return <TransactionsExpensesBarChart loading={loading} transactions={transactions} />;
+        return (
+          <>
+            <TransactionStats transactions={transactions} />
+            <TransactionsExpensesBarChart loading={loading} transactions={transactions} />;
+          </>
+        );
       case 'categories':
         return (
-          <TransactionsCategoryPieChart
-            loading={loading}
-            transactions={transactions}
-            setCategory={(category: string): void => console.log(category)}
-          />
+          <>
+            <TransactionStats transactions={transactions} />
+            <TransactionsCategoryPieChart
+              loading={loading}
+              transactions={transactions}
+              setCategory={(category: string): void => console.log(category)}
+            />
+          </>
         );
       default:
         return (
-          <TransactionsCategoryPieChart
-            loading={loading}
-            transactions={transactions}
-            setCategory={(category: string): void => console.log(category)}
-          />
+          <>
+            <TransactionStats transactions={transactions} />
+            <TransactionsCategoryPieChart
+              loading={loading}
+              transactions={transactions}
+              setCategory={(category: string): void => console.log(category)}
+            />
+          </>
         );
     }
   };
@@ -181,7 +202,6 @@ const Transactions: React.FC<{ user: User }> = ({ user }): React.ReactElement =>
                 transactionChartOptions={generateTransactionsChartOptions()}
                 setTransactionsChartOption={setTransactionsChartOption}
               />
-              <TransactionStats transactions={transactions} />
               {renderTransactionsChart()}
             </div>
 

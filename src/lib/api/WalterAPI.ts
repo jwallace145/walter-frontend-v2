@@ -6,6 +6,7 @@ import { IncomingMessage } from 'http';
 import { getCookie } from 'typescript-cookie';
 
 import { WALTER_API_TOKEN_NAME } from '@/lib/constants/Constants';
+import { CashAccount } from '@/lib/models/CashAccount';
 import { Newsletter } from '@/lib/models/Newsletter';
 import { Portfolio } from '@/lib/models/Portfolio';
 import { Price } from '@/lib/models/Price';
@@ -271,6 +272,16 @@ export class WalterAPI {
         page: 1,
       },
     }).then((response: AxiosResponse) => response.data.Data.newsletters);
+  }
+
+  public static async getCashAccounts(token: string): Promise<CashAccount[]> {
+    return axios({
+      method: 'GET',
+      url: `${this.ENDPOINT}/cash-accounts`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }).then((response: AxiosResponse) => response.data.Data.cash_accounts);
   }
 
   /**

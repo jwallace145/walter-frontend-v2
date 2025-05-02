@@ -1,18 +1,75 @@
+import axios, { AxiosResponse } from 'axios';
 import React from 'react';
 
 import Modal from '@/components/modals/Modal';
+import { CashAccount } from '@/lib/models/CashAccount';
 
 const UpdateCashAccountModal: React.FC<{
+  account: CashAccount | undefined;
   open: boolean;
   setOpen: (open: boolean) => void;
-}> = ({ open, setOpen }): React.ReactElement => {
+  onUpdateAccountSuccess: () => void;
+  onUpdateAccountError: () => void;
+}> = ({
+  account,
+  open,
+  setOpen,
+  onUpdateAccountSuccess,
+  onUpdateAccountError,
+}): React.ReactElement => {
   const [bankName, setBankName] = React.useState<string>('');
   const [accountName, setAccountName] = React.useState<string>('');
   const [accountBalance, setAccountBalance] = React.useState<string>('');
   const [loading, setLoading] = React.useState<boolean>(false);
+  const [error, setError] = React.useState<boolean>(false);
+  const [success, setSuccess] = React.useState<boolean>(false);
+  const [message, setMessage] = React.useState<string>('');
 
   const handleSubmit: (event: React.FormEvent) => void = (event): void => {
     event.preventDefault();
+
+    if (!bankName || !accountName || !accountBalance) {
+      setError(true);
+      setMessage('All fields are required.');
+      return;
+    }
+
+    const parsedBalance = parseFloat(accountBalance);
+    if (isNaN(parsedBalance) || parsedBalance <= 0) {
+      setError(true);
+      setMessage('Account balance must be a positive number!');
+      return;
+    }
+
+    setLoading(true);
+    axios('/api/cash-accounts/update-cash-account', {
+      method: 'PUT',
+      data: {
+        accountId: account?.account_id,
+        bankName: bankName,
+        accountName: accountName,
+        accountBalance: accountBalance,
+      },
+    })
+      .then((response: AxiosResponse) => response.data)
+      .then((data) => {
+        setSuccess(true);
+        setMessage(
+          'Updated cash account successfully. You can now view updated account details in the Cash page.'
+        );
+        onUpdateAccountSuccess();
+      })
+      .catch((error: Error): void => {
+        setError(true);
+        setMessage(
+          'Unexpected error occurred. Failed to update cash account. Please try again or contact support if the issue persists.'
+        );
+        onUpdateAccountError();
+      })
+      .finally((): void => {
+        setLoading(false);
+        setOpen(false);
+      });
   };
 
   const getContent: () => React.ReactElement = (): React.ReactElement => {
@@ -29,6 +86,7 @@ const UpdateCashAccountModal: React.FC<{
             className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
             value={bankName}
             onChange={(e): void => setBankName(e.target.value)}
+            placeholder={account?.bank_name}
           />
         </div>
 
@@ -43,6 +101,7 @@ const UpdateCashAccountModal: React.FC<{
             className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
             value={accountName}
             onChange={(e): void => setAccountName(e.target.value)}
+            placeholder={account?.account_name}
           />
         </div>
 
@@ -57,7 +116,10 @@ const UpdateCashAccountModal: React.FC<{
             value={accountBalance}
             onChange={(e) => setAccountBalance(e.target.value)}
             required
-            placeholder="e.g. 12.50"
+            placeholder={account?.balance?.toLocaleString('en-US', {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })}
             className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
           />
         </div>
@@ -87,13 +149,16 @@ const UpdateCashAccountModal: React.FC<{
   };
 
   return (
-    <Modal
-      open={open}
-      setOpen={setOpen}
-      title="Update Cash Account"
-      description="Update cash account details."
-      content={getContent()}
-    />
+    <>
+      {/* Update Cash Account Modal */}
+      <Modal
+        open={open}
+        setOpen={setOpen}
+        title="Update Cash Account"
+        description="Update cash account details."
+        content={getContent()}
+      />
+    </>
   );
 };
 

@@ -1,11 +1,21 @@
 import React from 'react';
 
 import Modal from '@/components/modals/Modal';
+import { CashAccount } from '@/lib/models/CashAccount';
 
 const DeleteCashAccountModal: React.FC<{
+  account: CashAccount | undefined;
   open: boolean;
   setOpen: (open: boolean) => void;
-}> = ({ open, setOpen }): React.ReactElement => {
+  onDeleteAccountSuccess: () => void;
+  onDeleteAccountError: () => void;
+}> = ({
+  account,
+  open,
+  setOpen,
+  onDeleteAccountSuccess,
+  onDeleteAccountError,
+}): React.ReactElement => {
   const [loading, setLoading] = React.useState<boolean>(false);
 
   const handleDelete = async (event: React.FormEvent): Promise<void> => {
@@ -14,9 +24,11 @@ const DeleteCashAccountModal: React.FC<{
 
     try {
       console.log('Deleting cash account...');
+      onDeleteAccountSuccess();
       setOpen(false);
     } catch (error) {
       console.error('Failed to delete the cash account:', error);
+      onDeleteAccountError();
     } finally {
       setLoading(false);
     }

@@ -1,20 +1,34 @@
+import { PlusCircleIcon } from '@heroicons/react/24/outline';
 import React from 'react';
 import Avatar from 'react-avatar';
 
+import LoadingSpinner from '@/components/loading/LoadingSpinner';
 import { US_DOLLAR } from '@/lib/constants/Constants';
 import { CashAccount } from '@/lib/models/CashAccount';
 
 const CashAccountsList: React.FC<{
+  loading: boolean;
   accounts: CashAccount[];
-  totalBalance: number;
   setSelectedAccount: (account: CashAccount) => void;
-}> = ({ accounts, totalBalance, setSelectedAccount }): React.ReactElement => {
-  return (
-    <>
-      <div className="flex items-center justify-between mb-4">
-        <h1 className="text-2xl font-bold">Accounts</h1>
+}> = ({ loading, accounts, setSelectedAccount }): React.ReactElement => {
+  const renderLoadingState: () => React.ReactElement = (): React.ReactElement => {
+    return (
+      <div className="flex flex-col items-center justify-center gap-y-4">
+        <LoadingSpinner />
       </div>
+    );
+  };
 
+  const renderEmptyState: () => React.ReactElement = (): React.ReactElement => {
+    return (
+      <div className="flex flex-col items-center justify-center gap-y-4">
+        <p className="text-sm text-gray-500">You don&#39;t have any accounts yet. Add one above.</p>
+      </div>
+    );
+  };
+
+  const renderAccountsList: () => React.ReactElement = (): React.ReactElement => {
+    return (
       <ul role="list" className="divide-y divide-gray-100">
         {accounts.map(
           (account: CashAccount): React.ReactElement => (
@@ -41,6 +55,20 @@ const CashAccountsList: React.FC<{
           )
         )}
       </ul>
+    );
+  };
+
+  return (
+    <>
+      <div className="flex items-center justify-between mb-4">
+        <h1 className="text-2xl font-bold">Accounts</h1>
+        <PlusCircleIcon aria-hidden="true" className="size-5 text-gray-400" />
+      </div>
+      {loading
+        ? renderLoadingState()
+        : accounts.length === 0
+          ? renderEmptyState()
+          : renderAccountsList()}
     </>
   );
 };

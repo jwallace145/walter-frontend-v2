@@ -8,9 +8,20 @@ import UpdateCashAccountModal from '@/components/cash/UpdateCashAccountModal';
 import { US_DOLLAR } from '@/lib/constants/Constants';
 import { CashAccount } from '@/lib/models/CashAccount';
 
-const CashAccountDescription: React.FC<{ loading: boolean; account: CashAccount | null }> = ({
+const CashAccountDescription: React.FC<{
+  loading: boolean;
+  account: CashAccount | undefined;
+  onUpdateAccountSuccess: () => void;
+  onUpdateAccountError: () => void;
+  onDeleteAccountSuccess: () => void;
+  onDeleteAccountError: () => void;
+}> = ({
   loading,
   account,
+  onUpdateAccountSuccess,
+  onUpdateAccountError,
+  onDeleteAccountSuccess,
+  onDeleteAccountError,
 }): React.ReactElement => {
   const [openUpdateCashAccountModal, setOpenUpdateCashAccountModal] =
     React.useState<boolean>(false);
@@ -32,8 +43,8 @@ const CashAccountDescription: React.FC<{ loading: boolean; account: CashAccount 
 
   const renderEmptyState: () => React.ReactElement = (): React.ReactElement => {
     return (
-      <div className="flex flex-col items-center justify-center h-full">
-        <div className="flex flex-col items-center justify-center space-y-4">
+      <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg">
+        <div className="flex flex-col items-center justify-center space-y-4 py-12">
           <div className="text-gray-400">
             <ChartPieIcon aria-hidden="true" className="size-12" />
           </div>
@@ -45,7 +56,7 @@ const CashAccountDescription: React.FC<{ loading: boolean; account: CashAccount 
 
   if (loading) return renderLoadingState();
 
-  if (!account) renderEmptyState();
+  if (!account) return renderEmptyState();
 
   return (
     <>
@@ -113,12 +124,18 @@ const CashAccountDescription: React.FC<{ loading: boolean; account: CashAccount 
 
       {/* Cash Account Modals */}
       <UpdateCashAccountModal
+        account={account as CashAccount}
         open={openUpdateCashAccountModal}
         setOpen={setOpenUpdateCashAccountModal}
+        onUpdateAccountSuccess={onUpdateAccountSuccess}
+        onUpdateAccountError={onUpdateAccountError}
       />
       <DeleteCashAccountModal
+        account={account as CashAccount}
         open={openDeleteCashAccountModal}
         setOpen={setOpenDeleteCashAccountModal}
+        onDeleteAccountSuccess={onDeleteAccountSuccess}
+        onDeleteAccountError={onDeleteAccountError}
       />
     </>
   );

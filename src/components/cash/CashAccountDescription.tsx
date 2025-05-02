@@ -1,7 +1,9 @@
 import { BuildingLibraryIcon } from '@heroicons/react/16/solid';
+import { TrashIcon } from '@heroicons/react/20/solid';
 import { ChartPieIcon } from '@heroicons/react/24/outline';
 import React from 'react';
 
+import DeleteCashAccountModal from '@/components/cash/DeleteCashAccountModal';
 import UpdateCashAccountModal from '@/components/cash/UpdateCashAccountModal';
 import { US_DOLLAR } from '@/lib/constants/Constants';
 import { CashAccount } from '@/lib/models/CashAccount';
@@ -11,6 +13,8 @@ const CashAccountDescription: React.FC<{ loading: boolean; account: CashAccount 
   account,
 }): React.ReactElement => {
   const [openUpdateCashAccountModal, setOpenUpdateCashAccountModal] =
+    React.useState<boolean>(false);
+  const [openDeleteCashAccountModal, setOpenDeleteCashAccountModal] =
     React.useState<boolean>(false);
 
   const renderLoadingState: () => React.ReactElement = (): React.ReactElement => {
@@ -54,14 +58,24 @@ const CashAccountDescription: React.FC<{ loading: boolean; account: CashAccount 
                 The details of the given cash account.
               </p>
             </div>
-            <button
-              type="button"
-              onClick={(): void => setOpenUpdateCashAccountModal(true)}
-              className="flex items-center gap-x-1 rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-            >
-              <BuildingLibraryIcon aria-hidden="true" className="-ml-1.5 size-5" />
-              <span>Update</span>
-            </button>
+            <div className="flex gap-x-2">
+              <button
+                type="button"
+                onClick={(): void => setOpenUpdateCashAccountModal(true)}
+                className="flex items-center gap-x-1 rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              >
+                <BuildingLibraryIcon aria-hidden="true" className="-ml-1.5 size-5" />
+                <span>Update</span>
+              </button>
+              <button
+                type="button"
+                onClick={(): void => setOpenDeleteCashAccountModal(true)}
+                className="flex items-center gap-x-1 rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              >
+                <TrashIcon aria-hidden="true" className="-ml-1.5 size-5" />
+                <span>Delete</span>
+              </button>
+            </div>
           </div>
         </div>
         <div className="border-t border-gray-100">
@@ -101,6 +115,10 @@ const CashAccountDescription: React.FC<{ loading: boolean; account: CashAccount 
       <UpdateCashAccountModal
         open={openUpdateCashAccountModal}
         setOpen={setOpenUpdateCashAccountModal}
+      />
+      <DeleteCashAccountModal
+        open={openDeleteCashAccountModal}
+        setOpen={setOpenDeleteCashAccountModal}
       />
     </>
   );

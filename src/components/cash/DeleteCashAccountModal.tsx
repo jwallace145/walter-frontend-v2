@@ -1,3 +1,4 @@
+import axios, { AxiosResponse } from 'axios';
 import React from 'react';
 
 import Modal from '@/components/modals/Modal';
@@ -20,18 +21,27 @@ const DeleteCashAccountModal: React.FC<{
 
   const handleDelete = async (event: React.FormEvent): Promise<void> => {
     event.preventDefault();
-    setLoading(true);
 
-    try {
-      console.log('Deleting cash account...');
-      onDeleteAccountSuccess();
-      setOpen(false);
-    } catch (error) {
-      console.error('Failed to delete the cash account:', error);
-      onDeleteAccountError();
-    } finally {
-      setLoading(false);
-    }
+    setLoading(true);
+    axios('/api/cash-accounts/delete-cash-account', {
+      method: 'DELETE',
+      data: {
+        accountId: account?.account_id,
+      },
+    })
+      .then((response: AxiosResponse) => response.data)
+      .then((data) => {
+        if (data['Status'] === 'Success') {
+          onDeleteAccountSuccess();
+        } else {
+          onDeleteAccountError();
+        }
+      })
+      .catch((): void => onDeleteAccountError())
+      .finally((): void => {
+        setLoading(false);
+        setOpen(false);
+      });
   };
 
   const getContent: () => React.ReactElement = (): React.ReactElement => {

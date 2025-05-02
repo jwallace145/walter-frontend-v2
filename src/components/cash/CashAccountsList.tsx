@@ -2,6 +2,7 @@ import { PlusCircleIcon } from '@heroicons/react/24/outline';
 import React from 'react';
 import Avatar from 'react-avatar';
 
+import CreateCashAccountModal from '@/components/cash/CreateCashAccountModal';
 import LoadingSpinner from '@/components/loading/LoadingSpinner';
 import { US_DOLLAR } from '@/lib/constants/Constants';
 import { CashAccount } from '@/lib/models/CashAccount';
@@ -10,7 +11,17 @@ const CashAccountsList: React.FC<{
   loading: boolean;
   accounts: CashAccount[];
   setSelectedAccount: (account: CashAccount) => void;
-}> = ({ loading, accounts, setSelectedAccount }): React.ReactElement => {
+  onCreateAccountSuccess: () => void;
+  onCreateAccountError: () => void;
+}> = ({
+  loading,
+  accounts,
+  setSelectedAccount,
+  onCreateAccountSuccess,
+  onCreateAccountError,
+}): React.ReactElement => {
+  const [openCreateAccountModal, setOpenCreateAccountModal] = React.useState<boolean>(false);
+
   const renderLoadingState: () => React.ReactElement = (): React.ReactElement => {
     return (
       <div className="flex flex-col items-center justify-center gap-y-4">
@@ -62,13 +73,25 @@ const CashAccountsList: React.FC<{
     <>
       <div className="flex items-center justify-between mb-4">
         <h1 className="text-2xl font-bold">Accounts</h1>
-        <PlusCircleIcon aria-hidden="true" className="size-5 text-gray-400" />
+        <PlusCircleIcon
+          onClick={(): void => setOpenCreateAccountModal(true)}
+          aria-hidden="true"
+          className="size-5 text-gray-400 cursor-pointer hover:text-gray-600"
+        />
       </div>
       {loading
         ? renderLoadingState()
         : accounts.length === 0
           ? renderEmptyState()
           : renderAccountsList()}
+
+      {/* Create Cash Account Modal */}
+      <CreateCashAccountModal
+        open={openCreateAccountModal}
+        setOpen={setOpenCreateAccountModal}
+        onCreateAccountSuccess={onCreateAccountSuccess}
+        onCreateAccountError={onCreateAccountError}
+      />
     </>
   );
 };

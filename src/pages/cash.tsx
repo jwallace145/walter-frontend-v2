@@ -31,6 +31,8 @@ const Cash: React.FC<{ user: User }> = ({ user }): React.ReactElement => {
   const [updateAccountError, setUpdateAccountError] = React.useState<boolean>(false);
   const [deleteAccountSuccess, setDeleteAccountSuccess] = React.useState<boolean>(false);
   const [deleteAccountError, setDeleteAccountError] = React.useState<boolean>(false);
+  const [createAccountSuccess, setCreateAccountSuccess] = React.useState<boolean>(false);
+  const [createAccountError, setCreateAccountError] = React.useState<boolean>(false);
 
   React.useEffect((): void => {
     setGettingAccounts(true);
@@ -79,6 +81,14 @@ const Cash: React.FC<{ user: User }> = ({ user }): React.ReactElement => {
                 loading={gettingAccounts}
                 accounts={accounts}
                 setSelectedAccount={setSelectedAccount}
+                onCreateAccountSuccess={(): void => {
+                  setRefresh(!refresh);
+                  setCreateAccountSuccess(true);
+                }}
+                onCreateAccountError={(): void => {
+                  setRefresh(!refresh);
+                  setCreateAccountError(true);
+                }}
               />
             </div>
           </aside>

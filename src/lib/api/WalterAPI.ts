@@ -306,6 +306,40 @@ export class WalterAPI {
     }).then((response: AxiosResponse) => response.data.Data.account);
   }
 
+  public static async deleteCashAccount(token: string, accountId: string): Promise<void> {
+    return axios({
+      method: 'DELETE',
+      url: `${this.ENDPOINT}/cash-accounts`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      data: {
+        account_id: accountId,
+      },
+    }).then((response: AxiosResponse) => response.data);
+  }
+
+  public static async createCashAccount(
+    token: string,
+    bankName: string,
+    accountName: string,
+    accountBalance: number
+  ): Promise<CashAccount> {
+    return axios({
+      method: 'POST',
+      url: `${this.ENDPOINT}/cash-accounts`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      data: {
+        bank_name: bankName,
+        account_name: accountName,
+        account_last_four_numbers: '1234',
+        balance: accountBalance,
+      },
+    }).then((response: AxiosResponse) => response.data);
+  }
+
   /**
    * Parses a multipart/form-data request, typically used for file uploads.
    *

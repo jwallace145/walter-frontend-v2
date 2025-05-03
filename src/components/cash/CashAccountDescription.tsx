@@ -70,9 +70,21 @@ const CashAccountDescription: React.FC<{
             <div className="flex items-start gap-x-4">
               <Image src={account.logo_url} alt={account.bank_name} height={80} width={80} />
               <div>
-                <h3 className="text-base/7 font-semibold text-gray-900">Account Information</h3>
+                <h3 className="text-base/7 font-semibold text-gray-900">
+                  {account.bank_name} {account.account_name}{' '}
+                </h3>
                 <p className="mt-1 max-w-2xl text-sm/6 text-gray-500">
-                  The details of the given cash account.
+                  Last updated{' '}
+                  {new Date(account.updated_at)
+                    .toLocaleString('en-US', {
+                      year: 'numeric',
+                      month: 'long',
+                      day: 'numeric',
+                      hour: 'numeric',
+                      minute: '2-digit',
+                      hour12: true,
+                    })
+                    .replace(',', 'th @')}
                 </p>
               </div>
             </div>
@@ -123,15 +135,6 @@ const CashAccountDescription: React.FC<{
                     className="size-4 cursor-pointer hover:text-gray-600"
                   />
                 </button>
-              </dd>
-            </div>
-            <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-              <dt className="text-sm font-medium text-gray-900">Description</dt>
-              <dd className="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0">
-                Fugiat ipsum ipsum deserunt culpa aute sint do nostrud anim incididunt cillum culpa
-                consequat. Excepteur qui ipsum aliquip consequat sint. Sit id mollit nulla mollit
-                nostrud in ea officia proident. Irure nostrud pariatur mollit ad adipisicing
-                reprehenderit deserunt qui eu.
               </dd>
             </div>
           </dl>

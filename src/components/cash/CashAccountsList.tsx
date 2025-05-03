@@ -24,6 +24,10 @@ const CashAccountsList: React.FC<{
 }): React.ReactElement => {
   const [openCreateAccountModal, setOpenCreateAccountModal] = React.useState<boolean>(false);
 
+  const getTotalBalance: () => number = (): number => {
+    return accounts.map((account: CashAccount) => account.balance).reduce((a, b) => a + b, 0);
+  };
+
   const renderLoadingState: () => React.ReactElement = (): React.ReactElement => {
     return (
       <div className="flex flex-col items-center justify-center gap-y-4">
@@ -85,11 +89,16 @@ const CashAccountsList: React.FC<{
     <>
       <div className="flex items-center justify-between mb-4">
         <h1 className="text-2xl font-bold">Accounts</h1>
-        <PlusCircleIcon
-          onClick={(): void => setOpenCreateAccountModal(true)}
-          aria-hidden="true"
-          className="size-5 text-gray-400 cursor-pointer hover:text-gray-600"
-        />
+        <div className="flex items-center gap-x-4">
+          <span className="text-lg font-bold text-green-600">
+            {US_DOLLAR.format(getTotalBalance())}
+          </span>
+          <PlusCircleIcon
+            onClick={(): void => setOpenCreateAccountModal(true)}
+            aria-hidden="true"
+            className="size-5 text-gray-400 cursor-pointer hover:text-gray-600"
+          />
+        </div>
       </div>
       {loading
         ? renderLoadingState()

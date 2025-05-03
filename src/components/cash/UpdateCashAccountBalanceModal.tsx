@@ -33,6 +33,7 @@ const UpdateCashAccountBalanceModal: React.FC<{
         accountId: account?.account_id,
         bankName: account?.bank_name,
         accountName: account?.account_name,
+        accountLastFourNumbers: account?.account_last_four_numbers,
         accountBalance: parsedBalance,
       },
     })

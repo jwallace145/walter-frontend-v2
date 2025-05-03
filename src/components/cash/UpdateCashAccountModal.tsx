@@ -19,6 +19,7 @@ const UpdateCashAccountModal: React.FC<{
 }): React.ReactElement => {
   const [bankName, setBankName] = React.useState<string>('');
   const [accountName, setAccountName] = React.useState<string>('');
+  const [accountLastFourNumbers, setAccountLastFourNumbers] = React.useState<string>('');
   const [accountBalance, setAccountBalance] = React.useState<string>('');
   const [loading, setLoading] = React.useState<boolean>(false);
   const [error, setError] = React.useState<boolean>(false);
@@ -50,6 +51,7 @@ const UpdateCashAccountModal: React.FC<{
         accountId: account?.account_id,
         bankName: bankName,
         accountName: accountName,
+        accountLastFourNumbers: accountLastFourNumbers,
         accountBalance: accountBalance,
       },
     })
@@ -104,6 +106,24 @@ const UpdateCashAccountModal: React.FC<{
             value={accountName}
             onChange={(e): void => setAccountName(e.target.value)}
             placeholder={account?.account_name}
+          />
+        </div>
+
+        <div>
+          <label
+            htmlFor="accountLastFourNumbers"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Account Last Four Numbers
+          </label>
+          <input
+            type="text"
+            name="accountLastFourNumbers"
+            id="accountLastFourNumbers"
+            className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+            value={accountLastFourNumbers}
+            onChange={(e): void => setAccountLastFourNumbers(e.target.value)}
+            placeholder={account?.account_last_four_numbers}
           />
         </div>
 

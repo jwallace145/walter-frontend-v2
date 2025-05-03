@@ -289,6 +289,7 @@ export class WalterAPI {
     accountId: string,
     bankName: string,
     accountName: string,
+    accountLastFourNumbers: string,
     accountBalance: number
   ): Promise<CashAccount> {
     return axios({
@@ -301,6 +302,7 @@ export class WalterAPI {
         account_id: accountId,
         bank_name: bankName,
         account_name: accountName,
+        account_last_four_numbers: accountLastFourNumbers,
         balance: accountBalance,
       },
     }).then((response: AxiosResponse) => response.data.Data.account);

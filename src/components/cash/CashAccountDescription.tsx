@@ -1,9 +1,10 @@
 import { BuildingLibraryIcon } from '@heroicons/react/16/solid';
-import { TrashIcon } from '@heroicons/react/20/solid';
+import { PencilSquareIcon, TrashIcon } from '@heroicons/react/20/solid';
 import { ChartPieIcon } from '@heroicons/react/24/outline';
 import React from 'react';
 
 import DeleteCashAccountModal from '@/components/cash/DeleteCashAccountModal';
+import UpdateCashAccountBalanceModal from '@/components/cash/UpdateCashAccountBalanceModal';
 import UpdateCashAccountModal from '@/components/cash/UpdateCashAccountModal';
 import { US_DOLLAR } from '@/lib/constants/Constants';
 import { CashAccount } from '@/lib/models/CashAccount';
@@ -26,6 +27,8 @@ const CashAccountDescription: React.FC<{
   const [openUpdateCashAccountModal, setOpenUpdateCashAccountModal] =
     React.useState<boolean>(false);
   const [openDeleteCashAccountModal, setOpenDeleteCashAccountModal] =
+    React.useState<boolean>(false);
+  const [openUpdateCashAccountBalanceModal, setOpenUpdateCashAccountBalanceModal] =
     React.useState<boolean>(false);
 
   const renderLoadingState: () => React.ReactElement = (): React.ReactElement => {
@@ -105,8 +108,17 @@ const CashAccountDescription: React.FC<{
             </div>
             <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
               <dt className="text-sm font-medium text-gray-900">Balance</dt>
-              <dd className="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0">
-                {US_DOLLAR.format(account?.balance || 0)}
+              <dd className="mt-1 text-sm/6 text-gray-700 sm:col-span-2 sm:mt-0 flex justify-between items-center">
+                <div>{US_DOLLAR.format(account?.balance || 0)}</div>
+                <button
+                  onClick={(): void => setOpenUpdateCashAccountBalanceModal(true)}
+                  className="p-1 text-gray-400 hover:text-gray-600"
+                >
+                  <PencilSquareIcon
+                    aria-hidden="true"
+                    className="size-4 cursor-pointer hover:text-gray-600"
+                  />
+                </button>
               </dd>
             </div>
             <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
@@ -136,6 +148,13 @@ const CashAccountDescription: React.FC<{
         setOpen={setOpenDeleteCashAccountModal}
         onDeleteAccountSuccess={onDeleteAccountSuccess}
         onDeleteAccountError={onDeleteAccountError}
+      />
+      <UpdateCashAccountBalanceModal
+        account={account as CashAccount}
+        open={openUpdateCashAccountBalanceModal}
+        setOpen={setOpenUpdateCashAccountBalanceModal}
+        onUpdateAccountSuccess={onUpdateAccountSuccess}
+        onUpdateAccountError={onUpdateAccountError}
       />
     </>
   );

@@ -1,6 +1,6 @@
 import { PlusCircleIcon } from '@heroicons/react/24/outline';
+import Image from 'next/image';
 import React from 'react';
-import Avatar from 'react-avatar';
 
 import CreateCashAccountModal from '@/components/cash/CreateCashAccountModal';
 import LoadingSpinner from '@/components/loading/LoadingSpinner';
@@ -49,7 +49,13 @@ const CashAccountsList: React.FC<{
               className="relative flex justify-between gap-x-6 py-5 cursor-pointer hover:bg-gray-50 transition-colors"
             >
               <div className="flex min-w-0 gap-x-4">
-                <Avatar name={account.account_name} size="50" round={true} />
+                {/*<Avatar name={account.account_name} size="50" round={true}/>*/}
+                <Image
+                  src="https://walterai-public-media-dev.s3.us-east-1.amazonaws.com/cash-accounts/capital-one/logo.svg"
+                  alt="Goldman Sachs"
+                  width={50}
+                  height={50}
+                />
                 <div className="min-w-0 flex-auto">
                   <p className="text-sm font-semibold text-gray-900">{account.account_name}</p>
                   <p className="mt-1 text-xs text-gray-500 truncate hover:underline">
@@ -61,6 +67,12 @@ const CashAccountsList: React.FC<{
                 <span className="text-sm font-bold text-green-600">
                   {US_DOLLAR.format(account.balance)}
                 </span>
+                <p className="text-xs text-gray-500 italic">
+                  ****{account.account_last_four_numbers}
+                </p>
+                <p className="mt-1 text-xs text-gray-500 italic">
+                  Updated {new Date(account.updated_at).toLocaleDateString()}
+                </p>
               </div>
             </li>
           )

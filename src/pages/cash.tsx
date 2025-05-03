@@ -7,6 +7,7 @@ import { getCookie } from 'typescript-cookie';
 
 import CashAccountDescription from '@/components/cash/CashAccountDescription';
 import CashAccountsList from '@/components/cash/CashAccountsList';
+import CashAccountTransactionsDateRangeOptions from '@/components/cash/CashAccountTransactionsDateRangeOptions';
 import ErrorNotification from '@/components/notifications/ErrorNotification';
 import SuccessNotification from '@/components/notifications/SuccessNotification';
 import WarningNotification from '@/components/notifications/WarningNotification';
@@ -116,14 +117,17 @@ const Cash: React.FC<{ user: User }> = ({ user }): React.ReactElement => {
               }}
             />
             <div className="mt-8">
-              <PaginatedTransactionsList
-                refresh={() => console.log('refresh')}
-                onUpdateTransactionSuccess={() => console.log('update')}
-                onDeleteTransactionSuccess={() => console.log('delete')}
-                transactions={transactions}
-                setTransactions={setTransactions}
-                transactionsPerPage={5}
-              />
+              <CashAccountTransactionsDateRangeOptions />
+              <div className="mt-6">
+                <PaginatedTransactionsList
+                  refresh={() => console.log('refresh')}
+                  onUpdateTransactionSuccess={() => console.log('update')}
+                  onDeleteTransactionSuccess={() => console.log('delete')}
+                  transactions={transactions}
+                  setTransactions={setTransactions}
+                  transactionsPerPage={5}
+                />
+              </div>
             </div>
           </section>
         </div>

@@ -31,13 +31,15 @@ const UpdateCashAccountModal: React.FC<{
     if (!bankName || !accountName || !accountBalance) {
       setError(true);
       setMessage('All fields are required.');
+      onUpdateAccountError();
       return;
     }
 
     const parsedBalance = parseFloat(accountBalance);
-    if (isNaN(parsedBalance) || parsedBalance <= 0) {
+    if (isNaN(parsedBalance) || parsedBalance < 0) {
       setError(true);
-      setMessage('Account balance must be a positive number!');
+      setMessage('Account balance must be zero or greater!');
+      onUpdateAccountError();
       return;
     }
 

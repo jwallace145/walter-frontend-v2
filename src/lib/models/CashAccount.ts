@@ -6,5 +6,5 @@ export interface CashAccount {
   account_last_four_numbers: string;
   balance: number;
   created_at: string;
-  last_updated_at: string;
+  updated_at: string;
 }

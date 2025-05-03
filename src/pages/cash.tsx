@@ -81,6 +81,7 @@ const Cash: React.FC<{ user: User }> = ({ user }): React.ReactElement => {
               <CashAccountsList
                 loading={gettingAccounts}
                 accounts={accounts}
+                selectedAccount={selectedAccount}
                 setSelectedAccount={setSelectedAccount}
                 onCreateAccountSuccess={(): void => {
                   setRefresh(!refresh);

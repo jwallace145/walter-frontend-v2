@@ -1,6 +1,7 @@
 import { BuildingLibraryIcon } from '@heroicons/react/16/solid';
 import { PencilSquareIcon, TrashIcon } from '@heroicons/react/20/solid';
 import { ChartPieIcon } from '@heroicons/react/24/outline';
+import Image from 'next/image';
 import React from 'react';
 
 import DeleteCashAccountModal from '@/components/cash/DeleteCashAccountModal';
@@ -66,11 +67,14 @@ const CashAccountDescription: React.FC<{
       <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg">
         <div className="px-4 py-6 sm:px-6">
           <div className="flex justify-between items-start">
-            <div>
-              <h3 className="text-base/7 font-semibold text-gray-900">Account Information</h3>
-              <p className="mt-1 max-w-2xl text-sm/6 text-gray-500">
-                The details of the given cash account.
-              </p>
+            <div className="flex items-start gap-x-4">
+              <Image src={account.logo_url} alt={account.bank_name} height={80} width={80} />
+              <div>
+                <h3 className="text-base/7 font-semibold text-gray-900">Account Information</h3>
+                <p className="mt-1 max-w-2xl text-sm/6 text-gray-500">
+                  The details of the given cash account.
+                </p>
+              </div>
             </div>
             <div className="flex gap-x-2">
               <button

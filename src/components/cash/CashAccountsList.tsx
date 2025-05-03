@@ -10,12 +10,14 @@ import { CashAccount } from '@/lib/models/CashAccount';
 const CashAccountsList: React.FC<{
   loading: boolean;
   accounts: CashAccount[];
+  selectedAccount: CashAccount | undefined;
   setSelectedAccount: (account: CashAccount) => void;
   onCreateAccountSuccess: () => void;
   onCreateAccountError: () => void;
 }> = ({
   loading,
   accounts,
+  selectedAccount,
   setSelectedAccount,
   onCreateAccountSuccess,
   onCreateAccountError,
@@ -46,16 +48,14 @@ const CashAccountsList: React.FC<{
             <li
               key={account.account_id}
               onClick={(): void => setSelectedAccount(account)}
-              className="relative flex justify-between gap-x-6 py-5 cursor-pointer hover:bg-gray-50 transition-colors"
+              className={`relative flex justify-between gap-x-6 py-5 cursor-pointer transition-all rounded-xl px-4 ${
+                selectedAccount?.account_id === account.account_id
+                  ? 'bg-indigo-50 border-l-4 border-indigo-500 shadow-sm ring-1 ring-indigo-100'
+                  : 'hover:bg-gray-50'
+              }`}
             >
               <div className="flex min-w-0 gap-x-4">
-                {/*<Avatar name={account.account_name} size="50" round={true}/>*/}
-                <Image
-                  src="https://walterai-public-media-dev.s3.us-east-1.amazonaws.com/cash-accounts/capital-one/logo.svg"
-                  alt="Goldman Sachs"
-                  width={50}
-                  height={50}
-                />
+                <Image src={account.logo_url} alt={account.bank_name} width={50} height={50} />
                 <div className="min-w-0 flex-auto">
                   <p className="text-sm font-semibold text-gray-900">{account.account_name}</p>
                   <p className="mt-1 text-xs text-gray-500 truncate hover:underline">

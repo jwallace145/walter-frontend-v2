@@ -121,12 +121,12 @@ const Cash: React.FC<{ user: User }> = ({ user }): React.ReactElement => {
               <CashAccountTransactionsDateRangeOptions />
               <div className="mt-6">
                 <PaginatedTransactionsList
-                  refresh={() => console.log('refresh')}
-                  onUpdateTransactionSuccess={() => console.log('update')}
-                  onDeleteTransactionSuccess={() => console.log('delete')}
+                  refresh={(): void => console.log('refresh')}
+                  onUpdateTransactionSuccess={(): void => console.log('update')}
+                  onDeleteTransactionSuccess={(): void => console.log('delete')}
                   transactions={transactions}
                   setTransactions={setTransactions}
-                  transactionsPerPage={5}
+                  transactionsPerPage={8}
                 />
               </div>
             </div>

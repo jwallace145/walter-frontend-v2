@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import Avatar from 'react-avatar';
 
 import ChangeAvatarModal from '@/components/settings/ChangeAvatarModal';
+import UserProfilePicture from '@/components/users/UserProfilePicture';
 import { User } from '@/lib/models/User';
 
 const SettingsPersonalInformationForm: React.FC<{
@@ -39,7 +40,13 @@ const SettingsPersonalInformationForm: React.FC<{
         <form className="md:col-span-2">
           <div className="grid grid-cols-1 gap-x-6 gap-y-8 sm:max-w-xl sm:grid-cols-6">
             <div className="col-span-full flex items-center gap-x-8">
-              {getUserAvatar()}
+              <UserProfilePicture
+                user={user}
+                defaultProfilePictureSize="100"
+                customProfilePictureWidth={200}
+                customProfilePictureHeight={200}
+                customProfilePictureRounded={false}
+              />
               <div>
                 <button
                   type="button"

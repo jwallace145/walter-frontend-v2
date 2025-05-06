@@ -2,12 +2,14 @@ import axios, { AxiosResponse } from 'axios';
 import React, { FormEvent, ReactElement } from 'react';
 
 import Modal from '@/components/modals/Modal';
+import { CashAccount } from '@/lib/models/CashAccount';
 
 interface AddIncomeModalProps {
   open: boolean;
   setOpen: (open: boolean) => void;
   onClose: () => void;
   onIncomeAdded: () => void;
+  accounts: CashAccount[];
 }
 
 const AddIncomeModal: React.FC<AddIncomeModalProps> = ({
@@ -15,7 +17,9 @@ const AddIncomeModal: React.FC<AddIncomeModalProps> = ({
   setOpen,
   onClose,
   onIncomeAdded,
+  accounts,
 }): ReactElement => {
+  const [selectedAccountId, setSelectedAccountId] = React.useState('');
   const [date, setDate] = React.useState('');
   const [vendor, setVendor] = React.useState('');
   const [amount, setAmount] = React.useState('');
@@ -24,6 +28,28 @@ const AddIncomeModal: React.FC<AddIncomeModalProps> = ({
   const getContent: () => React.ReactElement = (): React.ReactElement => {
     return (
       <form onSubmit={handleSubmit} className="mt-4 space-y-4">
+        <div>
+          <label htmlFor="account" className="block text-sm font-medium text-gray-700">
+            Account
+          </label>
+          <select
+            id="account"
+            value={selectedAccountId}
+            onChange={(e) => setSelectedAccountId(e.target.value)}
+            required
+            className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+          >
+            <option value="" disabled>
+              Select an account
+            </option>
+            {accounts.map((account) => (
+              <option key={account.account_id} value={account.account_id}>
+                {account.bank_name} - {account.account_name} ({account.account_last_four_numbers})
+              </option>
+            ))}
+          </select>
+        </div>
+
         <div>
           <label htmlFor="date" className="block text-sm font-medium text-gray-700">
             Date
@@ -115,6 +141,7 @@ const AddIncomeModal: React.FC<AddIncomeModalProps> = ({
     setLoading(true);
     await axios
       .post('/api/transactions/add-transaction', {
+        account_id: selectedAccountId,
         date: date,
         vendor: vendor,
         amount: Math.abs(parsedAmount),

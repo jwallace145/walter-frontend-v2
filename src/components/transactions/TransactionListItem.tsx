@@ -5,11 +5,15 @@ import { US_DOLLAR } from '@/lib/constants/Constants';
 import { Transaction } from '@/lib/models/Transaction';
 
 const TransactionListItem: React.FC<{
+  accountName: string;
+  accountLastFourNumbers: string;
   transaction: Transaction;
   setSelectedTransaction: (transaction: Transaction) => void;
   setOpenEditTransactionModal: (open: boolean) => void;
   setOpenDeleteTransactionModal: (open: boolean) => void;
 }> = ({
+  accountName,
+  accountLastFourNumbers,
   transaction,
   setSelectedTransaction,
   setOpenEditTransactionModal,
@@ -33,9 +37,9 @@ const TransactionListItem: React.FC<{
           </span>
           <div className="flex space-x-1">
             <span className="truncate whitespace-nowrap overflow-hidden text-ellipsis italic text-sm text-gray-500">
-              Savor
+              {accountName}
             </span>
-            <span className="italic text-sm text-gray-500">...1234</span>
+            <span className="italic text-sm text-gray-500">...{accountLastFourNumbers}</span>
           </div>
         </div>
       </td>

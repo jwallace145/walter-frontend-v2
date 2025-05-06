@@ -124,6 +124,7 @@ const Cash: React.FC<{ user: User }> = ({ user }): React.ReactElement => {
                   refresh={(): void => console.log('refresh')}
                   onUpdateTransactionSuccess={(): void => console.log('update')}
                   onDeleteTransactionSuccess={(): void => console.log('delete')}
+                  accounts={accounts}
                   transactions={transactions}
                   setTransactions={setTransactions}
                   transactionsPerPage={8}

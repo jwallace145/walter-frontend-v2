@@ -16,6 +16,7 @@ export enum TransactionCategory {
 }
 
 export interface Transaction {
+  account_id: string;
   date: string;
   transaction_id: string;
   vendor: string;

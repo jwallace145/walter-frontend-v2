@@ -23,6 +23,7 @@ import TransactionStats from '@/components/transactions/TransactionsStats';
 import AuthenticatedPageLayout from '@/layouts/AuthenticatedPageLayout';
 import { withAuthenticationRedirect } from '@/lib/auth/AuthenticationRedirect';
 import { WALTER_API_TOKEN_NAME } from '@/lib/constants/Constants';
+import { CashAccount } from '@/lib/models/CashAccount';
 import { Transaction, TransactionCategory } from '@/lib/models/Transaction';
 import { User } from '@/lib/models/User';
 
@@ -37,7 +38,8 @@ const START_OF_THE_MONTH: string = dayjs().startOf('month').format('YYYY-MM-DD')
 const END_OF_THE_MONTH: string = dayjs().endOf('month').format('YYYY-MM-DD');
 
 const Transactions: React.FC<{ user: User }> = ({ user }): React.ReactElement => {
-  const [loading, setLoading] = useState<boolean>(false);
+  const [gettingTransactions, setGettingTransactions] = useState<boolean>(false);
+  const [gettingAccounts, setGettingAccounts] = useState<boolean>(false);
   const [category, setCategory] = useState<TransactionCategory | null>(null);
   const [startDate, setStartDate] = useState<string>(START_OF_THE_MONTH);
   const [endDate, setEndDate] = useState<string>(END_OF_THE_MONTH);
@@ -56,6 +58,11 @@ const Transactions: React.FC<{ user: User }> = ({ user }): React.ReactElement =>
     name: 'Cash Flow',
     current: true,
   });
+  const [accounts, setAccounts] = useState<CashAccount[]>([]);
+
+  React.useEffect((): void => {
+    getAccounts();
+  }, []);
 
   useEffect((): void => {
     getTransactions(startDate, endDate, category);
@@ -66,7 +73,7 @@ const Transactions: React.FC<{ user: User }> = ({ user }): React.ReactElement =>
     endDate: string,
     category: TransactionCategory | null
   ) => void = (startDate: string, endDate: string): void => {
-    setLoading(true);
+    setGettingTransactions(true);
     axios(`/api/transactions/get-transactions`, {
       method: 'GET',
       params: {
@@ -79,9 +86,26 @@ const Transactions: React.FC<{ user: User }> = ({ user }): React.ReactElement =>
     })
       .then((response): void => {
         setTransactions(response.data);
+        console.log(response.data);
       })
       .catch((error): void => console.error('Error:', error))
-      .finally((): void => setLoading(false));
+      .finally((): void => setGettingTransactions(false));
+  };
+
+  const getAccounts: () => void = (): void => {
+    setGettingAccounts(true);
+    axios(`/api/cash-accounts/get-cash-accounts`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${getCookie(WALTER_API_TOKEN_NAME)}`,
+      },
+    })
+      .then((response): void => {
+        setAccounts(response.data);
+        console.log(response.data);
+      })
+      .catch((error): void => console.error('Error:', error))
+      .finally((): void => setGettingAccounts(false));
   };
 
   const generateTransactionsChartOptions: () => TransactionsChartOption[] =
@@ -104,21 +128,29 @@ const Transactions: React.FC<{ user: User }> = ({ user }): React.ReactElement =>
         return (
           <>
             <TransactionStats transactions={transactions} />
-            <TransactionsCashFlowLineChart loading={loading} transactions={transactions} />
+            <TransactionsCashFlowLineChart
+              loading={gettingTransactions}
+              transactions={transactions}
+            />
           </>
         );
       case 'income':
         return (
           <>
             <TransactionStats transactions={transactions} />
-            <TransactionsIncomeBarChart loading={loading} transactions={transactions} />;
+            <TransactionsIncomeBarChart loading={gettingTransactions} transactions={transactions} />
+            ;
           </>
         );
       case 'expense':
         return (
           <>
             <TransactionStats transactions={transactions} />
-            <TransactionsExpensesBarChart loading={loading} transactions={transactions} />;
+            <TransactionsExpensesBarChart
+              loading={gettingTransactions}
+              transactions={transactions}
+            />
+            ;
           </>
         );
       case 'categories':
@@ -126,7 +158,7 @@ const Transactions: React.FC<{ user: User }> = ({ user }): React.ReactElement =>
           <>
             <TransactionStats transactions={transactions} />
             <TransactionsCategoryPieChart
-              loading={loading}
+              loading={gettingTransactions}
               transactions={transactions}
               setCategory={(category: string): void => console.log(category)}
             />
@@ -137,7 +169,7 @@ const Transactions: React.FC<{ user: User }> = ({ user }): React.ReactElement =>
           <>
             <TransactionStats transactions={transactions} />
             <TransactionsCategoryPieChart
-              loading={loading}
+              loading={gettingTransactions}
               transactions={transactions}
               setCategory={(category: string): void => console.log(category)}
             />
@@ -211,6 +243,7 @@ const Transactions: React.FC<{ user: User }> = ({ user }): React.ReactElement =>
                 refresh={(): void => setRefresh(!refresh)}
                 onUpdateTransactionSuccess={(): void => setOpenEditTransactionSuccessAlert(true)}
                 onDeleteTransactionSuccess={(): void => setOpenDeleteTransactionSuccessAlert(true)}
+                accounts={accounts}
                 transactions={transactions}
                 setTransactions={setTransactions}
                 transactionsPerPage={12}
@@ -228,6 +261,7 @@ const Transactions: React.FC<{ user: User }> = ({ user }): React.ReactElement =>
             setRefresh(!refresh);
             setOpenAddIncomeSuccessAlert(true);
           }}
+          accounts={accounts}
         />
         <AddExpenseModal
           open={openAddTransactionForm}
@@ -237,6 +271,7 @@ const Transactions: React.FC<{ user: User }> = ({ user }): React.ReactElement =>
             setRefresh(!refresh);
             setOpenAddExpenseSuccessAlert(true);
           }}
+          accounts={accounts}
         />
       </>
     );

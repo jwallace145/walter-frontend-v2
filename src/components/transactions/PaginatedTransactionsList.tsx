@@ -6,6 +6,7 @@ import Pagination from '@/components/pagination/Pagination';
 import TransactionsDownloadModal from '@/components/transactions/TransactionsDownloadModal';
 import TransactionsSearchModal from '@/components/transactions/TransactionsSearchModal';
 import TransactionsTagModal from '@/components/transactions/TransactionsTagModal';
+import { CashAccount } from '@/lib/models/CashAccount';
 import { Transaction } from '@/lib/models/Transaction';
 
 import TransactionsList from './TransactionsList';
@@ -14,6 +15,7 @@ const PaginatedTransactionsList: React.FC<{
   refresh: () => void;
   onUpdateTransactionSuccess: () => void;
   onDeleteTransactionSuccess: () => void;
+  accounts: CashAccount[];
   transactions: Transaction[];
   setTransactions: (transactions: Transaction[]) => void;
   transactionsPerPage: number;
@@ -21,6 +23,7 @@ const PaginatedTransactionsList: React.FC<{
   refresh,
   onUpdateTransactionSuccess,
   onDeleteTransactionSuccess,
+  accounts,
   transactions,
   setTransactions,
   transactionsPerPage,
@@ -106,6 +109,7 @@ const PaginatedTransactionsList: React.FC<{
             refresh={refresh}
             onUpdateTransactionSuccess={onUpdateTransactionSuccess}
             onDeleteTransactionSuccess={onDeleteTransactionSuccess}
+            accounts={accounts}
             transactions={currentTransactions}
           />
           <Pagination

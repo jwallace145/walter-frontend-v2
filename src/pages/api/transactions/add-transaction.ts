@@ -12,6 +12,7 @@ export default async function handler(
     .json(
       await WalterAPI.addTransaction(
         token,
+        request.body.account_id,
         request.body.date,
         request.body.vendor,
         request.body.amount

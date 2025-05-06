@@ -154,6 +154,7 @@ export class WalterAPI {
       .then((transactions) => {
         return transactions.map(
           (transaction: {
+            account_id: string;
             date: string;
             transaction_id: string;
             vendor: string;
@@ -162,6 +163,7 @@ export class WalterAPI {
             reviewed: boolean;
           }): Transaction => {
             return {
+              account_id: transaction.account_id,
               date: transaction.date,
               transaction_id: transaction.transaction_id,
               vendor: transaction.vendor,
@@ -202,6 +204,7 @@ export class WalterAPI {
 
   public static async addTransaction(
     token: string,
+    account_id: string,
     date: string,
     vendor: string,
     amount: number
@@ -213,6 +216,7 @@ export class WalterAPI {
         Authorization: `Bearer ${token}`,
       },
       data: {
+        account_id: account_id,
         date: date,
         vendor: vendor,
         amount: amount,

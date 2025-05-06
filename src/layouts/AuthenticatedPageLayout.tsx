@@ -30,14 +30,13 @@ import Avatar from 'react-avatar';
 import SignOutModal from '@/components/signout/SignOutModal';
 import { User } from '@/lib/models/User';
 
-const AUTHENTICATED_PAGES = [
-  { name: 'Dashboard', href: 'dashboard', icon: ChartBarIcon },
-  { name: 'Transactions', href: 'transactions', icon: CreditCardIcon },
-  { name: 'Cash', href: 'cash', icon: BanknotesIcon },
-  { name: 'Investments', href: 'investments', icon: ChartPieIcon },
-  { name: 'Retirement', href: 'retirement', icon: PresentationChartLineIcon },
-  { name: 'Newsletters', href: 'newsletters', icon: NewspaperIcon },
-];
+interface Page {
+  name: string;
+  href: string;
+  icon: React.FC<React.SVGProps<SVGSVGElement>>;
+  numNotifications: number;
+  current: boolean;
+}
 
 const userNavigation = [
   { name: 'Your profile', href: '#' },
@@ -62,27 +61,82 @@ const AuthenticatedPageLayout: React.FC<AuthenticatedLayoutProps> = ({
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [openSignOutModal, setOpenSignOutModal] = useState(false);
 
-  const getNavigation = () => {
-    return AUTHENTICATED_PAGES.map((item) => {
-      return {
-        ...item,
-        current: item.name.toLowerCase() === pageName.toLowerCase(),
-      };
-    });
+  const getPages: () => Page[] = (): Page[] => {
+    return [
+      { name: 'Dashboard', href: 'dashboard', icon: ChartBarIcon, numNotifications: 0 },
+      { name: 'Transactions', href: 'transactions', icon: CreditCardIcon, numNotifications: 24 },
+      { name: 'Cash', href: 'cash', icon: BanknotesIcon, numNotifications: 0 },
+      { name: 'Investments', href: 'investments', icon: ChartPieIcon, numNotifications: 0 },
+      {
+        name: 'Retirement',
+        href: 'retirement',
+        icon: PresentationChartLineIcon,
+        numNotifications: 0,
+      },
+      { name: 'Newsletters', href: 'newsletters', icon: NewspaperIcon, numNotifications: 0 },
+    ].map(
+      (item: {
+        name: string;
+        href: string;
+        icon: React.FC<React.SVGProps<SVGSVGElement>>;
+        numNotifications: number;
+      }): Page => {
+        return {
+          ...item,
+          current: item.name.toLowerCase() === pageName.toLowerCase(),
+        };
+      }
+    );
+  };
+
+  const renderPageItem: (page: Page) => React.ReactElement = (page: Page): React.ReactElement => {
+    return (
+      <li key={page.name}>
+        <a
+          href={page.href}
+          className={classNames(
+            page.current
+              ? 'bg-indigo-700 text-white'
+              : 'text-indigo-200 hover:bg-indigo-700 hover:text-white',
+            'group flex justify-between rounded-md p-2 text-sm/6 font-semibold'
+          )}
+        >
+          <div className="flex gap-x-3">
+            <page.icon
+              aria-hidden="true"
+              className={classNames(
+                page.current ? 'text-white' : 'text-indigo-200 group-hover:text-white',
+                'size-6 shrink-0'
+              )}
+            />
+            {page.name}
+          </div>
+          {page.numNotifications > 0 && (
+            <span
+              className={classNames(
+                page.current ? 'bg-indigo-500' : 'bg-indigo-400',
+                'ml-auto flex size-5 items-center justify-center rounded-full text-xs font-medium text-white'
+              )}
+            >
+              {page.numNotifications}
+            </span>
+          )}
+        </a>
+      </li>
+    );
   };
 
   const getUserAvatar: () => ReactElement = (): ReactElement => {
     if (!user.profile_picture_url) {
-      // If the user doesn't have a profile picture, use the Avatar component with name initials
       return <Avatar name={`${user.first_name} ${user.last_name}`} size="35" round={true} />;
     }
     return (
       <Image
-        alt={`${user.first_name} ${user.last_name}'s profile picture`} // Better alt text for accessibility
-        src={user.profile_picture_url} // The URL for the user's profile picture
+        alt={`${user.first_name} ${user.last_name}'s profile picture`}
+        src={user.profile_picture_url}
         className="rounded-full bg-gray-50"
-        width={35} // Ensure width is specified
-        height={35} // Ensure height is specified
+        width={35}
+        height={35}
       />
     );
   };
@@ -113,7 +167,6 @@ const AuthenticatedPageLayout: React.FC<AuthenticatedLayoutProps> = ({
                   </button>
                 </div>
               </TransitionChild>
-              {/* Sidebar component, swap this element with another sidebar if you like */}
               <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-indigo-600 px-6 pb-4">
                 <div className="flex h-16 shrink-0 items-center">
                   <img
@@ -126,30 +179,7 @@ const AuthenticatedPageLayout: React.FC<AuthenticatedLayoutProps> = ({
                   <ul role="list" className="flex flex-1 flex-col gap-y-7">
                     <li>
                       <ul role="list" className="-mx-2 space-y-1">
-                        {getNavigation().map((item) => (
-                          <li key={item.name}>
-                            <a
-                              href={item.href}
-                              className={classNames(
-                                item.current
-                                  ? 'bg-indigo-700 text-white'
-                                  : 'text-indigo-200 hover:bg-indigo-700 hover:text-white',
-                                'group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold'
-                              )}
-                            >
-                              <item.icon
-                                aria-hidden="true"
-                                className={classNames(
-                                  item.current
-                                    ? 'text-white'
-                                    : 'text-indigo-200 group-hover:text-white',
-                                  'size-6 shrink-0'
-                                )}
-                              />
-                              {item.name}
-                            </a>
-                          </li>
-                        ))}
+                        {getPages().map(renderPageItem)}
                       </ul>
                     </li>
                     <li className="mt-auto">
@@ -171,9 +201,7 @@ const AuthenticatedPageLayout: React.FC<AuthenticatedLayoutProps> = ({
           </div>
         </Dialog>
 
-        {/* Static sidebar for desktop */}
         <div className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col">
-          {/* Sidebar component, swap this element with another sidebar if you like */}
           <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-indigo-600 px-6 pb-4">
             <div className="flex h-16 shrink-0 items-center">
               <img
@@ -186,30 +214,7 @@ const AuthenticatedPageLayout: React.FC<AuthenticatedLayoutProps> = ({
               <ul role="list" className="flex flex-1 flex-col gap-y-7">
                 <li>
                   <ul role="list" className="-mx-2 space-y-1">
-                    {getNavigation().map((item) => (
-                      <li key={item.name}>
-                        <a
-                          href={item.href}
-                          className={classNames(
-                            item.current
-                              ? 'bg-indigo-700 text-white'
-                              : 'text-indigo-200 hover:bg-indigo-700 hover:text-white',
-                            'group flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold'
-                          )}
-                        >
-                          <item.icon
-                            aria-hidden="true"
-                            className={classNames(
-                              item.current
-                                ? 'text-white'
-                                : 'text-indigo-200 group-hover:text-white',
-                              'size-6 shrink-0'
-                            )}
-                          />
-                          {item.name}
-                        </a>
-                      </li>
-                    ))}
+                    {getPages().map(renderPageItem)}
                   </ul>
                 </li>
                 <li className="mt-auto">
@@ -240,7 +245,6 @@ const AuthenticatedPageLayout: React.FC<AuthenticatedLayoutProps> = ({
               <Bars3Icon aria-hidden="true" className="size-6" />
             </button>
 
-            {/* Separator */}
             <div aria-hidden="true" className="h-6 w-px bg-gray-900/10 lg:hidden" />
 
             <div className="flex flex-1 gap-x-4 self-stretch lg:gap-x-6">
@@ -263,13 +267,11 @@ const AuthenticatedPageLayout: React.FC<AuthenticatedLayoutProps> = ({
                   <BellIcon aria-hidden="true" className="size-6" />
                 </button>
 
-                {/* Separator */}
                 <div
                   aria-hidden="true"
                   className="hidden lg:block lg:h-6 lg:w-px lg:bg-gray-900/10"
                 />
 
-                {/* Profile dropdown */}
                 <Menu as="div" className="relative">
                   <MenuButton className="-m-1.5 flex items-center p-1.5">
                     <span className="sr-only">Open user menu</span>

@@ -1,5 +1,5 @@
 import { MagnifyingGlassIcon } from '@heroicons/react/20/solid';
-import { ArrowDownTrayIcon, TagIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import { ArrowDownTrayIcon, FunnelIcon, TagIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import React from 'react';
 
 import Pagination from '@/components/pagination/Pagination';
@@ -91,6 +91,7 @@ const PaginatedTransactionsList: React.FC<{
                 onClick={(): void => setOpenSearchTransactionsModal(true)}
                 className="size-5 text-gray-500 cursor-pointer hover:text-gray-700"
               />
+              <FunnelIcon className="size-5 text-gray-500 cursor-pointer hover:text-gray-700" />
               <TagIcon
                 onClick={(): void => setOpenCreateTransactionTagModal(true)}
                 className="size-5 text-gray-500 cursor-pointer hover:text-gray-700"

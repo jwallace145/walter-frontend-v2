@@ -159,6 +159,7 @@ export class WalterAPI {
             vendor: string;
             amount: number;
             category: string;
+            reviewed: boolean;
           }): Transaction => {
             return {
               date: transaction.date,
@@ -166,6 +167,7 @@ export class WalterAPI {
               vendor: transaction.vendor,
               amount: transaction.amount,
               category: getTransactionCategory(transaction.category) as TransactionCategory,
+              reviewed: transaction.reviewed,
             };
           }
         );
@@ -174,11 +176,12 @@ export class WalterAPI {
 
   public static async editTransaction(
     token: string,
+    transaction_date: string,
     transaction_id: string,
-    date: string,
-    vendor: string,
-    amount: number,
-    category: string
+    updated_date: string,
+    updated_vendor: string,
+    updated_amount: number,
+    updated_category: string
   ): Promise<any> {
     return axios({
       method: 'PUT',
@@ -187,11 +190,12 @@ export class WalterAPI {
         Authorization: `Bearer ${token}`,
       },
       data: {
-        date: date,
+        transaction_date: transaction_date,
         transaction_id: transaction_id,
-        vendor: vendor,
-        amount: amount,
-        category: category,
+        updated_date: updated_date,
+        updated_vendor: updated_vendor,
+        updated_amount: updated_amount,
+        updated_category: updated_category,
       },
     }).then((response: AxiosResponse) => response.data);
   }

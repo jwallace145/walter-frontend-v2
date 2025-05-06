@@ -21,4 +21,5 @@ export interface Transaction {
   vendor: string;
   amount: number;
   category: TransactionCategory;
+  reviewed: boolean;
 }

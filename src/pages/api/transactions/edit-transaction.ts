@@ -13,11 +13,12 @@ export default async function handler(
       .json(
         await WalterAPI.editTransaction(
           token,
+          request.body.transaction_date,
           request.body.transaction_id,
-          request.body.date,
-          request.body.vendor,
-          request.body.amount,
-          request.body.category
+          request.body.updated_date,
+          request.body.updated_vendor,
+          request.body.updated_amount,
+          request.body.updated_category
         )
       );
   } catch (error) {

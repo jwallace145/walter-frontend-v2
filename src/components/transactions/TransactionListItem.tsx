@@ -34,11 +34,13 @@ const TransactionListItem: React.FC<{
         </div>
       </div>
 
-      <div className="flex items-center space-x-4">
-        <p className={`text-sm ${transaction.amount > 0 ? 'text-green-600' : 'text-gray-900'}`}>
+      <div className="flex items-center">
+        <p
+          className={`text-sm mr-4 ${transaction.amount > 0 ? 'text-green-600' : 'text-gray-900'}`}
+        >
           {US_DOLLAR.format(transaction.amount > 0 ? transaction.amount : -1 * transaction.amount)}
         </p>
-        <Menu as="div" className="relative">
+        <Menu as="div" className="relative mr-4">
           <MenuButton className="-m-1.5 p-1.5 text-gray-500 hover:text-gray-900">
             <span className="sr-only">Open options</span>
             <EllipsisVerticalIcon aria-hidden="true" className="h-5 w-5" />
@@ -77,10 +79,14 @@ const TransactionListItem: React.FC<{
             </MenuItem>
           </MenuItems>
         </Menu>
-        <span className="relative flex h-2 w-2">
-          <span className="absolute inline-flex h-full w-full rounded-full bg-blue-300 opacity-40"></span>
-          <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-400"></span>
-        </span>
+        <div className="w-2">
+          {!transaction.reviewed && (
+            <span className="relative flex h-2 w-2">
+              <span className="absolute inline-flex h-full w-full rounded-full bg-blue-300 opacity-40"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-400"></span>
+            </span>
+          )}
+        </div>
       </div>
     </li>
   );

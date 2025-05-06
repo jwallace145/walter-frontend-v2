@@ -76,11 +76,12 @@ const EditTransactionModal: React.FC<{
     setIsSubmitting(true);
     axios
       .put('/api/transactions/edit-transaction', {
+        transaction_date: transaction.date,
         transaction_id: transaction.transaction_id,
-        date,
-        vendor,
-        amount,
-        category: category.name as TransactionCategory,
+        updated_date: date,
+        updated_vendor: vendor,
+        updated_amount: amount,
+        updated_category: category.name as TransactionCategory,
       })
       .then((response: AxiosResponse): void => response.data)
       .then((data: any): void => {

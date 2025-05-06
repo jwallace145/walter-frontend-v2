@@ -1,115 +1,133 @@
 import React from 'react';
 
+type CategoryConfig = {
+  emoji: string;
+  text: string;
+  bgColor: string;
+  textColor: string;
+  ringColor: string;
+};
+
+const CATEGORY_CONFIG: Record<string, CategoryConfig> = {
+  bills: {
+    emoji: '💰',
+    text: 'Bills',
+    bgColor: 'bg-orange-50',
+    textColor: 'text-orange-700',
+    ringColor: 'ring-orange-700/10',
+  },
+  entertainment: {
+    emoji: '🎮',
+    text: 'Entertainment',
+    bgColor: 'bg-red-50',
+    textColor: 'text-red-700',
+    ringColor: 'ring-red-700/10',
+  },
+  groceries: {
+    emoji: '🛒',
+    text: 'Groceries',
+    bgColor: 'bg-yellow-50',
+    textColor: 'text-yellow-800',
+    ringColor: 'ring-yellow-600/20',
+  },
+  'health and wellness': {
+    emoji: '❤️',
+    text: 'Health and Wellness',
+    bgColor: 'bg-emerald-50',
+    textColor: 'text-emerald-700',
+    ringColor: 'ring-emerald-700/10',
+  },
+  hobbies: {
+    emoji: '🎨',
+    text: 'Hobbies',
+    bgColor: 'bg-pink-50',
+    textColor: 'text-pink-700',
+    ringColor: 'ring-pink-700/10',
+  },
+  housing: {
+    emoji: '🏠',
+    text: 'Housing',
+    bgColor: 'bg-purple-50',
+    textColor: 'text-purple-700',
+    ringColor: 'ring-purple-600/20',
+  },
+  income: {
+    emoji: '💵',
+    text: 'Income',
+    bgColor: 'bg-green-50',
+    textColor: 'text-green-700',
+    ringColor: 'ring-green-600/20',
+  },
+  insurance: {
+    emoji: '🛡️',
+    text: 'Insurance',
+    bgColor: 'bg-cyan-50',
+    textColor: 'text-cyan-700',
+    ringColor: 'ring-cyan-700/10',
+  },
+  merchandise: {
+    emoji: '📦',
+    text: 'Merchandise',
+    bgColor: 'bg-purple-50',
+    textColor: 'text-purple-700',
+    ringColor: 'ring-purple-700/10',
+  },
+  restaurants: {
+    emoji: '🍽️',
+    text: 'Restaurants',
+    bgColor: 'bg-amber-50',
+    textColor: 'text-amber-700',
+    ringColor: 'ring-amber-700/10',
+  },
+  shopping: {
+    emoji: '🛍️',
+    text: 'Shopping',
+    bgColor: 'bg-fuchsia-50',
+    textColor: 'text-fuchsia-700',
+    ringColor: 'ring-fuchsia-700/10',
+  },
+  subscriptions: {
+    emoji: '📱',
+    text: 'Subscriptions',
+    bgColor: 'bg-violet-50',
+    textColor: 'text-violet-700',
+    ringColor: 'ring-violet-700/10',
+  },
+  transportation: {
+    emoji: '🚗',
+    text: 'Transportation',
+    bgColor: 'bg-blue-50',
+    textColor: 'text-blue-700',
+    ringColor: 'ring-blue-700/10',
+  },
+  travel: {
+    emoji: '✈️',
+    text: 'Travel',
+    bgColor: 'bg-indigo-50',
+    textColor: 'text-indigo-700',
+    ringColor: 'ring-indigo-700/10',
+  },
+};
+
 const TransactionCategoryBadge: React.FC<{ category: string }> = ({
   category,
 }): React.ReactElement => {
-  switch (category.toLowerCase()) {
-    case 'bills':
-      return (
-        <span className="inline-flex items-center rounded-md bg-orange-50 px-2 py-0.5 text-xs font-medium text-orange-700 ring-1 ring-orange-700/10 ring-inset">
-          <span className="sm:hidden">💰</span>
-          <span className="hidden sm:inline">💰 Bills</span>
-        </span>
-      );
-    case 'entertainment':
-      return (
-        <span className="inline-flex items-center rounded-md bg-red-50 px-2 py-0.5 text-xs font-medium text-red-700 ring-1 ring-red-700/10 ring-inset">
-          <span className="sm:hidden">🎮</span>
-          <span className="hidden sm:inline">🎮 Entertainment</span>
-        </span>
-      );
-    case 'groceries':
-      return (
-        <span className="inline-flex items-center rounded-md bg-yellow-50 px-2 py-0.5 text-xs font-medium text-yellow-800 ring-1 ring-yellow-600/20 ring-inset">
-          <span className="sm:hidden">🛒</span>
-          <span className="hidden sm:inline">🛒 Groceries</span>
-        </span>
-      );
-    case 'health and wellness':
-      return (
-        <span className="inline-flex items-center rounded-md bg-emerald-50 px-2 py-0.5 text-xs font-medium text-emerald-700 ring-1 ring-emerald-700/10 ring-inset">
-          <span className="sm:hidden">❤️</span>
-          <span className="hidden sm:inline">❤️ Health and Wellness</span>
-        </span>
-      );
-    case 'hobbies':
-      return (
-        <span className="inline-flex items-center rounded-md bg-pink-50 px-2 py-0.5 text-xs font-medium text-pink-700 ring-1 ring-pink-700/10 ring-inset">
-          <span className="sm:hidden">🎨</span>
-          <span className="hidden sm:inline">🎨 Hobbies</span>
-        </span>
-      );
-    case 'housing':
-      return (
-        <span className="inline-flex items-center rounded-md bg-purple-50 px-2 py-0.5 text-xs font-medium text-purple-700 ring-1 ring-purple-600/20 ring-inset">
-          <span className="sm:hidden">🏠</span>
-          <span className="hidden sm:inline">🏠 Housing</span>
-        </span>
-      );
-    case 'income':
-      return (
-        <span className="inline-flex items-center rounded-md bg-green-50 px-2 py-0.5 text-xs font-medium text-green-700 ring-1 ring-green-600/20 ring-inset">
-          <span className="sm:hidden">💵</span>
-          <span className="hidden sm:inline">💵 Income</span>
-        </span>
-      );
-    case 'insurance':
-      return (
-        <span className="inline-flex items-center rounded-md bg-cyan-50 px-2 py-0.5 text-xs font-medium text-cyan-700 ring-1 ring-cyan-700/10 ring-inset">
-          <span className="sm:hidden">🛡️</span>
-          <span className="hidden sm:inline">🛡️ Insurance</span>
-        </span>
-      );
-    case 'merchandise':
-      return (
-        <span className="inline-flex items-center rounded-md bg-purple-50 px-2 py-0.5 text-xs font-medium text-purple-700 ring-1 ring-purple-700/10 ring-inset">
-          <span className="sm:hidden">📦</span>
-          <span className="hidden sm:inline">📦 Merchandise</span>
-        </span>
-      );
-    case 'restaurants':
-      return (
-        <span className="inline-flex items-center rounded-md bg-amber-50 px-2 py-0.5 text-xs font-medium text-amber-700 ring-1 ring-amber-700/10 ring-inset">
-          <span className="sm:hidden">🍽️</span>
-          <span className="hidden sm:inline">🍽️ Restaurants</span>
-        </span>
-      );
-    case 'shopping':
-      return (
-        <span className="inline-flex items-center rounded-md bg-fuchsia-50 px-2 py-0.5 text-xs font-medium text-fuchsia-700 ring-1 ring-fuchsia-700/10 ring-inset">
-          <span className="sm:hidden">🛍️</span>
-          <span className="hidden sm:inline">🛍️ Shopping</span>
-        </span>
-      );
-    case 'subscriptions':
-      return (
-        <span className="inline-flex items-center rounded-md bg-violet-50 px-2 py-0.5 text-xs font-medium text-violet-700 ring-1 ring-violet-700/10 ring-inset">
-          <span className="sm:hidden">📱</span>
-          <span className="hidden sm:inline">📱 Subscriptions</span>
-        </span>
-      );
-    case 'transportation':
-      return (
-        <span className="inline-flex items-center rounded-md bg-blue-50 px-2 py-0.5 text-xs font-medium text-blue-700 ring-1 ring-blue-700/10 ring-inset">
-          <span className="sm:hidden">🚗</span>
-          <span className="hidden sm:inline">🚗 Transportation</span>
-        </span>
-      );
-    case 'travel':
-      return (
-        <span className="inline-flex items-center rounded-md bg-indigo-50 px-2 py-0.5 text-xs font-medium text-indigo-700 ring-1 ring-indigo-700/10 ring-inset">
-          <span className="sm:hidden">✈️</span>
-          <span className="hidden sm:inline">✈️ Travel</span>
-        </span>
-      );
-    default:
-      return (
-        <span className="inline-flex items-center rounded-md bg-gray-50 px-2 py-0.5 text-xs font-medium text-gray-600 ring-1 ring-gray-500/10 ring-inset">
-          <span className="sm:hidden">❔</span>
-          <span className="hidden sm:inline">❔ Other</span>
-        </span>
-      );
-  }
+  const config: CategoryConfig = CATEGORY_CONFIG[category.toLowerCase()] || {
+    emoji: '❔',
+    text: 'Other',
+    bgColor: 'bg-gray-50',
+    textColor: 'text-gray-600',
+    ringColor: 'ring-gray-500/10',
+  };
+
+  return (
+    <span
+      className={`inline-flex items-center rounded-md ${config.bgColor} px-2 py-0.5 text-xs font-medium ${config.textColor} ring-1 ${config.ringColor} ring-inset`}
+    >
+      <span className="sm:hidden">{config.emoji}</span>
+      <span className="hidden sm:inline">{`${config.emoji} ${config.text}`}</span>
+    </span>
+  );
 };
 
 export default TransactionCategoryBadge;

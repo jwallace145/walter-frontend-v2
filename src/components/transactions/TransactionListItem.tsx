@@ -25,9 +25,19 @@ const TransactionListItem: React.FC<{
         />
       </td>
 
-      {/* Vendor (truncated) */}
-      <td className="px-4 py-2 align-middle max-w-[8.5rem] truncate text-sm font-medium text-gray-900">
-        {transaction.vendor}
+      {/* Vendor and Account */}
+      <td className="px-4 py-2 align-middle max-w-[8.5rem] text-sm font-medium text-gray-900">
+        <div className="flex flex-col">
+          <span className="truncate whitespace-nowrap overflow-hidden text-ellipsis">
+            {transaction.vendor}
+          </span>
+          <div className="flex space-x-1">
+            <span className="truncate whitespace-nowrap overflow-hidden text-ellipsis italic text-sm text-gray-500">
+              Savor
+            </span>
+            <span className="italic text-sm text-gray-500">...1234</span>
+          </div>
+        </div>
       </td>
 
       {/* Category Badge */}

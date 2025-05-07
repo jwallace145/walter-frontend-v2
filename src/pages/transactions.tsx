@@ -1,6 +1,6 @@
 'use client';
 
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import dayjs from 'dayjs';
 import { GetServerSideProps } from 'next';
 import dynamic from 'next/dynamic';
@@ -23,8 +23,9 @@ import TransactionStats from '@/components/transactions/TransactionsStats';
 import AuthenticatedPageLayout from '@/layouts/AuthenticatedPageLayout';
 import { withAuthenticationRedirect } from '@/lib/auth/AuthenticationRedirect';
 import { WALTER_API_TOKEN_NAME } from '@/lib/constants/Constants';
+import { AccountTransaction } from '@/lib/models/AccountTransaction';
 import { CashAccount } from '@/lib/models/CashAccount';
-import { Transaction, TransactionCategory } from '@/lib/models/Transaction';
+import { TransactionCategory } from '@/lib/models/Transaction';
 import { User } from '@/lib/models/User';
 
 const TransactionsCategoryPieChart = dynamic(
@@ -40,10 +41,11 @@ const END_OF_THE_MONTH: string = dayjs().endOf('month').format('YYYY-MM-DD');
 const Transactions: React.FC<{ user: User }> = ({ user }): React.ReactElement => {
   const [gettingTransactions, setGettingTransactions] = useState<boolean>(false);
   const [gettingAccounts, setGettingAccounts] = useState<boolean>(false);
+  const [accounts, setAccounts] = useState<CashAccount[]>([]);
   const [category, setCategory] = useState<TransactionCategory | null>(null);
   const [startDate, setStartDate] = useState<string>(START_OF_THE_MONTH);
   const [endDate, setEndDate] = useState<string>(END_OF_THE_MONTH);
-  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [transactions, setTransactions] = useState<AccountTransaction[]>([]);
   const [openAddIncomeModal, setOpenAddIncomeModal] = useState<boolean>(false);
   const [openAddTransactionForm, setOpenAddTransactionForm] = useState<boolean>(false);
   const [refresh, setRefresh] = useState<boolean>(false);
@@ -58,7 +60,6 @@ const Transactions: React.FC<{ user: User }> = ({ user }): React.ReactElement =>
     name: 'Cash Flow',
     current: true,
   });
-  const [accounts, setAccounts] = useState<CashAccount[]>([]);
 
   React.useEffect((): void => {
     getAccounts();
@@ -84,9 +85,8 @@ const Transactions: React.FC<{ user: User }> = ({ user }): React.ReactElement =>
         Authorization: `Bearer ${getCookie(WALTER_API_TOKEN_NAME)}`,
       },
     })
-      .then((response): void => {
+      .then((response: AxiosResponse): void => {
         setTransactions(response.data);
-        console.log(response.data);
       })
       .catch((error): void => console.error('Error:', error))
       .finally((): void => setGettingTransactions(false));
@@ -100,9 +100,8 @@ const Transactions: React.FC<{ user: User }> = ({ user }): React.ReactElement =>
         Authorization: `Bearer ${getCookie(WALTER_API_TOKEN_NAME)}`,
       },
     })
-      .then((response): void => {
+      .then((response: AxiosResponse): void => {
         setAccounts(response.data);
-        console.log(response.data);
       })
       .catch((error): void => console.error('Error:', error))
       .finally((): void => setGettingAccounts(false));
@@ -243,7 +242,7 @@ const Transactions: React.FC<{ user: User }> = ({ user }): React.ReactElement =>
                 refresh={(): void => setRefresh(!refresh)}
                 onUpdateTransactionSuccess={(): void => setOpenEditTransactionSuccessAlert(true)}
                 onDeleteTransactionSuccess={(): void => setOpenDeleteTransactionSuccessAlert(true)}
-                accounts={accounts}
+                loading={gettingTransactions}
                 transactions={transactions}
                 setTransactions={setTransactions}
                 transactionsPerPage={12}

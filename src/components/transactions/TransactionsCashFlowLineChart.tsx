@@ -4,19 +4,22 @@ import React from 'react';
 
 import LineChart from '@/components/charts/LineChart';
 import LoadingSpinner from '@/components/loading/LoadingSpinner';
-import { Transaction } from '@/lib/models/Transaction';
+import { AccountTransaction } from '@/lib/models/AccountTransaction';
 
 const TransactionsCashFlowLineChart: React.FC<{
   loading: boolean;
-  transactions: Transaction[];
+  transactions: AccountTransaction[];
 }> = ({ loading, transactions }): React.ReactElement => {
   const generateData: () => Serie[] = (): Serie[] => {
     if (loading || !transactions || transactions.length === 0) return [];
 
     const transactionsDailySums: { [key: string]: number } = transactions.reduce(
-      (acc: { [key: string]: number }, transaction: Transaction): { [key: string]: number } => {
-        const transactionDate: string = transaction.date;
-        acc[transactionDate] = (acc[transactionDate] || 0) + transaction.amount;
+      (
+        acc: { [key: string]: number },
+        transaction: AccountTransaction
+      ): { [key: string]: number } => {
+        const transactionDate: string = transaction.transaction_date;
+        acc[transactionDate] = (acc[transactionDate] || 0) + transaction.transaction_amount;
         return acc;
       },
       {}

@@ -3,14 +3,14 @@
 import { ChartPieIcon } from '@heroicons/react/24/outline';
 import React from 'react';
 
-import { Transaction } from '@/lib/models/Transaction';
+import { AccountTransaction } from '@/lib/models/AccountTransaction';
 
 import PieChart, { PieSlice } from '../charts/PieChart';
 import LoadingSpinner from '../loading/LoadingSpinner';
 
 const TransactionsCategoryPieChart: React.FC<{
   loading: boolean;
-  transactions: Transaction[];
+  transactions: AccountTransaction[];
   setCategory: (category: string) => void;
 }> = ({ loading, transactions, setCategory }): React.ReactElement => {
   const getTransactionCategories: () => PieSlice[] = (): PieSlice[] => {
@@ -20,16 +20,16 @@ const TransactionsCategoryPieChart: React.FC<{
       transactions.reduce<Record<string, PieSlice>>(
         (
           categories: Record<string, PieSlice>,
-          transaction: Transaction
+          transaction: AccountTransaction
         ): Record<string, PieSlice> => {
-          if (!categories[transaction.category]) {
-            categories[transaction.category] = {
-              id: transaction.category,
-              label: transaction.category,
+          if (!categories[transaction.transaction_category]) {
+            categories[transaction.transaction_category] = {
+              id: transaction.transaction_category,
+              label: transaction.transaction_category,
               value: 0,
             };
           }
-          categories[transaction.category].value += transaction.amount;
+          categories[transaction.transaction_category].value += transaction.transaction_amount;
           return categories;
         },
         {}

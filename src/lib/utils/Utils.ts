@@ -1,7 +1,8 @@
 import { getCookie } from 'typescript-cookie';
 
 import { WALTER_API_TOKEN_NAME } from '@/lib/constants/Constants';
-import { Transaction, TransactionCategory } from '@/lib/models/Transaction';
+import { AccountTransaction } from '@/lib/models/AccountTransaction';
+import { TransactionCategory } from '@/lib/models/Transaction';
 
 /**
  * Get the TransactionCategory enum value for a given category string.
@@ -44,7 +45,7 @@ export function isValidEmail(email: string): boolean {
  * @param filename The name of the CSV file to download. Defaults to 'transactions.csv'.
  */
 export function downloadTransactionsAsCSV(
-  transactions: Transaction[],
+  transactions: AccountTransaction[],
   filename = 'transactions.csv'
 ) {
   if (!transactions || transactions.length === 0) return;
@@ -52,7 +53,7 @@ export function downloadTransactionsAsCSV(
   const headers: string[] = Object.keys(transactions[0]);
   const csvRows: string[] = [
     headers.join(','), // header row
-    ...transactions.map((transaction: Transaction): string =>
+    ...transactions.map((transaction: AccountTransaction): string =>
       headers
         .map((key: string): string => {
           const val = (transaction as any)[key];

@@ -6,11 +6,12 @@ import { IncomingMessage } from 'http';
 import { getCookie } from 'typescript-cookie';
 
 import { WALTER_API_TOKEN_NAME } from '@/lib/constants/Constants';
+import { AccountTransaction } from '@/lib/models/AccountTransaction';
 import { CashAccount } from '@/lib/models/CashAccount';
 import { Newsletter } from '@/lib/models/Newsletter';
 import { Portfolio } from '@/lib/models/Portfolio';
 import { Price } from '@/lib/models/Price';
-import { Transaction, TransactionCategory } from '@/lib/models/Transaction';
+import { TransactionCategory } from '@/lib/models/Transaction';
 import { User } from '@/lib/models/User';
 import { getTransactionCategory } from '@/lib/utils/Utils';
 
@@ -137,7 +138,7 @@ export class WalterAPI {
     token: string,
     startDate: string,
     endDate: string
-  ): Promise<Transaction[]> {
+  ): Promise<AccountTransaction[]> {
     return axios({
       method: 'GET',
       url: `${WalterAPI.ENDPOINT}/transactions`,
@@ -155,25 +156,35 @@ export class WalterAPI {
         return transactions.map(
           (transaction: {
             account_id: string;
-            date: string;
+            bank_name: string;
+            account_name: string;
+            account_type: string;
+            account_last_four_numbers: string;
             transaction_id: string;
-            vendor: string;
-            amount: number;
-            category: string;
-            reviewed: boolean;
-          }): Transaction => {
+            transaction_date: string;
+            transaction_vendor: string;
+            transaction_amount: number;
+            transaction_category: string;
+            transaction_reviewed: boolean;
+          }): AccountTransaction => {
             return {
               account_id: transaction.account_id,
-              date: transaction.date,
+              bank_name: transaction.bank_name,
+              account_name: transaction.account_name,
+              account_type: transaction.account_type,
+              account_last_four_numbers: transaction.account_last_four_numbers,
               transaction_id: transaction.transaction_id,
-              vendor: transaction.vendor,
-              amount: transaction.amount,
-              category: getTransactionCategory(transaction.category) as TransactionCategory,
-              reviewed: transaction.reviewed,
+              transaction_date: transaction.transaction_date,
+              transaction_vendor: transaction.transaction_vendor,
+              transaction_amount: transaction.transaction_amount,
+              transaction_category: getTransactionCategory(
+                transaction.transaction_category
+              ) as TransactionCategory,
+              transaction_reviewed: transaction.transaction_reviewed,
             };
           }
         );
-      }) as Promise<Transaction[]>;
+      }) as Promise<AccountTransaction[]>;
   }
 
   public static async editTransaction(

@@ -1,36 +1,36 @@
+import { CreditCardIcon } from '@heroicons/react/24/outline';
 import dayjs from 'dayjs';
 import React, { ReactElement, useState } from 'react';
 
 import DeleteTransactionModal from '@/components/transactions/DeleteTransactionModal';
 import EditTransactionModal from '@/components/transactions/EditTransactionModal';
 import TransactionListItem from '@/components/transactions/TransactionListItem';
-import { CashAccount } from '@/lib/models/CashAccount';
-import { Transaction } from '@/lib/models/Transaction';
+import { AccountTransaction } from '@/lib/models/AccountTransaction';
 
 const TransactionsList: React.FC<{
   refresh: () => void;
   onUpdateTransactionSuccess: () => void;
   onDeleteTransactionSuccess: () => void;
-  accounts: CashAccount[];
-  transactions: Transaction[];
+  loading: boolean;
+  transactions: AccountTransaction[];
 }> = ({
   refresh,
   onUpdateTransactionSuccess,
   onDeleteTransactionSuccess,
-  accounts,
+  loading,
   transactions,
 }): ReactElement => {
-  const [selectedTransaction, setSelectedTransaction] = useState<Transaction | null>(null);
+  const [selectedTransaction, setSelectedTransaction] = useState<AccountTransaction | null>(null);
   const [openEditTransactionModal, setOpenEditTransactionModal] = useState<boolean>(false);
   const [openDeleteTransactionModal, setOpenDeleteTransactionModal] = useState<boolean>(false);
 
-  const groupTransactionsByDate: () => Map<string, Transaction[]> = (): Map<
+  const groupTransactionsByDate: () => Map<string, AccountTransaction[]> = (): Map<
     string,
-    Transaction[]
+    AccountTransaction[]
   > => {
-    const transactionsByDate = new Map<string, Transaction[]>();
-    transactions.forEach((transaction: Transaction): void => {
-      const dateKey: string = transaction.date;
+    const transactionsByDate = new Map<string, AccountTransaction[]>();
+    transactions.forEach((transaction: AccountTransaction): void => {
+      const dateKey: string = transaction.transaction_date;
       if (!transactionsByDate.has(dateKey)) transactionsByDate.set(dateKey, []);
       transactionsByDate.get(dateKey)!.push(transaction);
     });
@@ -41,70 +41,65 @@ const TransactionsList: React.FC<{
     );
   };
 
-  const getAccountName: (transaction_account_id: string) => string = (
-    transaction_account_id: string
-  ): string => {
-    const transactionAccount: CashAccount | null =
-      accounts.find(
-        (account: CashAccount): boolean => account.account_id === transaction_account_id
-      ) || null;
-    if (transactionAccount === null) {
-      return 'Anonymous Account';
-    }
-    return transactionAccount.account_name;
+  const renderLoadingState: () => React.ReactElement = (): React.ReactElement => {
+    return (
+      <div className="flex flex-col items-center justify-center h-full">
+        <div className="flex flex-col items-center justify-center space-y-4">
+          <div className="text-gray-400">
+            <CreditCardIcon aria-hidden="true" className="size-12" />
+          </div>
+          <p className="text-sm/6 text-gray-500">Loading...</p>
+        </div>
+      </div>
+    );
   };
 
-  const getAccountLastFourNumbers: (transaction_account_id: string) => string = (
-    transaction_account_id: string
-  ): string => {
-    const transactionAccount: CashAccount | null =
-      accounts.find(
-        (account: CashAccount): boolean => account.account_id === transaction_account_id
-      ) || null;
-    if (transactionAccount === null) {
-      return '0000';
-    }
-    return transactionAccount.account_last_four_numbers;
+  const renderEmptyState: () => React.ReactElement = (): React.ReactElement => {
+    return (
+      <div className="flex flex-col items-center justify-center h-full">
+        <div className="flex flex-col items-center justify-center space-y-4">
+          <div className="text-gray-400">
+            <CreditCardIcon aria-hidden="true" className="size-12" />
+          </div>
+          <p className="text-sm/6 text-gray-500">No transactions found</p>
+        </div>
+      </div>
+    );
   };
+
+  if (loading) return renderLoadingState();
+
+  if (transactions.length === 0) return renderEmptyState();
 
   return (
     <>
-      {transactions.length === 0 ? (
-        <p className="p-4 text-center text-gray-500">No transactions found</p>
-      ) : (
-        <table className="min-w-full table-auto">
-          <tbody className="bg-white divide-y divide-gray-100">
-            {Array.from(groupTransactionsByDate()).map(([date, dateTransactions]) => (
-              <React.Fragment key={date}>
-                {/* Date Group Row */}
-                <tr>
-                  <td
-                    colSpan={5}
-                    className="bg-gray-50 px-4 py-2 text-xs text-gray-500 font-medium"
-                  >
-                    {dayjs(date).format('ddd, MMM D').toUpperCase()}
-                  </td>
-                </tr>
+      <table className="min-w-full table-auto">
+        <tbody className="bg-white divide-y divide-gray-100">
+          {Array.from(groupTransactionsByDate()).map(([date, dateTransactions]) => (
+            <React.Fragment key={date}>
+              {/* Date Group Row */}
+              <tr>
+                <td colSpan={5} className="bg-gray-50 px-4 py-2 text-xs text-gray-500 font-medium">
+                  {dayjs(date).format('ddd, MMM D').toUpperCase()}
+                </td>
+              </tr>
 
-                {/* Transactions */}
-                {dateTransactions.map(
-                  (transaction: Transaction): React.ReactElement => (
-                    <TransactionListItem
-                      key={transaction.transaction_id}
-                      accountName={getAccountName(transaction.account_id)}
-                      accountLastFourNumbers={getAccountLastFourNumbers(transaction.account_id)}
-                      transaction={transaction}
-                      setSelectedTransaction={setSelectedTransaction}
-                      setOpenEditTransactionModal={setOpenEditTransactionModal}
-                      setOpenDeleteTransactionModal={setOpenDeleteTransactionModal}
-                    />
-                  )
-                )}
-              </React.Fragment>
-            ))}
-          </tbody>
-        </table>
-      )}
+              {/* Transactions */}
+              {dateTransactions.map(
+                (transaction: AccountTransaction): React.ReactElement => (
+                  <TransactionListItem
+                    key={transaction.transaction_id}
+                    transaction={transaction}
+                    setSelectedTransaction={setSelectedTransaction}
+                    setOpenEditTransactionModal={setOpenEditTransactionModal}
+                    setOpenDeleteTransactionModal={setOpenDeleteTransactionModal}
+                  />
+                )
+              )}
+            </React.Fragment>
+          ))}
+        </tbody>
+      </table>
 
       {/* Modals */}
       <EditTransactionModal

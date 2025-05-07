@@ -4,21 +4,13 @@ import React, { FormEvent, ReactElement } from 'react';
 import Modal from '@/components/modals/Modal';
 import { CashAccount } from '@/lib/models/CashAccount';
 
-interface AddIncomeModalProps {
+const AddIncomeModal: React.FC<{
   open: boolean;
   setOpen: (open: boolean) => void;
   onClose: () => void;
   onIncomeAdded: () => void;
   accounts: CashAccount[];
-}
-
-const AddIncomeModal: React.FC<AddIncomeModalProps> = ({
-  open,
-  setOpen,
-  onClose,
-  onIncomeAdded,
-  accounts,
-}): ReactElement => {
+}> = ({ open, setOpen, onClose, onIncomeAdded, accounts }): ReactElement => {
   const [selectedAccountId, setSelectedAccountId] = React.useState('');
   const [date, setDate] = React.useState('');
   const [vendor, setVendor] = React.useState('');

@@ -17,7 +17,8 @@ import { CheckIcon } from '@heroicons/react/20/solid';
 import axios, { AxiosResponse } from 'axios';
 import React, { ReactElement, useEffect, useState } from 'react';
 
-import { Transaction, TransactionCategory } from '@/lib/models/Transaction';
+import { AccountTransaction } from '@/lib/models/AccountTransaction';
+import { TransactionCategory } from '@/lib/models/Transaction';
 import { getTransactionCategory } from '@/lib/utils/Utils';
 
 interface TransactionCategoryId {
@@ -41,34 +42,37 @@ const EditTransactionModal: React.FC<{
   open: boolean;
   setOpen: (open: boolean) => void;
   refresh: () => void;
-  transaction: Transaction | null;
+  transaction: AccountTransaction | null;
   onUpdateTransactionSuccess: () => void;
 }> = ({ open, setOpen, refresh, transaction, onUpdateTransactionSuccess }): ReactElement => {
-  const [date, setDate] = useState(transaction?.date || '');
-  const [vendor, setVendor] = useState(transaction?.vendor || '');
-  const [amount, setAmount] = useState(transaction?.amount || '');
+  const [date, setDate] = useState(transaction?.transaction_date || '');
+  const [vendor, setVendor] = useState(transaction?.transaction_vendor || '');
+  const [amount, setAmount] = useState(transaction?.transaction_amount || '');
   const [category, setCategory] = useState<TransactionCategoryId>(transactionCategories[0]);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect((): void => {
-    setDate(transaction?.date || '');
-    setVendor(transaction?.vendor || '');
-    setAmount(transaction?.amount || '');
+    setDate(transaction?.transaction_date || '');
+    setVendor(transaction?.transaction_vendor || '');
+    setAmount(transaction?.transaction_amount || '');
     setCategory(
-      transactionCategories.find((category) => category.name === getCategory()) ||
-        transactionCategories[0]
+      transactionCategories.find(
+        (category: TransactionCategoryId): boolean => category.name === getCategory()
+      ) || transactionCategories[0]
     );
   }, [transaction]);
 
   const getCategory: () => TransactionCategory = (): TransactionCategory => {
     return (
-      transaction?.category
-        ? getTransactionCategory(transaction.category)
+      transaction?.transaction_category
+        ? getTransactionCategory(transaction.transaction_category)
         : TransactionCategory.BILLS
     ) as TransactionCategory;
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit: (e: React.FormEvent) => Promise<void> = async (
+    e: React.FormEvent
+  ): Promise<void> => {
     e.preventDefault();
     if (transaction === null || !transaction.transaction_id) return;
 
@@ -76,7 +80,7 @@ const EditTransactionModal: React.FC<{
     setIsSubmitting(true);
     axios
       .put('/api/transactions/edit-transaction', {
-        transaction_date: transaction.date,
+        transaction_date: transaction.transaction_date,
         transaction_id: transaction.transaction_id,
         updated_date: date,
         updated_vendor: vendor,

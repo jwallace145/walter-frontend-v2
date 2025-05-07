@@ -15,8 +15,8 @@ import PaginatedTransactionsList from '@/components/transactions/PaginatedTransa
 import AuthenticatedPageLayout from '@/layouts/AuthenticatedPageLayout';
 import { withAuthenticationRedirect } from '@/lib/auth/AuthenticationRedirect';
 import { WALTER_API_TOKEN_NAME } from '@/lib/constants/Constants';
+import { AccountTransaction } from '@/lib/models/AccountTransaction';
 import { CashAccount } from '@/lib/models/CashAccount';
-import { Transaction } from '@/lib/models/Transaction';
 import { User } from '@/lib/models/User';
 
 const Cash: React.FC<{ user: User }> = ({ user }): React.ReactElement => {
@@ -24,8 +24,8 @@ const Cash: React.FC<{ user: User }> = ({ user }): React.ReactElement => {
   const [selectedAccount, setSelectedAccount] = React.useState<CashAccount | undefined>(undefined);
   const [gettingAccounts, setGettingAccounts] = React.useState<boolean>(false);
   const [startDate, setStartDate] = React.useState<string>('2025-01-01');
-  const [endDate, setEndDate] = React.useState<string>('2025-04-30');
-  const [transactions, setTransactions] = React.useState<Transaction[]>([]);
+  const [endDate, setEndDate] = React.useState<string>('2025-05-30');
+  const [transactions, setTransactions] = React.useState<AccountTransaction[]>([]);
   const [gettingTransactions, setGettingTransactions] = React.useState<boolean>(false);
   const [refresh, setRefresh] = React.useState<boolean>(false);
   const [updateAccountSuccess, setUpdateAccountSuccess] = React.useState<boolean>(false);
@@ -47,12 +47,12 @@ const Cash: React.FC<{ user: User }> = ({ user }): React.ReactElement => {
       .then((accounts: CashAccount[]): void => {
         setAccounts(accounts);
         setSelectedAccount(accounts.length === 0 ? undefined : accounts[0]);
-        console.log('whattt');
-        console.log(accounts);
-        console.log(accounts[0]);
       })
       .catch((error: Error): void => console.error('Error:', error))
       .finally((): void => setGettingAccounts(false));
+  }, [refresh]);
+
+  React.useEffect((): void => {
     setGettingTransactions(true);
     axios(`/api/transactions/get-transactions`, {
       method: 'GET',
@@ -64,12 +64,19 @@ const Cash: React.FC<{ user: User }> = ({ user }): React.ReactElement => {
         Authorization: `Bearer ${getCookie(WALTER_API_TOKEN_NAME)}`,
       },
     })
-      .then((response): void => {
-        setTransactions(response.data);
+      .then((response: AxiosResponse): void => {
+        console.log(response.data);
+        console.log(selectedAccount?.account_id);
+        const filteredTransactions: AccountTransaction[] = response.data.filter(
+          (transaction: AccountTransaction): boolean =>
+            transaction.account_id == selectedAccount?.account_id
+        );
+        console.log(filteredTransactions);
+        setTransactions(filteredTransactions);
       })
       .catch((error): void => console.error('Error:', error))
       .finally((): void => setGettingTransactions(false));
-  }, [refresh]);
+  }, [selectedAccount, startDate, endDate, refresh]);
 
   const getContent: () => React.ReactElement = (): React.ReactElement => {
     return (
@@ -124,7 +131,7 @@ const Cash: React.FC<{ user: User }> = ({ user }): React.ReactElement => {
                   refresh={(): void => console.log('refresh')}
                   onUpdateTransactionSuccess={(): void => console.log('update')}
                   onDeleteTransactionSuccess={(): void => console.log('delete')}
-                  accounts={accounts}
+                  loading={gettingTransactions}
                   transactions={transactions}
                   setTransactions={setTransactions}
                   transactionsPerPage={8}

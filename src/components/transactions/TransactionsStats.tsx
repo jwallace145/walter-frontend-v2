@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 
 import { US_DOLLAR } from '@/lib/constants/Constants';
-import { Transaction } from '@/lib/models/Transaction';
+import { AccountTransaction } from '@/lib/models/AccountTransaction';
 
-const TransactionStats: React.FC<{ transactions: Transaction[] }> = ({
+const TransactionStats: React.FC<{ transactions: AccountTransaction[] }> = ({
   transactions,
 }): React.ReactElement => {
   const [cashFlow, setCashFlow] = useState<number>(0);
@@ -17,24 +17,24 @@ const TransactionStats: React.FC<{ transactions: Transaction[] }> = ({
   }, [transactions]);
 
   const getCashFlow: () => number = (): number => {
-    return transactions.reduce((total: number, transaction: Transaction): number => {
-      return total + transaction.amount;
+    return transactions.reduce((total: number, transaction: AccountTransaction): number => {
+      return total + transaction.transaction_amount;
     }, 0);
   };
 
   const getTotalIncome: () => number = (): number => {
     return transactions
-      .filter((transaction: Transaction): boolean => transaction.amount > 0)
-      .reduce((total: number, transaction: Transaction): number => {
-        return total + transaction.amount;
+      .filter((transaction: AccountTransaction): boolean => transaction.transaction_amount > 0)
+      .reduce((total: number, transaction: AccountTransaction): number => {
+        return total + transaction.transaction_amount;
       }, 0);
   };
 
   const getTotalExpenses: () => number = (): number => {
     return transactions
-      .filter((transaction: Transaction): boolean => transaction.amount < 0)
-      .reduce((total: number, transaction: Transaction): number => {
-        return total + transaction.amount;
+      .filter((transaction: AccountTransaction): boolean => transaction.transaction_amount < 0)
+      .reduce((total: number, transaction: AccountTransaction): number => {
+        return total + transaction.transaction_amount;
       }, 0);
   };
 

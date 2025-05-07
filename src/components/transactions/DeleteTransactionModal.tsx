@@ -10,13 +10,13 @@ import {
 import axios, { AxiosResponse } from 'axios';
 import React, { useState } from 'react';
 
-import { Transaction } from '@/lib/models/Transaction';
+import { AccountTransaction } from '@/lib/models/AccountTransaction';
 
 const DeleteTransactionModal: React.FC<{
   open: boolean;
   setOpen: (open: boolean) => void;
   refresh: () => void;
-  transaction: Transaction | null;
+  transaction: AccountTransaction | null;
   onDeleteTransactionSuccess: () => void;
 }> = ({ open, setOpen, refresh, transaction, onDeleteTransactionSuccess }): React.ReactElement => {
   const [isDeleting, setIsDeleting] = useState(false);
@@ -24,18 +24,18 @@ const DeleteTransactionModal: React.FC<{
   const handleDelete = async () => {
     if (transaction === null) return;
 
-    const transactionToDelete: Transaction = transaction as Transaction;
+    const transactionToDelete: AccountTransaction = transaction as AccountTransaction;
 
     setIsDeleting(true);
     axios
       .delete('/api/transactions/delete-transaction', {
         data: {
-          date: transactionToDelete.date,
+          date: transactionToDelete.transaction_date,
           transaction_id: transactionToDelete.transaction_id,
         },
       })
       .then((response: AxiosResponse) => response.data)
-      .then((data: any) => {
+      .then((data: any): void => {
         if (data['Status'].toLowerCase() === 'success') {
           setOpen(false);
           onDeleteTransactionSuccess();

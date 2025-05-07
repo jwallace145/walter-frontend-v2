@@ -3,13 +3,13 @@ import React from 'react';
 import Modal from '@/components/modals/Modal';
 import ErrorNotification from '@/components/notifications/ErrorNotification';
 import SuccessNotification from '@/components/notifications/SuccessNotification';
-import { Transaction } from '@/lib/models/Transaction';
+import { AccountTransaction } from '@/lib/models/AccountTransaction';
 import { downloadTransactionsAsCSV } from '@/lib/utils/Utils';
 
 const TransactionsDownloadModal: React.FC<{
   open: boolean;
   setOpen: (open: boolean) => void;
-  transactions: Transaction[];
+  transactions: AccountTransaction[];
 }> = ({ open, setOpen, transactions }): React.ReactElement => {
   const [error, setError] = React.useState(false);
   const [success, setSuccess] = React.useState(false);

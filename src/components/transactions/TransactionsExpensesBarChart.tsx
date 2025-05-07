@@ -4,22 +4,25 @@ import React from 'react';
 
 import BarChart from '@/components/charts/BarChart';
 import LoadingSpinner from '@/components/loading/LoadingSpinner';
-import { Transaction } from '@/lib/models/Transaction';
+import { AccountTransaction } from '@/lib/models/AccountTransaction';
 
-const TransactionsIncomeBarChart: React.FC<{ loading: boolean; transactions: Transaction[] }> = ({
-  loading,
-  transactions,
-}): React.ReactElement => {
+const TransactionsIncomeBarChart: React.FC<{
+  loading: boolean;
+  transactions: AccountTransaction[];
+}> = ({ loading, transactions }): React.ReactElement => {
   const generateData: () => BarDatum[] = (): BarDatum[] => {
     if (loading || !transactions || transactions.length === 0) return [];
     const transactionsWeeklySums: { [key: string]: number } = transactions
-      .filter((transaction: Transaction): boolean => transaction.amount < 0)
+      .filter((transaction: AccountTransaction): boolean => transaction.transaction_amount < 0)
       .reduce(
-        (acc: { [key: string]: number }, transaction: Transaction): { [key: string]: number } => {
-          const date = new Date(transaction.date);
+        (
+          acc: { [key: string]: number },
+          transaction: AccountTransaction
+        ): { [key: string]: number } => {
+          const date = new Date(transaction.transaction_date);
           const startOfWeek = new Date(date.setDate(date.getDate() - date.getDay()));
           const weekKey = startOfWeek.toISOString().split('T')[0];
-          acc[weekKey] = (acc[weekKey] || 0) + -1 * transaction.amount;
+          acc[weekKey] = (acc[weekKey] || 0) + -1 * transaction.transaction_amount;
           return acc;
         },
         {}

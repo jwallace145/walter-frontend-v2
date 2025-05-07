@@ -6,8 +6,7 @@ import Pagination from '@/components/pagination/Pagination';
 import TransactionsDownloadModal from '@/components/transactions/TransactionsDownloadModal';
 import TransactionsSearchModal from '@/components/transactions/TransactionsSearchModal';
 import TransactionsTagModal from '@/components/transactions/TransactionsTagModal';
-import { CashAccount } from '@/lib/models/CashAccount';
-import { Transaction } from '@/lib/models/Transaction';
+import { AccountTransaction } from '@/lib/models/AccountTransaction';
 
 import TransactionsList from './TransactionsList';
 
@@ -15,21 +14,21 @@ const PaginatedTransactionsList: React.FC<{
   refresh: () => void;
   onUpdateTransactionSuccess: () => void;
   onDeleteTransactionSuccess: () => void;
-  accounts: CashAccount[];
-  transactions: Transaction[];
-  setTransactions: (transactions: Transaction[]) => void;
+  loading: boolean;
+  transactions: AccountTransaction[];
+  setTransactions: (transactions: AccountTransaction[]) => void;
   transactionsPerPage: number;
 }> = ({
   refresh,
   onUpdateTransactionSuccess,
   onDeleteTransactionSuccess,
-  accounts,
+  loading,
   transactions,
   setTransactions,
   transactionsPerPage,
 }): React.ReactElement => {
   const [currentPage, setCurrentPage] = React.useState(1);
-  const [currentTransactions, setCurrentTransactions] = React.useState<Transaction[]>([]);
+  const [currentTransactions, setCurrentTransactions] = React.useState<AccountTransaction[]>([]);
   const [openSearchTransactionsModal, setOpenSearchTransactionsModal] =
     React.useState<boolean>(false);
   const [openCreateTransactionTagModal, setOpenCreateTransactionTagModal] =
@@ -55,12 +54,12 @@ const PaginatedTransactionsList: React.FC<{
     }
 
     const searchTermLower: string = searchTerm.toLowerCase();
-    const filteredTransactions: Transaction[] = transactions.filter(
-      (transaction: Transaction): boolean => {
+    const filteredTransactions: AccountTransaction[] = transactions.filter(
+      (transaction: AccountTransaction): boolean => {
         return (
-          transaction.vendor.toLowerCase().includes(searchTermLower) ||
-          transaction.category.toLowerCase().includes(searchTermLower) ||
-          transaction.date.toLowerCase().includes(searchTermLower)
+          transaction.transaction_vendor.toLowerCase().includes(searchTermLower) ||
+          transaction.transaction_category.toLowerCase().includes(searchTermLower) ||
+          transaction.transaction_date.toLowerCase().includes(searchTermLower)
         );
       }
     );
@@ -109,7 +108,7 @@ const PaginatedTransactionsList: React.FC<{
             refresh={refresh}
             onUpdateTransactionSuccess={onUpdateTransactionSuccess}
             onDeleteTransactionSuccess={onDeleteTransactionSuccess}
-            accounts={accounts}
+            loading={loading}
             transactions={currentTransactions}
           />
           <Pagination

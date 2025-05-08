@@ -1,6 +1,4 @@
-import Image from 'next/image';
 import React, { useState } from 'react';
-import Avatar from 'react-avatar';
 
 import ChangeAvatarModal from '@/components/settings/ChangeAvatarModal';
 import UserProfilePicture from '@/components/users/UserProfilePicture';
@@ -10,20 +8,6 @@ const SettingsPersonalInformationForm: React.FC<{
   user: User;
 }> = ({ user }): React.ReactElement => {
   const [openChangeAvatarModal, setOpenChangeAvatarModal] = useState(false);
-
-  const getUserAvatar: () => React.ReactElement = (): React.ReactElement => {
-    if (!user.profile_picture_url)
-      return <Avatar name={`${user.first_name} ${user.last_name}`} size="100" round={true} />;
-    return (
-      <Image
-        alt=""
-        src={user.profile_picture_url}
-        className="rounded-lg bg-gray-50"
-        width={200}
-        height={200}
-      />
-    );
-  };
 
   return (
     <>

@@ -10,7 +10,8 @@ import { User } from '@/lib/models/User';
  * This method is an SSR function that calls the GetUser API in an attempt to get the current user before
  * allowing access to authenticated pages. Furthermore, this method redirects authenticated users attempting
  * to access unauthenticated pages. This method is intended to be used by all pages to protect authenticated
- * access. Pages can pass in an additional SSR function to get additional props from the server.
+ * access. Pages can pass in an additional SSR function to get additional props from the server as well
+ * before rendering.
  *
  * @param props
  */

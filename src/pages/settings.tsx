@@ -6,6 +6,7 @@ import React, { useState } from 'react';
 import Avatar from 'react-avatar';
 
 import SettingsChangePassword from '@/components/settings/SettingsChangePassword';
+import SettingsLinkAccounts from '@/components/settings/SettingsLinkAccounts';
 import SettingsPersonalInformationForm from '@/components/settings/SettingsPersonalInformationForm';
 import AuthenticatedPageLayout from '@/layouts/AuthenticatedPageLayout';
 import { withAuthenticationRedirect } from '@/lib/auth/AuthenticationRedirect';
@@ -69,6 +70,7 @@ const Settings: React.FC<{ user: User }> = ({ user }): React.ReactElement => {
 
           <h1 className="sr-only">Account Settings</h1>
           <div className="divide-y divide-white/5">
+            <SettingsLinkAccounts />
             <SettingsPersonalInformationForm user={user} />
             <SettingsChangePassword />
           </div>

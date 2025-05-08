@@ -30,6 +30,7 @@
     "react-dom": "^19.0.0",
     "react-dropzone": "^14.3.8",
     "react-easy-crop": "^5.4.1",
+    "react-plaid-link": "^4.0.1",
     "typescript-cookie": "^1.0.6"
   },
   "lint-staged": {

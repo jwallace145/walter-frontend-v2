@@ -8,6 +8,7 @@ import { getCookie } from 'typescript-cookie';
 import { WALTER_API_TOKEN_NAME } from '@/lib/constants/Constants';
 import { AccountTransaction } from '@/lib/models/AccountTransaction';
 import { CashAccount } from '@/lib/models/CashAccount';
+import { LinkToken } from '@/lib/models/LinkToken';
 import { Newsletter } from '@/lib/models/Newsletter';
 import { Portfolio } from '@/lib/models/Portfolio';
 import { Price } from '@/lib/models/Price';
@@ -357,6 +358,42 @@ export class WalterAPI {
         account_name: accountName,
         account_last_four_numbers: '1234',
         balance: accountBalance,
+      },
+    }).then((response: AxiosResponse) => response.data);
+  }
+
+  public static async createLinkToken(token: string): Promise<LinkToken> {
+    return axios({
+      method: 'POST',
+      url: `${this.ENDPOINT}/plaid/create-link-token`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }).then((response: AxiosResponse) => response.data);
+  }
+
+  public static async exchangePublicToken(
+    token: string,
+    publicToken: string,
+    institutionName: string,
+    accounts: {
+      account_id: string;
+      account_name: string;
+      account_type: string;
+      account_subtype: string;
+      account_last_four_numbers: string;
+    }[]
+  ): Promise<void> {
+    axios({
+      method: 'POST',
+      url: `${this.ENDPOINT}/plaid/exchange-public-token`,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      data: {
+        public_token: publicToken,
+        institution_name: institutionName,
+        accounts: accounts,
       },
     }).then((response: AxiosResponse) => response.data);
   }

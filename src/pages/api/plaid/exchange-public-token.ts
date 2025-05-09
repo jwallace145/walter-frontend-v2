@@ -11,6 +11,7 @@ export default async function handler(
   await WalterAPI.exchangePublicToken(
     token,
     request.body.public_token,
+    request.body.institution_id,
     request.body.institution_name,
     request.body.accounts
   );

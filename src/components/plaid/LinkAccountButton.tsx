@@ -1,23 +1,31 @@
-// LinkAccountButton.tsx
-
 import axios from 'axios';
 import React, { useState } from 'react';
 
+import ErrorNotification from '@/components/notifications/ErrorNotification';
+import SuccessNotification from '@/components/notifications/SuccessNotification';
+
 import PlaidLinkWrapper from './PlaidLinkWrapper';
 
-const LinkAccountButton: React.FC = () => {
+const LinkAccountButton: React.FC = (): React.ReactElement => {
   const [linkToken, setLinkToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState(false);
+  const [message, setMessage] = useState<string>();
 
   const handleButtonClick = async () => {
     setIsLoading(true);
 
     try {
       const response = await axios.post('/api/plaid/create-link-token');
+      setSuccess(true);
+      setMessage('Plaid connection successful! You can now link your bank account with Plaid.');
       setLinkToken(response.data.Data.link_token);
     } catch (error) {
-      console.error('Failed to fetch link token:', error);
-      alert('Failed to generate link token. Please try again.');
+      setError(true);
+      setMessage(
+        'There was an error linking your bank account with Plaid. Please try again or contact support if the issue persists.'
+      );
     } finally {
       setIsLoading(false);
     }
@@ -33,6 +41,18 @@ const LinkAccountButton: React.FC = () => {
         {isLoading ? 'Linking account...' : 'Link Account'}
       </button>
       {linkToken && <PlaidLinkWrapper linkToken={linkToken} />}
+      <SuccessNotification
+        show={success}
+        setShow={setSuccess}
+        title="Plaid connection successful!"
+        message={message}
+      />
+      <ErrorNotification
+        show={error}
+        setShow={setError}
+        title="There was an error linking your bank account with Plaid."
+        message={message}
+      />
     </>
   );
 };

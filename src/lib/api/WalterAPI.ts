@@ -375,6 +375,7 @@ export class WalterAPI {
   public static async exchangePublicToken(
     token: string,
     publicToken: string,
+    institutionId: string,
     institutionName: string,
     accounts: {
       account_id: string;
@@ -392,6 +393,7 @@ export class WalterAPI {
       },
       data: {
         public_token: publicToken,
+        institution_id: institutionId,
         institution_name: institutionName,
         accounts: accounts,
       },

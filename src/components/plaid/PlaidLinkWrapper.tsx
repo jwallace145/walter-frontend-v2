@@ -17,6 +17,7 @@ const PlaidLinkWrapper: React.FC<{
     metadata: PlaidLinkOnSuccessMetadata
   ): object => {
     const institutionName: string = metadata.institution?.name || 'UNKNOWN INSTITUTION';
+    const institutionId: string = metadata.institution?.institution_id || 'UNKNOWN INSTITUTION ID';
     const accounts: {
       account_id: string;
       account_name: string;
@@ -44,16 +45,16 @@ const PlaidLinkWrapper: React.FC<{
     );
     const response: object = {
       public_token: publicToken,
+      institution_id: institutionId,
       institution_name: institutionName,
       accounts: accounts,
     };
-    console.log(response);
-    console.log('exchanging public token for access token...');
     axios({
       method: 'POST',
       url: '/api/plaid/exchange-public-token',
       data: {
         public_token: publicToken,
+        institution_id: institutionId,
         institution_name: institutionName,
         accounts: accounts,
       },

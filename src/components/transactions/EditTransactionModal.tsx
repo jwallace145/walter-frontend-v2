@@ -76,7 +76,7 @@ const EditTransactionModal: React.FC<{
     e.preventDefault();
     if (transaction === null || !transaction.transaction_id) return;
 
-    // transaction is set and non-null, attempt to delete from db
+    // transaction is set and non-null, attempt to edit transaction and persist to db
     setIsSubmitting(true);
     axios
       .put('/api/transactions/edit-transaction', {

@@ -82,7 +82,10 @@ const TransactionListItem: React.FC<{
           >
             <MenuItem>
               <a
-                href="#"
+                onClick={(): void => {
+                  setSelectedTransaction(transaction);
+                  setOpenEditTransactionModal(true);
+                }}
                 className="block px-3 py-1 text-sm/6 text-gray-900 data-focus:bg-gray-50 data-focus:outline-hidden"
               >
                 Edit

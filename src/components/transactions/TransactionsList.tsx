@@ -79,7 +79,7 @@ const TransactionsList: React.FC<{
             <React.Fragment key={date}>
               {/* Date Group Row */}
               <tr>
-                <td colSpan={5} className="bg-gray-50 px-4 py-2 text-xs text-gray-500 font-medium">
+                <td colSpan={6} className="bg-gray-50 px-4 py-2 text-xs text-gray-500 font-medium">
                   {dayjs(date).format('ddd, MMM D').toUpperCase()}
                 </td>
               </tr>

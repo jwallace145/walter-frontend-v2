@@ -11,10 +11,12 @@ const CreateCashAccountModal: React.FC<{
 }> = ({ open, setOpen, onCreateAccountSuccess, onCreateAccountError }): React.ReactElement => {
   const [bankName, setBankName] = React.useState('');
   const [accountName, setAccountName] = React.useState('');
+  const [accountLastFourNumbers, setAccountLastFourNumbers] = React.useState('');
   const [balance, setBalance] = React.useState('');
   const [loading, setLoading] = React.useState(false);
 
   const getContent: () => React.ReactElement = (): React.ReactElement => {
+    let accountLastFourNumbers;
     return (
       <form onSubmit={handleCreateCashAccount} className="mt-4 space-y-4">
         <div>
@@ -44,6 +46,21 @@ const CreateCashAccountModal: React.FC<{
             value={accountName}
             onChange={(e): void => setAccountName(e.target.value)}
             placeholder="e.g. Performance 360 Savings, Marcus, etc."
+          />
+        </div>
+
+        <div>
+          <label htmlFor="accountName" className="block text-sm font-medium text-gray-700">
+            Account Last Four Numbers
+          </label>
+          <input
+            type="text"
+            name="accountLastFourNumbers"
+            id="accountLastFourNumbers"
+            className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-sm shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+            value={accountLastFourNumbers}
+            onChange={(e): void => setAccountLastFourNumbers(e.target.value)}
+            placeholder="e.g. 1234"
           />
         </div>
 
@@ -96,6 +113,7 @@ const CreateCashAccountModal: React.FC<{
       data: {
         bankName: bankName,
         accountName: accountName,
+        accountLastFourNumbers: accountLastFourNumbers,
         balance: balance,
       },
     })

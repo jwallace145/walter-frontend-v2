@@ -15,6 +15,7 @@ export default async function handler(
         token,
         request.body.bankName,
         request.body.accountName,
+        request.body.accountLastFourNumbers,
         request.body.balance
       )
     );

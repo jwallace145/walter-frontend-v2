@@ -345,6 +345,7 @@ export class WalterAPI {
     token: string,
     bankName: string,
     accountName: string,
+    accountType: string,
     accountLastFourNumbers: string,
     accountBalance: number
   ): Promise<CashAccount> {
@@ -357,6 +358,7 @@ export class WalterAPI {
       data: {
         bank_name: bankName,
         account_name: accountName,
+        account_type: accountType,
         account_last_four_numbers: accountLastFourNumbers,
         balance: accountBalance,
       },

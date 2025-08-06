@@ -162,26 +162,27 @@ export class WalterAPI {
             account_type: string;
             account_last_four_numbers: string;
             transaction_id: string;
-            transaction_date: string;
-            transaction_vendor: string;
-            transaction_amount: number;
-            transaction_category: string;
-            transaction_reviewed: boolean;
+            date: string;
+            vendor: string;
+            amount: number;
+            category: string;
+            reviewed: boolean;
           }): AccountTransaction => {
+            console.log(transaction);
             return {
               account_id: transaction.account_id,
               bank_name: transaction.bank_name,
               account_name: transaction.account_name,
-              account_type: transaction.account_type,
+              account_type: transaction.account_type ?? 'CHECKING',
               account_last_four_numbers: transaction.account_last_four_numbers,
               transaction_id: transaction.transaction_id,
-              transaction_date: transaction.transaction_date,
-              transaction_vendor: transaction.transaction_vendor,
-              transaction_amount: transaction.transaction_amount,
+              transaction_date: transaction.date,
+              transaction_vendor: transaction.vendor,
+              transaction_amount: transaction.amount,
               transaction_category: getTransactionCategory(
-                transaction.transaction_category
+                transaction.category
               ) as TransactionCategory,
-              transaction_reviewed: transaction.transaction_reviewed,
+              transaction_reviewed: transaction.reviewed,
             };
           }
         );

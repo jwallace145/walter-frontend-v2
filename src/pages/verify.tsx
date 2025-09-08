@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import { ReactElement } from 'react';
 
@@ -7,9 +8,11 @@ const Verify: React.FC = (): ReactElement => {
       <div className="flex min-h-full flex-1 flex-col justify-center py-12 sm:px-6 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
           <Link href="/">
-            <img
+            <Image
               alt="Your Company"
               src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600"
+              width={40}
+              height={40}
               className="mx-auto h-10 w-auto"
             />
           </Link>

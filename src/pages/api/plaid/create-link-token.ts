@@ -1,12 +1,11 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 
-import { WalterAPI } from '@/lib/api/WalterAPI';
-import { WALTER_API_TOKEN_NAME } from '@/lib/constants/Constants';
+import { WalterBackend } from '@/lib/backend/Client';
 
 export default async function handler(
   request: NextApiRequest,
   response: NextApiResponse
 ): Promise<void> {
-  const token: string = request.cookies[WALTER_API_TOKEN_NAME] || '';
-  response.status(200).json(await WalterAPI.createLinkToken(token));
+  const token: string = request.cookies[WalterBackend.ACCESS_TOKEN_KEY] || '';
+  response.status(200).json(await WalterBackend.createLinkToken(token));
 }

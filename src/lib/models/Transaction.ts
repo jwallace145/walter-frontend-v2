@@ -15,12 +15,16 @@ export enum TransactionCategory {
   TRAVEL = 'Travel',
 }
 
-export interface Transaction {
-  account_id: string;
-  date: string;
+export interface BankTransaction {
   transaction_id: string;
+  account_id: string;
+  user_id: string;
+  transaction_type: string;
+  transaction_subtype: string;
+  transaction_category: string;
+  transaction_date: string;
   vendor: string;
-  amount: number;
+  transaction_amount: number;
   category: TransactionCategory;
   reviewed: boolean;
 }

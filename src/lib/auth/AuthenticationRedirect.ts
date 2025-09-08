@@ -1,35 +1,69 @@
+import { serialize } from 'cookie';
 import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next';
 
-import { WalterAPI } from '@/lib/api/WalterAPI';
-import { WALTER_API_TOKEN_NAME } from '@/lib/constants/Constants';
+import { WalterBackend } from '@/lib/backend/Client';
+import { GetUserResponse } from '@/lib/backend/GetUser';
+import { RefreshResponse } from '@/lib/backend/Refresh';
 import { User } from '@/lib/models/User';
 
-/**
- * This SSR function gets the current user from WalterAPI and redirects users based on authentication status.
- *
- * This method is an SSR function that calls the GetUser API in an attempt to get the current user before
- * allowing access to authenticated pages. Furthermore, this method redirects authenticated users attempting
- * to access unauthenticated pages. This method is intended to be used by all pages to protect authenticated
- * access. Pages can pass in an additional SSR function to get additional props from the server as well
- * before rendering.
- *
- * @param props
- */
+const INVALID_REFRESH_TOKEN_DEFAULT_VALUE = 'INVALID_REFRESH_TOKEN';
+const INVALID_ACCESS_TOKEN_DEFAULT_VALUE = 'INVALID_ACCESS_TOKEN';
+
 export function withAuthenticationRedirect<T>(
   props: withAuthenticationRedirectProps<T>
-): GetServerSideProps<T & { user: User | undefined }> {
+): GetServerSideProps<T & { user: User | undefined; accessToken: string | undefined }> {
   return async (
     context: GetServerSidePropsContext
-  ): Promise<GetServerSidePropsResult<T & { user: User | undefined }>> => {
-    // grab user api token from cookies if it exists and attempt to get user from backend
-    const token: string = context.req.cookies?.[WALTER_API_TOKEN_NAME] || 'INVALID_TOKEN';
-    const user: User | null = await WalterAPI.getUser(token);
+  ): Promise<
+    GetServerSidePropsResult<T & { user: User | undefined; accessToken: string | undefined }>
+  > => {
+    const refreshToken: string =
+      context.req.cookies?.[WalterBackend.REFRESH_TOKEN_KEY] || INVALID_REFRESH_TOKEN_DEFAULT_VALUE;
+    let accessToken: string =
+      context.req.cookies?.[WalterBackend.ACCESS_TOKEN_KEY] || INVALID_ACCESS_TOKEN_DEFAULT_VALUE;
 
-    // get original props from passed in optional ssr function
+    // attempt to get user from backend via tokens (if present)
+    let user: User | undefined = undefined;
+    let getUser: GetUserResponse;
+
+    if (accessToken !== INVALID_ACCESS_TOKEN_DEFAULT_VALUE) {
+      getUser = await WalterBackend.getUser(accessToken);
+      console.log(getUser);
+
+      if (getUser.isNotAuthorized() && refreshToken !== INVALID_REFRESH_TOKEN_DEFAULT_VALUE) {
+        const refresh: RefreshResponse = await WalterBackend.refresh(refreshToken);
+
+        if (refresh.isSuccess()) {
+          accessToken = refresh.getAccessToken();
+
+          context.res.setHeader(
+            'Set-Cookie',
+            serialize(WalterBackend.ACCESS_TOKEN_KEY, accessToken, {
+              httpOnly: true,
+              path: '/',
+              sameSite: 'lax',
+              secure: process.env.NODE_ENV === 'production',
+              maxAge: 60 * 60, // match backend expiration
+            })
+          );
+
+          getUser = await WalterBackend.getUser(accessToken);
+
+          if (getUser.isSuccess()) {
+            user = getUser.getUser();
+          }
+        }
+      } else if (getUser.isSuccess()) {
+        user = getUser.getUser();
+      }
+    }
+
+    // Get additional props from optional SSR function
     const originalProps: { props: T } = props.getServerSidePropsFunc
       ? ((await props.getServerSidePropsFunc(context)) as { props: T })
       : { props: {} as T };
 
+    // Redirect logic based on authentication
     if (!props.authenticatedPage && user) {
       return {
         redirect: {
@@ -48,9 +82,10 @@ export function withAuthenticationRedirect<T>(
       return {
         props: {
           ...originalProps.props,
-          user,
+          user: user || null,
+          accessToken, // always return the valid access token (original or refreshed)
         },
-      } as GetServerSidePropsResult<T & { user: User }>;
+      } as GetServerSidePropsResult<T & { user: User; accessToken: string }>;
     }
   };
 }

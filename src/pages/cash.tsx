@@ -65,13 +65,10 @@ const Cash: React.FC<{ user: User }> = ({ user }): React.ReactElement => {
       },
     })
       .then((response: AxiosResponse): void => {
-        console.log(response.data);
-        console.log(selectedAccount?.account_id);
         const filteredTransactions: AccountTransaction[] = response.data.filter(
           (transaction: AccountTransaction): boolean =>
             transaction.account_id == selectedAccount?.account_id
         );
-        console.log(filteredTransactions);
         setTransactions(filteredTransactions);
       })
       .catch((error): void => console.error('Error:', error))

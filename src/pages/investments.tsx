@@ -32,7 +32,7 @@ const Investments: React.FC<{ user: User }> = ({ user }): React.ReactElement => 
   });
 
   React.useEffect((): void => {
-    // get api token from cookies
+    // get backend token from cookies
     const token: string = getWalterAPIToken();
 
     // get user portfolio with stocks and cryptos

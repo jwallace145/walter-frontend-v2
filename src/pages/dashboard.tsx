@@ -1,5 +1,4 @@
 import { BanknotesIcon, GlobeAltIcon } from '@heroicons/react/24/outline';
-import axios from 'axios';
 import { GetServerSideProps } from 'next';
 import React from 'react';
 
@@ -10,7 +9,6 @@ import { withAuthenticationRedirect } from '@/lib/auth/AuthenticationRedirect';
 import { PortfolioStock } from '@/lib/models/PortfolioStock';
 import { Price } from '@/lib/models/Price';
 import { User } from '@/lib/models/User';
-import { getWalterAPIToken } from '@/lib/utils/Utils';
 
 const Dashboard: React.FC<{ user: User }> = ({ user }): React.ReactElement => {
   const [stocks, setStocks] = React.useState<PortfolioStock[]>([]);
@@ -30,39 +28,7 @@ const Dashboard: React.FC<{ user: User }> = ({ user }): React.ReactElement => {
     current: true,
   });
 
-  React.useEffect((): void => {
-    // get api token from cookies
-    const token: string = getWalterAPIToken();
-
-    // get user portfolio with stocks and cryptos
-    setGettingPortfolio(true);
-    axios('/api/portfolios/get-portfolio', {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((response): void => {
-        setStocks(response.data.stocks);
-        setEquity(response.data.total_equity);
-      })
-      .catch((error): void => console.error('Error:', error))
-      .finally((): void => setGettingPortfolio(false));
-
-    // get the latest prices of the included stocks and cryptos
-    setGettingPrices(true);
-    axios('/api/prices/get-prices?stock=AAPL&start_date=2025-04-01&end_date=2025-04-30', {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((response): void => {
-        setPrices(response.data);
-      })
-      .catch((error): void => console.error('Error:', error))
-      .finally((): void => setGettingPrices(false));
-  }, []);
+  React.useEffect((): void => {}, []);
 
   const getPortfolioNavigation: () => { id: string; name: string; current: boolean }[] = (): {
     id: string;

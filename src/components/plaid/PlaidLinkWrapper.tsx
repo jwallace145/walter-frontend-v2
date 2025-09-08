@@ -49,6 +49,8 @@ const PlaidLinkWrapper: React.FC<{
       institution_name: institutionName,
       accounts: accounts,
     };
+    console.log(accounts);
+    console.log(publicToken);
     axios({
       method: 'POST',
       url: '/api/plaid/exchange-public-token',

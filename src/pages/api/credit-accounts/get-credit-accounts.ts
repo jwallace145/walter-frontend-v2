@@ -8,16 +8,5 @@ export default async function handler(
   response: NextApiResponse
 ): Promise<void> {
   const token: string = request.cookies[WALTER_API_TOKEN_NAME] || '';
-  response
-    .status(200)
-    .json(
-      await WalterAPI.updateCashAccount(
-        token,
-        request.body.accountId,
-        request.body.bankName,
-        request.body.accountName,
-        request.body.accountLastFourNumbers,
-        request.body.accountBalance
-      )
-    );
+  response.status(200).json(await WalterAPI.getCreditAccounts(token));
 }

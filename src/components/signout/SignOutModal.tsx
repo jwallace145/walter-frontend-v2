@@ -8,9 +8,8 @@ import {
   DialogTitle,
 } from '@headlessui/react';
 import React from 'react';
-import { removeCookie } from 'typescript-cookie';
 
-import { WALTER_API_TOKEN_NAME } from '@/lib/constants/Constants';
+import { WalterBackend } from '@/lib/backend/Client';
 
 interface SignOutModalProps {
   open: boolean;
@@ -20,7 +19,8 @@ interface SignOutModalProps {
 const SignOutModal: React.FC<SignOutModalProps> = ({ open, setOpen }): React.ReactElement => {
   const handleSignOut = (e: React.FormEvent) => {
     e.preventDefault();
-    removeCookie(WALTER_API_TOKEN_NAME);
+    WalterBackend.unsetAccessToken();
+    WalterBackend.unsetRefreshToken();
     window.location.href = '/';
   };
 

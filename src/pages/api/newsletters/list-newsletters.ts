@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 
-import { WalterAPI } from '@/lib/api/WalterAPI';
+import { WalterAPI } from '@/lib/backend/Client';
 import { WALTER_API_TOKEN_NAME } from '@/lib/constants/Constants';
 
 export default async function handler(

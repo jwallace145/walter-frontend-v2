@@ -1,16 +1,15 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 
-import { WalterAPI } from '@/lib/api/WalterAPI';
+import { WalterBackend } from '@/lib/backend/Client';
 
 export default async function handler(
   request: NextApiRequest,
   response: NextApiResponse
 ): Promise<void> {
   try {
-    const token: string = request.cookies.WALTER_API_TOKEN || '';
-    response.status(200).json(await WalterAPI.getUser(token));
+    const token: string = request.cookies[WalterBackend.ACCESS_TOKEN_KEY] || '';
+    response.status(200).json(await WalterBackend.getUser(token));
   } catch (error) {
-    console.error('Error while fetching user:', error);
     const status = (error as any).response?.status || 500;
     const message = (error as any).response?.data || 'Internal Server Error';
     response.status(status).json({ message });

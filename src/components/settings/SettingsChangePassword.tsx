@@ -48,7 +48,6 @@ const SettingsChangePassword: React.FC = (): React.ReactElement => {
     })
       .then((response: AxiosResponse) => response.data)
       .then((data: any): void => {
-        console.log(data);
         if (data['Status'].toLowerCase() === 'success') {
           setShowSuccess(true);
           setSuccess(data['Message']);

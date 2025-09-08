@@ -146,7 +146,6 @@ const AddExpenseModal: React.FC<AddExpenseModalProps> = ({
       })
       .then((response: AxiosResponse): any => response.data)
       .then((data: any): void => {
-        console.log(data);
         setOpen(false);
         onExpenseAdded();
         onClose();

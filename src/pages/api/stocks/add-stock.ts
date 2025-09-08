@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 
-import { WalterAPI } from '@/lib/api/WalterAPI';
+import { WalterAPI } from '@/lib/backend/Client';
 import { PortfolioStock } from '@/lib/models/PortfolioStock';
 
 export default async function handler(

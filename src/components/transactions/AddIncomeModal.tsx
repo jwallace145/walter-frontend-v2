@@ -140,7 +140,6 @@ const AddIncomeModal: React.FC<{
       })
       .then((response: AxiosResponse) => response.data)
       .then((data: any): void => {
-        console.log(data);
         onIncomeAdded();
         setDate('');
         setVendor('');

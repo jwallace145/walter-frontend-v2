@@ -1,11 +1,11 @@
 import { Dialog, DialogBackdrop, DialogPanel, TransitionChild } from '@headlessui/react';
 import {
   BanknotesIcon,
+  BuildingLibraryIcon,
   ChartBarIcon,
   ChartPieIcon,
   Cog6ToothIcon,
   CreditCardIcon,
-  NewspaperIcon,
   PresentationChartLineIcon,
   XMarkIcon,
 } from '@heroicons/react/24/outline';
@@ -40,11 +40,18 @@ const Sidebar: React.FC<{
       {
         name: 'Transactions',
         href: 'transactions',
-        icon: CreditCardIcon,
+        icon: BanknotesIcon,
         numNotifications: 24,
         current: false,
       },
-      { name: 'Cash', href: 'cash', icon: BanknotesIcon, numNotifications: 0, current: false },
+      {
+        name: 'Cash',
+        href: 'cash',
+        icon: BuildingLibraryIcon,
+        numNotifications: 0,
+        current: false,
+      },
+      { name: 'Credit', href: 'credit', icon: CreditCardIcon, numNotifications: 0, current: false },
       {
         name: 'Investments',
         href: 'investments',
@@ -56,13 +63,6 @@ const Sidebar: React.FC<{
         name: 'Retirement',
         href: 'retirement',
         icon: PresentationChartLineIcon,
-        numNotifications: 0,
-        current: false,
-      },
-      {
-        name: 'Newsletters',
-        href: 'newsletters',
-        icon: NewspaperIcon,
         numNotifications: 0,
         current: false,
       },

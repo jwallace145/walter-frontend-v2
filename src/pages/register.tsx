@@ -5,8 +5,8 @@ import Link from 'next/link';
 import ErrorNotification from '@/components/notifications/ErrorNotification';
 import SuccessNotification from '@/components/notifications/SuccessNotification';
 import { withAuthenticationRedirect } from '@/lib/auth/AuthenticationRedirect';
-import { WalterBackendProxy } from '@/lib/backend/proxy';
-import { CreateUserResponse } from '@/lib/backend/responses';
+import { WalterBackendProxy } from '@/lib/proxy/client';
+import { CreateUserResponse } from '@/lib/proxy/responses';
 import { isValidEmail } from '@/lib/utils/Utils';
 
 interface RegisterProps {

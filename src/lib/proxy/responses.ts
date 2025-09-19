@@ -1,5 +1,5 @@
-import WalterBackendAPIResponse, { ResponseArguments } from '@/lib/backend/response';
 import { User } from '@/lib/models/User';
+import WalterBackendAPIResponse, { ResponseArguments } from '@/lib/proxy/response';
 
 export interface LoginData {
   user_id: string;

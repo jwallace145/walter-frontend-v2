@@ -1,7 +1,7 @@
 import axios, { AxiosResponse } from 'axios';
 
-import { ENDPOINTS } from '@/lib/backend/endpoints';
-import { ResponseArguments } from '@/lib/backend/response';
+import { PROXY_ENDPOINTS } from '@/lib/proxy/endpoints';
+import { ResponseArguments } from '@/lib/proxy/response';
 import {
   CreateLinkTokenData,
   CreateLinkTokenResponse,
@@ -13,13 +13,16 @@ import {
   LoginResponse,
   LogoutData,
   LogoutResponse,
-} from '@/lib/backend/responses';
+} from '@/lib/proxy/responses';
 
 export class WalterBackendProxy {
   static readonly PROXY_URL: string = '/api';
 
+  static readonly REFRESH_TOKEN_KEY: string = 'WALTER_BACKEND_REFRESH_TOKEN';
+  static readonly ACCESS_TOKEN_KEY: string = 'WALTER_BACKEND_ACCESS_TOKEN';
+
   public static async login(email: string, password: string): Promise<LoginResponse> {
-    return this.callProxy(ENDPOINTS['LOGIN'].method, ENDPOINTS['LOGIN'].proxy, {
+    return this.callProxy(PROXY_ENDPOINTS['LOGIN'].method, PROXY_ENDPOINTS['LOGIN'].path, {
       email,
       password,
     })
@@ -31,7 +34,7 @@ export class WalterBackendProxy {
   }
 
   public static async logout(): Promise<LogoutResponse> {
-    return this.callProxy(ENDPOINTS['LOGOUT'].method, ENDPOINTS['LOGOUT'].proxy)
+    return this.callProxy(PROXY_ENDPOINTS['LOGOUT'].method, PROXY_ENDPOINTS['LOGOUT'].path)
       .then(
         (response: AxiosResponse): ResponseArguments<LogoutData> =>
           this.getResponseArgs<LogoutData>(response)
@@ -40,7 +43,10 @@ export class WalterBackendProxy {
   }
 
   public static async createUser(): Promise<CreateUserResponse> {
-    return this.callProxy(ENDPOINTS['CREATE_USER'].method, ENDPOINTS['CREATE_USER'].proxy)
+    return this.callProxy(
+      PROXY_ENDPOINTS['CREATE_USER'].method,
+      PROXY_ENDPOINTS['CREATE_USER'].path
+    )
       .then(
         (response: AxiosResponse): ResponseArguments<CreateUserData> =>
           this.getResponseArgs(response)
@@ -53,8 +59,8 @@ export class WalterBackendProxy {
 
   public static async createLinkToken(): Promise<CreateLinkTokenResponse> {
     return this.callProxy(
-      ENDPOINTS['CREATE_LINK_TOKEN'].method,
-      ENDPOINTS['CREATE_LINK_TOKEN'].proxy
+      PROXY_ENDPOINTS['CREATE_LINK_TOKEN'].method,
+      PROXY_ENDPOINTS['CREATE_LINK_TOKEN'].path
     )
       .then(
         (response: AxiosResponse): ResponseArguments<CreateLinkTokenData> =>
@@ -73,8 +79,8 @@ export class WalterBackendProxy {
     accounts: any
   ): Promise<ExchangePublicTokenResponse> {
     return this.callProxy(
-      ENDPOINTS['EXCHANGE_PUBLIC_TOKEN'].method,
-      ENDPOINTS['CREATE_LINK_TOKEN_RESPONSE'].proxy,
+      PROXY_ENDPOINTS['EXCHANGE_PUBLIC_TOKEN'].method,
+      PROXY_ENDPOINTS['CREATE_LINK_TOKEN_RESPONSE'].path,
       {
         publicToken: publicToken,
         institutionId: institutionId,
@@ -92,6 +98,11 @@ export class WalterBackendProxy {
       );
   }
 
+  public static isValidMethod(method: string | undefined, validMethods: string[]): boolean {
+    if (!method) return false;
+    return validMethods.includes(method);
+  }
+
   private static async callProxy(method: string, path: string, data?: any): Promise<AxiosResponse> {
     const config: any = {
       method: method,
@@ -99,6 +110,7 @@ export class WalterBackendProxy {
       validateStatus: function (status: number): boolean {
         return true;
       },
+      withCredentials: true, // TODO: I don't think this is necessary for all api endpoints
     };
 
     if (data) {

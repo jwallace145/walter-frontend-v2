@@ -1,4 +1,4 @@
-import { HttpStatus, toHttpStatus } from '@/lib/backend/statuses';
+import { HttpStatus, toHttpStatus } from '@/lib/proxy/statuses';
 
 /********************************
  * WalterBackend Response Model *

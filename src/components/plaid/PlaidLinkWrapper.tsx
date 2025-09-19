@@ -3,8 +3,8 @@ import { PlaidAccount, PlaidLinkOnSuccessMetadata, usePlaidLink } from 'react-pl
 
 import ErrorNotification from '@/components/notifications/ErrorNotification';
 import SuccessNotification from '@/components/notifications/SuccessNotification';
-import { WalterBackendProxy } from '@/lib/backend/proxy';
-import { ExchangePublicTokenResponse } from '@/lib/backend/responses';
+import { WalterBackendProxy } from '@/lib/proxy/client';
+import { ExchangePublicTokenResponse } from '@/lib/proxy/responses';
 
 const PlaidLinkWrapper: React.FC<{
   linkToken: string;

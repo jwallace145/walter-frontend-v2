@@ -1,13 +1,13 @@
-/********************************
- * Walter Backend API Endpoints *
- ********************************/
+/**********************************
+ * Walter Backend Proxy Endpoints *
+ **********************************/
 
-export const API_ENDPOINTS: { [key: string]: { method: string; path: string } } = {
+export const PROXY_ENDPOINTS: { [key: string]: { method: string; path: string } } = {
   LOGIN: { method: 'POST', path: '/auth/login' },
   REFRESH: { method: 'POST', path: '/auth/refresh' },
   LOGOUT: { method: 'POST', path: '/auth/logout' },
-  GET_USER: { method: 'GET', path: '/users' },
-  CREATE_USER: { method: 'POST', path: '/users' },
+  GET_USER: { method: 'GET', path: '/users/get-user' },
+  CREATE_USER: { method: 'POST', path: '/users/create-user' },
   CREATE_LINK_TOKEN: {
     method: 'POST',
     path: '/plaid/create-link-token',

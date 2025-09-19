@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { AxiosResponse } from 'axios';
 
 import { WalterBackend } from '@/lib/backend/client';
-import { HttpStatus } from '@/lib/backend/statuses';
+import { HttpStatus } from '@/lib/proxy/statuses';
 
 export default async function handler(
   request: NextApiRequest,

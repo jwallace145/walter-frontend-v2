@@ -4,8 +4,8 @@ import React, { useState } from 'react';
 
 import ErrorNotification from '@/components/notifications/ErrorNotification';
 import SuccessNotification from '@/components/notifications/SuccessNotification';
-import { WalterBackendProxy } from '@/lib/backend/proxy';
-import { LogoutResponse } from '@/lib/backend/responses';
+import { WalterBackendProxy } from '@/lib/proxy/client';
+import { LogoutResponse } from '@/lib/proxy/responses';
 
 import {
   Dialog,
@@ -47,6 +47,7 @@ const SignOutModal: React.FC<SignOutModalProps> = ({ open, setOpen }): React.Rea
         }
       })
       .catch((error: any): void => {
+        console.error('There was an error signing out the user:', error);
         console.error(error);
         setShowError(true);
         setMessage('Error signing out user. Please try again later or contact support.');

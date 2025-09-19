@@ -1,5 +1,6 @@
-import { ChevronDownIcon } from '@heroicons/react/20/solid';
 import React from 'react';
+
+import { ChevronDownIcon } from '@heroicons/react/20/solid';
 
 interface CashAccountTransactionsDateRangeOption {
   name: string;

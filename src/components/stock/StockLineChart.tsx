@@ -1,5 +1,3 @@
-import { PresentationChartLineIcon } from '@heroicons/react/24/outline';
-import { Serie } from '@nivo/line';
 import React from 'react';
 
 import LoadingSpinner from '@/components/loading/LoadingSpinner';
@@ -7,6 +5,9 @@ import { PortfolioStock } from '@/lib/models/PortfolioStock';
 import { Price } from '@/lib/models/Price';
 
 import LineChart from '../charts/LineChart';
+
+import { PresentationChartLineIcon } from '@heroicons/react/24/outline';
+import { Serie } from '@nivo/line';
 
 const StockLineChart: React.FC<{
   stock: PortfolioStock | null;

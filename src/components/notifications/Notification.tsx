@@ -1,6 +1,7 @@
+import React, { FC, ReactElement, ReactNode } from 'react';
+
 import { Transition } from '@headlessui/react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
-import React, { FC, ReactElement, ReactNode } from 'react';
 
 const Notification: FC<{
   show: boolean;

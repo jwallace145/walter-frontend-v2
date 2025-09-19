@@ -1,8 +1,8 @@
 'use client';
 
+import React, { ReactElement } from 'react';
 import { GetServerSideProps } from 'next';
 import Link from 'next/link';
-import React, { ReactElement } from 'react';
 
 import LogoCloud from '@/components/marketing/LogoCloud';
 import Testimonials from '@/components/marketing/Testimonials';

@@ -1,5 +1,5 @@
-import axios, { AxiosResponse } from 'axios';
 import React from 'react';
+import axios, { AxiosResponse } from 'axios';
 
 import Modal from '@/components/modals/Modal';
 import { CashAccount } from '@/lib/models/CashAccount';

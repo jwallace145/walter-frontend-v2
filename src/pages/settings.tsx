@@ -1,9 +1,9 @@
 'use client';
 
-import { GetServerSideProps } from 'next';
-import Image from 'next/image';
 import React, { useState } from 'react';
 import Avatar from 'react-avatar';
+import { GetServerSideProps } from 'next';
+import Image from 'next/image';
 
 import SettingsLinkAccounts from '@/components/settings/SettingsLinkAccounts';
 import SettingsPersonalInformationForm from '@/components/settings/SettingsPersonalInformationForm';

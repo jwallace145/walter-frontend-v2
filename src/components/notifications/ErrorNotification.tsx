@@ -1,7 +1,8 @@
-import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
 import React from 'react';
 
 import Notification from './Notification';
+
+import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
 
 const ErrorNotification: React.FC<{
   show: boolean;

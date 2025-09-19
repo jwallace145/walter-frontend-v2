@@ -1,7 +1,8 @@
-import { ExclamationCircleIcon } from '@heroicons/react/24/outline';
 import React, { ReactElement } from 'react';
 
 import Notification from '@/components/notifications/Notification';
+
+import { ExclamationCircleIcon } from '@heroicons/react/24/outline';
 
 const WarningNotification: React.FC<{
   show: boolean;

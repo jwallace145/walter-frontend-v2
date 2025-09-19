@@ -1,14 +1,15 @@
-import { BuildingLibraryIcon } from '@heroicons/react/16/solid';
-import { PencilSquareIcon, TrashIcon } from '@heroicons/react/20/solid';
-import { ChartPieIcon } from '@heroicons/react/24/outline';
-import Image from 'next/image';
 import React from 'react';
+import Image from 'next/image';
 
 import DeleteCashAccountModal from '@/components/cash/DeleteCashAccountModal';
 import UpdateCashAccountBalanceModal from '@/components/cash/UpdateCashAccountBalanceModal';
 import UpdateCashAccountModal from '@/components/cash/UpdateCashAccountModal';
 import { US_DOLLAR } from '@/lib/constants/Constants';
 import { CashAccount } from '@/lib/models/CashAccount';
+
+import { BuildingLibraryIcon } from '@heroicons/react/16/solid';
+import { PencilSquareIcon, TrashIcon } from '@heroicons/react/20/solid';
+import { ChartPieIcon } from '@heroicons/react/24/outline';
 
 const CashAccountDescription: React.FC<{
   loading: boolean;

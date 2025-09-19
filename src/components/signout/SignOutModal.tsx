@@ -1,5 +1,12 @@
 'use client';
 
+import React, { useState } from 'react';
+
+import ErrorNotification from '@/components/notifications/ErrorNotification';
+import SuccessNotification from '@/components/notifications/SuccessNotification';
+import { WalterBackendProxy } from '@/lib/backend/proxy';
+import { LogoutResponse } from '@/lib/backend/responses';
+
 import {
   Dialog,
   DialogBackdrop,
@@ -7,12 +14,6 @@ import {
   DialogPanel,
   DialogTitle,
 } from '@headlessui/react';
-import React, { useState } from 'react';
-
-import ErrorNotification from '@/components/notifications/ErrorNotification';
-import SuccessNotification from '@/components/notifications/SuccessNotification';
-import { WalterBackendProxy } from '@/lib/backend/proxy';
-import { LogoutResponse } from '@/lib/backend/responses';
 
 interface SignOutModalProps {
   open: boolean;

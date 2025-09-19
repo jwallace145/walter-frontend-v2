@@ -1,12 +1,13 @@
 'use client';
 
-import { MagnifyingGlassIcon } from '@heroicons/react/20/solid';
-import { Bars3Icon, BellIcon } from '@heroicons/react/24/outline';
 import React, { ReactElement, ReactNode, useState } from 'react';
 
 import Sidebar from '@/components/sidebars/Sidebar';
 import UserProfileMenu from '@/components/users/UserProfileMenu';
 import { User } from '@/lib/models/User';
+
+import { MagnifyingGlassIcon } from '@heroicons/react/20/solid';
+import { Bars3Icon, BellIcon } from '@heroicons/react/24/outline';
 
 const AuthenticatedPageLayout: React.FC<{
   pageName: string;

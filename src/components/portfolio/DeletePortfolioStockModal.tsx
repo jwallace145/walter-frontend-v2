@@ -1,5 +1,10 @@
 'use client';
 
+import React, { useState } from 'react';
+import axios from 'axios';
+
+import { PortfolioStock } from '@/lib/models/PortfolioStock';
+
 import {
   Dialog,
   DialogBackdrop,
@@ -7,10 +12,6 @@ import {
   DialogPanel,
   DialogTitle,
 } from '@headlessui/react';
-import axios from 'axios';
-import React, { useState } from 'react';
-
-import { PortfolioStock } from '@/lib/models/PortfolioStock';
 
 interface DeletePortfolioStockModalProps {
   open: boolean;

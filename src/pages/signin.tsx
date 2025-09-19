@@ -5,8 +5,8 @@ import Link from 'next/link';
 import ErrorNotification from '@/components/notifications/ErrorNotification';
 import SuccessNotification from '@/components/notifications/SuccessNotification';
 import { withAuthenticationRedirect } from '@/lib/auth/AuthenticationRedirect';
-import { WalterBackendProxy } from '@/lib/backend/proxy';
-import { LoginResponse } from '@/lib/backend/responses';
+import { WalterBackendProxy } from '@/lib/proxy/client';
+import { LoginResponse } from '@/lib/proxy/responses';
 
 const SignIn: React.FC = (): React.ReactElement => {
   const [loading, setLoading] = useState(false);

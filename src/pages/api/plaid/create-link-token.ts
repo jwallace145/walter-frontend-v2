@@ -1,15 +1,14 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { AxiosResponse } from 'axios';
-import cookie from 'cookie';
 
 import { WalterBackend } from '@/lib/backend/client';
+import { WalterBackendProxy } from '@/lib/proxy/client';
 
 export default async function handler(
   request: NextApiRequest,
   response: NextApiResponse
 ): Promise<void> {
-  const cookies: Record<string, string | undefined> = cookie.parse(request.headers.cookie || '');
-  const token: string | undefined = cookies[WalterBackend.ACCESS_TOKEN_KEY];
+  const token: string | undefined = request.cookies[WalterBackendProxy.ACCESS_TOKEN_KEY];
 
   if (!token) {
     return response.status(401).json({ error: 'Missing access token' });

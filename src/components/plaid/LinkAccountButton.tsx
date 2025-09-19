@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 
 import ErrorNotification from '@/components/notifications/ErrorNotification';
 import SuccessNotification from '@/components/notifications/SuccessNotification';
-import { WalterBackendProxy } from '@/lib/backend/proxy';
-import { CreateLinkTokenResponse } from '@/lib/backend/responses';
+import { WalterBackendProxy } from '@/lib/proxy/client';
+import { CreateLinkTokenResponse } from '@/lib/proxy/responses';
 
 import PlaidLinkWrapper from './PlaidLinkWrapper';
 

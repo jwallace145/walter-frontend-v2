@@ -4,8 +4,8 @@ import React, { useState } from 'react';
 
 import ErrorNotification from '@/components/notifications/ErrorNotification';
 import SuccessNotification from '@/components/notifications/SuccessNotification';
-import { WalterBackendProxy } from '@/lib/backend/proxy';
-import { LogoutResponse } from '@/lib/backend/responses';
+import { WalterBackendProxy } from '@/lib/proxy/client';
+import { LogoutResponse } from '@/lib/proxy/responses';
 
 import {
   Dialog,

@@ -1,22 +1,18 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { AxiosResponse } from 'axios';
-import cookie from 'cookie';
 
 import { WalterBackend } from '@/lib/backend/client';
+import { WalterBackendProxy } from '@/lib/proxy/client';
 
 export default async function handler(
   request: NextApiRequest,
   response: NextApiResponse
 ): Promise<void> {
   if (request.method !== 'POST') {
-    console.log('Logout request method:', request.method);
     return response.status(405).json({ error: 'Method not allowed' });
   }
 
-  const requestCookies: Record<string, string | undefined> = cookie.parse(
-    request.headers.cookie || ''
-  );
-  const token: string | undefined = requestCookies[WalterBackend.ACCESS_TOKEN_KEY];
+  const token: string | undefined = request.cookies[WalterBackendProxy.ACCESS_TOKEN_KEY];
 
   if (!token) {
     return response.status(401).json({ error: 'Missing access token' });

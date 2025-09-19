@@ -9,6 +9,7 @@ export default async function handler(
   response: NextApiResponse
 ): Promise<void> {
   if (request.method !== 'POST') {
+    console.log('Logout request method:', request.method);
     return response.status(405).json({ error: 'Method not allowed' });
   }
 
@@ -31,7 +32,8 @@ export default async function handler(
 
     return response.status(backendResponse.status).json(backendResponse.data);
   } catch (err) {
+    console.log('Dude straight up, what is happening');
     console.error('Logout failed:', err);
-    return response.status(500).json({ error: 'Internal Server Error' });
+    return response.status(500).json({ error: 'Internal Server Error from Next.js API' });
   }
 }

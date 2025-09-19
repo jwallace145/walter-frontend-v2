@@ -47,6 +47,7 @@ const SignOutModal: React.FC<SignOutModalProps> = ({ open, setOpen }): React.Rea
         }
       })
       .catch((error: any): void => {
+        console.error('There was an error signing out the user:', error);
         console.error(error);
         setShowError(true);
         setMessage('Error signing out user. Please try again later or contact support.');

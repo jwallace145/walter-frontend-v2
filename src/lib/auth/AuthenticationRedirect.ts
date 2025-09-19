@@ -1,6 +1,6 @@
+import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next';
 import { AxiosResponse } from 'axios';
 import { parse } from 'cookie';
-import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next';
 
 import { WalterBackend } from '@/lib/backend/client';
 import { GetUserResponse } from '@/lib/backend/responses';

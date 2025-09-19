@@ -1,6 +1,6 @@
+import React from 'react';
 import { GetServerSideProps } from 'next';
 import Link from 'next/link';
-import React from 'react';
 
 import ErrorNotification from '@/components/notifications/ErrorNotification';
 import SuccessNotification from '@/components/notifications/SuccessNotification';

@@ -1,10 +1,11 @@
-import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
-import { ChevronDownIcon } from '@heroicons/react/20/solid';
 import React from 'react';
 
 import SignOutModal from '@/components/signout/SignOutModal';
 import UserProfilePicture from '@/components/users/UserProfilePicture';
 import { User } from '@/lib/models/User';
+
+import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
+import { ChevronDownIcon } from '@heroicons/react/20/solid';
 
 const UserProfileMenu: React.FC<{ user: User }> = ({ user }): React.ReactElement => {
   const [openSignOutModal, setOpenSignOutModal] = React.useState<boolean>(false);

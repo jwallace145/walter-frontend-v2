@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { Dialog, DialogBackdrop, DialogPanel, TransitionChild } from '@headlessui/react';
 import {
   BanknotesIcon,
@@ -9,7 +11,6 @@ import {
   PresentationChartLineIcon,
   XMarkIcon,
 } from '@heroicons/react/24/outline';
-import React from 'react';
 
 export interface Page {
   name: string;

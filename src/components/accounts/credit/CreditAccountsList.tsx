@@ -1,10 +1,11 @@
-import { PlusCircleIcon } from '@heroicons/react/24/outline';
-import Image from 'next/image';
 import React from 'react';
+import Image from 'next/image';
 
 import LoadingSpinner from '@/components/loading/LoadingSpinner';
 import { US_DOLLAR } from '@/lib/constants/Constants';
 import { CreditAccount } from '@/lib/models/CreditAccount';
+
+import { PlusCircleIcon } from '@heroicons/react/24/outline';
 
 const CreditAccountsList: React.FC<{
   loading: boolean;

@@ -1,7 +1,8 @@
-import { BanknotesIcon, GlobeAltIcon } from '@heroicons/react/24/outline';
 import React from 'react';
 
 import AddPortfolioStockModal from '@/components/portfolio/AddPortfolioStockModal';
+
+import { BanknotesIcon, GlobeAltIcon } from '@heroicons/react/24/outline';
 
 const InvestmentsActionButtons: React.FC<{ refresh: () => void }> = ({
   refresh,

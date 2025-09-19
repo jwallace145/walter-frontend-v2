@@ -1,20 +1,8 @@
-echo "Linting code..."
-
+#!/bin/sh
+echo "🔍 Running lint-staged (ESLint + Prettier on changed files)..."
 npx lint-staged
 
-echo "Simulating build locally..."
+echo "🛡️ Type-checking with tsc..."
+pnpm exec tsc --noEmit
 
-# Make sure pnpm is installed
-if ! command -v pnpm &> /dev/null
-then
-    echo "pnpm could not be found, please install it first."
-    exit 1
-fi
-
-# Install dependencies
-pnpm install
-
-# Run production build
-pnpm run build
-
-echo "Amplify build simulation successful ✅"
+echo "✅ Pre-commit checks passed!"

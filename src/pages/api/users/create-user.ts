@@ -1,5 +1,5 @@
-import { AxiosResponse } from 'axios';
 import type { NextApiRequest, NextApiResponse } from 'next';
+import { AxiosResponse } from 'axios';
 
 import { WalterBackend } from '@/lib/backend/client';
 import { HttpStatus } from '@/lib/backend/statuses';

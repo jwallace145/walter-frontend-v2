@@ -1,5 +1,3 @@
-import { PencilSquareIcon, TrashIcon } from '@heroicons/react/20/solid';
-import { CurrencyDollarIcon } from '@heroicons/react/24/outline';
 import React, { ReactElement, useState } from 'react';
 
 import { AssetViewOption } from '@/components/investments/InvestmentsAssetsViewOptions';
@@ -7,6 +5,9 @@ import LoadingSpinner from '@/components/loading/LoadingSpinner';
 import DeletePortfolioStockModal from '@/components/portfolio/DeletePortfolioStockModal';
 import { US_DOLLAR } from '@/lib/constants/Constants';
 import { PortfolioStock } from '@/lib/models/PortfolioStock';
+
+import { PencilSquareIcon, TrashIcon } from '@heroicons/react/20/solid';
+import { CurrencyDollarIcon } from '@heroicons/react/24/outline';
 
 const PortfolioStockCards: React.FC<{
   loading: boolean;

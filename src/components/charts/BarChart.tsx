@@ -1,8 +1,9 @@
-import { BarDatum } from '@nivo/bar';
-import dynamic from 'next/dynamic';
 import React from 'react';
+import dynamic from 'next/dynamic';
 
 import { US_DOLLAR } from '@/lib/constants/Constants';
+
+import { BarDatum } from '@nivo/bar';
 
 const ResponsiveBar = dynamic(() => import('@nivo/bar').then((mod) => mod.ResponsiveBar), {
   ssr: false,

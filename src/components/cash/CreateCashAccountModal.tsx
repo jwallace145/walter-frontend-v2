@@ -1,8 +1,9 @@
-import { ChevronDownIcon } from '@heroicons/react/20/solid';
-import axios, { AxiosResponse } from 'axios';
 import React from 'react';
+import axios, { AxiosResponse } from 'axios';
 
 import Modal from '@/components/modals/Modal';
+
+import { ChevronDownIcon } from '@heroicons/react/20/solid';
 
 const CreateCashAccountModal: React.FC<{
   open: boolean;

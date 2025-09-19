@@ -1,11 +1,12 @@
-import { BuildingLibraryIcon } from '@heroicons/react/16/solid';
-import { PencilSquareIcon, TrashIcon } from '@heroicons/react/20/solid';
-import { ChartPieIcon } from '@heroicons/react/24/outline';
-import Image from 'next/image';
 import React from 'react';
+import Image from 'next/image';
 
 import { US_DOLLAR } from '@/lib/constants/Constants';
 import { CreditAccount } from '@/lib/models/CreditAccount';
+
+import { BuildingLibraryIcon } from '@heroicons/react/16/solid';
+import { PencilSquareIcon, TrashIcon } from '@heroicons/react/20/solid';
+import { ChartPieIcon } from '@heroicons/react/24/outline';
 
 const CreditAccountDescription: React.FC<{
   loading: boolean;

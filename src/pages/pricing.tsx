@@ -1,9 +1,10 @@
-import { CheckIcon } from '@heroicons/react/20/solid';
-import { GetServerSideProps } from 'next';
 import { ReactElement } from 'react';
+import { GetServerSideProps } from 'next';
 
 import UnauthenticatedPageLayout from '@/layouts/UnauthenticatedPageLayout';
 import { withAuthenticationRedirect } from '@/lib/auth/AuthenticationRedirect';
+
+import { CheckIcon } from '@heroicons/react/20/solid';
 
 const includedFeatures = [
   'Weekly newsletter with personalized AI insights',

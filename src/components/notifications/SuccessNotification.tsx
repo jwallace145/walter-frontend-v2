@@ -1,7 +1,8 @@
-import { CheckCircleIcon } from '@heroicons/react/24/outline';
 import React from 'react';
 
 import Notification from './Notification';
+
+import { CheckCircleIcon } from '@heroicons/react/24/outline';
 
 const SuccessNotification: React.FC<{
   show: boolean;

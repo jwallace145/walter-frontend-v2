@@ -1,6 +1,5 @@
 'use client';
 
-import { ChartPieIcon } from '@heroicons/react/24/outline';
 import React from 'react';
 
 import PieChart, { PieSlice } from '@/components/charts/PieChart';
@@ -8,6 +7,8 @@ import { US_DOLLAR } from '@/lib/constants/Constants';
 import { PortfolioStock } from '@/lib/models/PortfolioStock';
 
 import LoadingSpinner from '../loading/LoadingSpinner';
+
+import { ChartPieIcon } from '@heroicons/react/24/outline';
 
 const PortfolioEquityPieChart: React.FC<{
   loading: boolean;

@@ -1,6 +1,6 @@
+import type { NextApiRequest, NextApiResponse } from 'next';
 import { AxiosResponse } from 'axios';
 import cookie from 'cookie';
-import type { NextApiRequest, NextApiResponse } from 'next';
 
 import { WalterBackend } from '@/lib/backend/client';
 

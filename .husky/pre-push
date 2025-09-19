@@ -1,0 +1,5 @@
+#!/bin/sh
+echo "🏗️ Running production build before push..."
+pnpm run build || exit 1
+
+echo "✅ Build successful, push allowed."

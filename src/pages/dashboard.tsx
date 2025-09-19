@@ -1,6 +1,5 @@
-import { BanknotesIcon, GlobeAltIcon } from '@heroicons/react/24/outline';
-import { GetServerSideProps } from 'next';
 import React from 'react';
+import { GetServerSideProps } from 'next';
 
 import PortfolioEquityPieChart from '@/components/portfolio/PortfolioEquityPieChart';
 import StockLineChart from '@/components/stock/StockLineChart';
@@ -9,6 +8,8 @@ import { withAuthenticationRedirect } from '@/lib/auth/AuthenticationRedirect';
 import { PortfolioStock } from '@/lib/models/PortfolioStock';
 import { Price } from '@/lib/models/Price';
 import { User } from '@/lib/models/User';
+
+import { BanknotesIcon, GlobeAltIcon } from '@heroicons/react/24/outline';
 
 const Dashboard: React.FC<{ user: User }> = ({ user }): React.ReactElement => {
   const [stocks, setStocks] = React.useState<PortfolioStock[]>([]);

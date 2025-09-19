@@ -1,11 +1,12 @@
-import { PlusCircleIcon } from '@heroicons/react/24/outline';
-import Image from 'next/image';
 import React from 'react';
+import Image from 'next/image';
 
 import CreateCashAccountModal from '@/components/cash/CreateCashAccountModal';
 import LoadingSpinner from '@/components/loading/LoadingSpinner';
 import { US_DOLLAR } from '@/lib/constants/Constants';
 import { CashAccount } from '@/lib/models/CashAccount';
+
+import { PlusCircleIcon } from '@heroicons/react/24/outline';
 
 const CashAccountsList: React.FC<{
   loading: boolean;

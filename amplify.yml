@@ -4,6 +4,7 @@ frontend:
     preBuild:
       commands:
         - npm install -g pnpm
+        - export NEXT_PUBLIC_WALTER_API_ENDPOINT=https://dev-api.walterai.dev
         - pnpm install
     build:
       commands:

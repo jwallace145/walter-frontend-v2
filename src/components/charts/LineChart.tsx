@@ -1,10 +1,11 @@
 'use client';
 
-import { Serie } from '@nivo/line';
-import dynamic from 'next/dynamic';
 import React from 'react';
+import dynamic from 'next/dynamic';
 
 import { US_DOLLAR } from '@/lib/constants/Constants';
+
+import { Serie } from '@nivo/line';
 
 const ResponsiveLine = dynamic(() => import('@nivo/line').then((mod) => mod.ResponsiveLine), {
   ssr: false,

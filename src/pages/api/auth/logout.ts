@@ -12,24 +12,26 @@ export default async function handler(
     return response.status(405).json({ error: 'Method not allowed' });
   }
 
-  const cookies: Record<string, string | undefined> = cookie.parse(request.headers.cookie || '');
-  const token: string | undefined = cookies[WalterBackend.ACCESS_TOKEN_KEY];
+  const requestCookies: Record<string, string | undefined> = cookie.parse(
+    request.headers.cookie || ''
+  );
+  const token: string | undefined = requestCookies[WalterBackend.ACCESS_TOKEN_KEY];
 
   if (!token) {
     return response.status(401).json({ error: 'Missing access token' });
   }
 
   try {
-    const backendResponse: AxiosResponse = await WalterBackend.exchangePublicToken(
-      token,
-      request.body.public_token,
-      request.body.institution_id,
-      request.body.institution_name,
-      request.body.accounts
-    );
+    const backendResponse: AxiosResponse = await WalterBackend.logout(token);
+
+    const responseCookies: string[] | undefined = backendResponse.headers['set-cookie'];
+    if (responseCookies) {
+      response.setHeader('Set-Cookie', responseCookies);
+    }
+
     return response.status(backendResponse.status).json(backendResponse.data);
   } catch (err) {
-    console.error('Exchange Public Token failed:', err);
+    console.error('Logout failed:', err);
     return response.status(500).json({ error: 'Internal Server Error' });
   }
 }

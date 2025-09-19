@@ -7,9 +7,11 @@ import {
   DialogPanel,
   DialogTitle,
 } from '@headlessui/react';
-import React from 'react';
+import axios from 'axios';
+import React, { useState } from 'react';
 
-import { WalterBackend } from '@/lib/backend/Client';
+import { WalterBackendProxy } from '@/lib/backend/proxy';
+import { LogoutResponse } from '@/lib/backend/responses';
 
 interface SignOutModalProps {
   open: boolean;
@@ -17,11 +19,41 @@ interface SignOutModalProps {
 }
 
 const SignOutModal: React.FC<SignOutModalProps> = ({ open, setOpen }): React.ReactElement => {
+  const [loading, setLoading] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [success, setSuccess] = useState('');
+  const [showError, setShowError] = useState(false);
+  const [error, setError] = useState('');
+  const [message, setMessage] = useState('');
+
   const handleSignOut = (e: React.FormEvent) => {
     e.preventDefault();
-    WalterBackend.unsetAccessToken();
-    WalterBackend.unsetRefreshToken();
-    window.location.href = '/';
+
+    setLoading(true);
+    WalterBackendProxy.logout()
+      .then((response: LogoutResponse): void => {
+        if (response.isSuccess()) {
+          setShowSuccess(true);
+          setSuccess(response.message);
+          setMessage('User successfully signed out! Redirecting to sign in...');
+          window.location.href = '/';
+        } else {
+          setShowError(true);
+          setError(response.message);
+          setMessage('Error signing out user. Please try again later or contact support.');
+        }
+      })
+      .catch((error: any): void => {
+        setMessage('Error signing out user. Please try again later or contact support.');
+        if (axios.isAxiosError(error)) {
+          setShowError(true);
+          setError(error.response?.data.message);
+        } else {
+          setShowError(true);
+          setError(error.message);
+        }
+      })
+      .finally((): void => setLoading(false));
   };
 
   return (

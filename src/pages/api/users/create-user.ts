@@ -1,24 +1,35 @@
+import { AxiosResponse } from 'axios';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
-import { WalterBackend } from '@/lib/backend/Client';
-import { CreateUserResponse } from '@/lib/backend/CreateUserResponse';
+import { WalterBackend } from '@/lib/backend/client';
+import { HttpStatus } from '@/lib/backend/statuses';
 
 export default async function handler(
   request: NextApiRequest,
   response: NextApiResponse
 ): Promise<void> {
+  if (request.method !== 'POST') {
+    return response.status(HttpStatus.METHOD_NOT_ALLOWED).json({ error: 'Method not allowed' });
+  }
+
   const { email, firstName, lastName, password } = request.body;
+
+  if (!email || !firstName || !lastName || !password) {
+    return response.status(HttpStatus.BAD_REQUEST).json({ error: 'Missing required fields' });
+  }
+
   try {
-    const createUserResponse: CreateUserResponse = await WalterBackend.createUser(
+    const backendResponse: AxiosResponse = await WalterBackend.createUser(
       email,
       firstName,
       lastName,
       password
     );
-    return response.status(200).json(createUserResponse);
-  } catch (error) {
-    const status = (error as any).response?.status || 500;
-    const message = (error as any).response?.data || 'Internal Server Error';
-    response.status(status).json({ message });
+    return response.status(backendResponse.status).json(backendResponse.data);
+  } catch (err) {
+    console.error('Create User failed:', err);
+    return response
+      .status(HttpStatus.INTERNAL_SERVER_ERROR)
+      .json({ error: 'Internal Server Error' });
   }
 }

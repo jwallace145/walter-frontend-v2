@@ -1,9 +1,9 @@
-import { serialize } from 'cookie';
+import { AxiosResponse } from 'axios';
+import { parse } from 'cookie';
 import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next';
 
-import { WalterBackend } from '@/lib/backend/Client';
-import { GetUserResponse } from '@/lib/backend/GetUser';
-import { RefreshResponse } from '@/lib/backend/Refresh';
+import { WalterBackend } from '@/lib/backend/client';
+import { GetUserResponse } from '@/lib/backend/responses';
 import { User } from '@/lib/models/User';
 
 const INVALID_REFRESH_TOKEN_DEFAULT_VALUE = 'INVALID_REFRESH_TOKEN';
@@ -11,86 +11,101 @@ const INVALID_ACCESS_TOKEN_DEFAULT_VALUE = 'INVALID_ACCESS_TOKEN';
 
 export function withAuthenticationRedirect<T>(
   props: withAuthenticationRedirectProps<T>
-): GetServerSideProps<T & { user: User | undefined; accessToken: string | undefined }> {
+): GetServerSideProps<T & { user: User | null; accessToken: string | undefined }> {
   return async (
     context: GetServerSidePropsContext
   ): Promise<
-    GetServerSidePropsResult<T & { user: User | undefined; accessToken: string | undefined }>
+    GetServerSidePropsResult<T & { user: User | null; accessToken: string | undefined }>
   > => {
     const refreshToken: string =
       context.req.cookies?.[WalterBackend.REFRESH_TOKEN_KEY] || INVALID_REFRESH_TOKEN_DEFAULT_VALUE;
     let accessToken: string =
       context.req.cookies?.[WalterBackend.ACCESS_TOKEN_KEY] || INVALID_ACCESS_TOKEN_DEFAULT_VALUE;
 
-    // attempt to get user from backend via tokens (if present)
-    let user: User | undefined = undefined;
-    let getUser: GetUserResponse;
+    let user: User | null = null;
 
     if (accessToken !== INVALID_ACCESS_TOKEN_DEFAULT_VALUE) {
-      getUser = await WalterBackend.getUser(accessToken);
-      console.log(getUser);
+      let getUser: AxiosResponse = await WalterBackend.getUser(accessToken);
 
-      if (getUser.isNotAuthorized() && refreshToken !== INVALID_REFRESH_TOKEN_DEFAULT_VALUE) {
-        const refresh: RefreshResponse = await WalterBackend.refresh(refreshToken);
+      // If access token is invalid/expired, try refreshing
+      if (getUser.status === 401 && refreshToken !== INVALID_REFRESH_TOKEN_DEFAULT_VALUE) {
+        const refresh: AxiosResponse = await WalterBackend.refresh(refreshToken);
 
-        if (refresh.isSuccess()) {
-          accessToken = refresh.getAccessToken();
+        if (refresh.status === 200 && refresh.headers['set-cookie']) {
+          const setCookies: string[] = Array.isArray(refresh.headers['set-cookie'])
+            ? refresh.headers['set-cookie']
+            : [refresh.headers['set-cookie']];
 
-          context.res.setHeader(
-            'Set-Cookie',
-            serialize(WalterBackend.ACCESS_TOKEN_KEY, accessToken, {
-              httpOnly: true,
-              path: '/',
-              sameSite: 'lax',
-              secure: process.env.NODE_ENV === 'production',
-              maxAge: 60 * 60, // match backend expiration
-            })
-          );
+          // Forward the Set-Cookie headers to the browser so cookies are updated
+          context.res.setHeader('Set-Cookie', setCookies);
 
-          getUser = await WalterBackend.getUser(accessToken);
+          // Extract the access token from the refreshed cookies for SSR use
+          for (const c of setCookies) {
+            const parsed: Record<string, string | undefined> = parse(c);
+            if (parsed[WalterBackend.ACCESS_TOKEN_KEY]) {
+              accessToken = parsed[WalterBackend.ACCESS_TOKEN_KEY] as string;
+              break;
+            }
+          }
 
-          if (getUser.isSuccess()) {
-            user = getUser.getUser();
+          // Retry fetching the user with new access token
+          if (accessToken && accessToken !== INVALID_ACCESS_TOKEN_DEFAULT_VALUE) {
+            getUser = await WalterBackend.getUser(accessToken);
+            if (getUser.status === 200) {
+              user = new GetUserResponse({
+                statusCode: getUser.status,
+                service: getUser.data['Service'],
+                domain: getUser.data['Domain'],
+                api: getUser.data['API'],
+                requestId: getUser.data['RequestId'],
+                status: getUser.data['Status'],
+                message: getUser.data['Message'],
+                responseTimeMillis: getUser.data['ResponseTimeMillis'],
+                data: getUser.data['Data'] || undefined,
+              }).getUser();
+            }
           }
         }
-      } else if (getUser.isSuccess()) {
-        user = getUser.getUser();
+      } else if (getUser.status === 200) {
+        user = new GetUserResponse({
+          statusCode: getUser.status,
+          service: getUser.data['Service'],
+          domain: getUser.data['Domain'],
+          api: getUser.data['API'],
+          requestId: getUser.data['RequestId'],
+          status: getUser.data['Status'],
+          message: getUser.data['Message'],
+          responseTimeMillis: getUser.data['ResponseTimeMillis'],
+          data: getUser.data['Data'] || undefined,
+        }).getUser();
       }
     }
 
-    // Get additional props from optional SSR function
+    // Run the optional SSR function provided by the page
     const originalProps: { props: T } = props.getServerSidePropsFunc
       ? ((await props.getServerSidePropsFunc(context)) as { props: T })
       : { props: {} as T };
 
-    // Redirect logic based on authentication
+    // Redirect logic
     if (!props.authenticatedPage && user) {
-      return {
-        redirect: {
-          destination: '/dashboard',
-          permanent: false,
-        },
-      };
-    } else if (props.authenticatedPage && !user) {
-      return {
-        redirect: {
-          destination: '/signin',
-          permanent: false,
-        },
-      };
-    } else {
-      return {
-        props: {
-          ...originalProps.props,
-          user: user || null,
-          accessToken, // always return the valid access token (original or refreshed)
-        },
-      } as GetServerSidePropsResult<T & { user: User; accessToken: string }>;
+      return { redirect: { destination: '/dashboard', permanent: false } };
     }
+    if (props.authenticatedPage && !user) {
+      return { redirect: { destination: '/signin', permanent: false } };
+    }
+
+    // Return props (include latest valid access token)
+    return {
+      props: {
+        ...originalProps.props,
+        user,
+        accessToken,
+      },
+    };
   };
 }
 
 export interface withAuthenticationRedirectProps<T> {
   authenticatedPage: boolean;
-  getServerSidePropsFunc?: GetServerSideProps<T & { user: User | undefined }>;
+  getServerSidePropsFunc?: GetServerSideProps<T & { user: User | null }>;
 }

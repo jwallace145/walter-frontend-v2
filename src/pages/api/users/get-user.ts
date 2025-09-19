@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 
-import { WalterBackend } from '@/lib/backend/Client';
+import { WalterBackend } from '@/lib/backend/client';
 
 export default async function handler(
   request: NextApiRequest,

@@ -1,4 +1,3 @@
-import axios, { AxiosResponse } from 'axios';
 import { GetServerSideProps } from 'next';
 import Link from 'next/link';
 import React from 'react';
@@ -6,6 +5,8 @@ import React from 'react';
 import ErrorNotification from '@/components/notifications/ErrorNotification';
 import SuccessNotification from '@/components/notifications/SuccessNotification';
 import { withAuthenticationRedirect } from '@/lib/auth/AuthenticationRedirect';
+import { WalterBackendProxy } from '@/lib/backend/proxy';
+import { CreateUserResponse } from '@/lib/backend/responses';
 import { isValidEmail } from '@/lib/utils/Utils';
 
 interface RegisterProps {
@@ -38,7 +39,7 @@ const Register: React.FC = (): React.ReactElement => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>): void => {
     event.preventDefault();
 
     const { email, password, confirmPassword } = formData;
@@ -50,7 +51,6 @@ const Register: React.FC = (): React.ReactElement => {
       return;
     }
 
-    // ensure the user password and confirm password match
     if (password !== confirmPassword) {
       setError('Passwords do not match');
       setMessage('Please ensure both passwords match and try again.');
@@ -59,25 +59,23 @@ const Register: React.FC = (): React.ReactElement => {
     }
 
     setLoading(true);
-    axios
-      .post('/api/users/create-user', formData)
-      .then((response: AxiosResponse): any => response.data)
-      .then((data: any): void => {
-        if (data['Status'].toLowerCase() === 'success') {
+    WalterBackendProxy.createUser()
+      .then((response: CreateUserResponse): void => {
+        if (response.isSuccess()) {
           window.location.href = '/signin';
-          setSuccess(data['Message']);
+          setSuccess(response.message);
           setMessage('Successfully created new account! Please wait to be redirected...');
           setShowSuccess(true);
         } else {
-          setError(data['Message']);
+          setError(response.message);
           setMessage('Failed to create new account! Please try again or contact support.');
           setShowError(true);
         }
       })
       .catch((error: any): void => {
-        setError(error.response.data.message);
-        setMessage('Unexpected error occurred! Please try again or contact support.');
         setShowError(true);
+        setError(error.response?.data.message);
+        setMessage('Unexpected error occurred! Please try again or contact support.');
       })
       .finally((): void => setLoading(false));
   };

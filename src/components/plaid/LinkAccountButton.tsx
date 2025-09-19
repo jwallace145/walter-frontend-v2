@@ -1,8 +1,9 @@
-import axios from 'axios';
 import React, { useState } from 'react';
 
 import ErrorNotification from '@/components/notifications/ErrorNotification';
 import SuccessNotification from '@/components/notifications/SuccessNotification';
+import { WalterBackendProxy } from '@/lib/backend/proxy';
+import { CreateLinkTokenResponse } from '@/lib/backend/responses';
 
 import PlaidLinkWrapper from './PlaidLinkWrapper';
 
@@ -17,10 +18,17 @@ const LinkAccountButton: React.FC = (): React.ReactElement => {
     setIsLoading(true);
 
     try {
-      const response = await axios.post('/api/plaid/create-link-token');
-      setSuccess(true);
-      setMessage('Plaid connection successful! You can now link your bank account with Plaid.');
-      setLinkToken(response.data.Data.link_token);
+      const response: CreateLinkTokenResponse = await WalterBackendProxy.createLinkToken();
+      if (response.isSuccess()) {
+        setSuccess(true);
+        setLinkToken(response.getLinkToken());
+        setMessage('Plaid connection successful! You can now link your bank account with Plaid.');
+      } else {
+        setError(true);
+        setMessage(
+          'There was an error linking your bank account with Plaid. Please try again or contact support if the issue persists.'
+        );
+      }
     } catch (error) {
       setError(true);
       setMessage(

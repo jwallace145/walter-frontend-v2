@@ -1,9 +1,10 @@
-import axios, { AxiosResponse } from 'axios';
 import React, { useEffect } from 'react';
 import { PlaidAccount, PlaidLinkOnSuccessMetadata, usePlaidLink } from 'react-plaid-link';
 
 import ErrorNotification from '@/components/notifications/ErrorNotification';
 import SuccessNotification from '@/components/notifications/SuccessNotification';
+import { WalterBackendProxy } from '@/lib/backend/proxy';
+import { ExchangePublicTokenResponse } from '@/lib/backend/responses';
 
 const PlaidLinkWrapper: React.FC<{
   linkToken: string;
@@ -51,21 +52,19 @@ const PlaidLinkWrapper: React.FC<{
     };
     console.log(accounts);
     console.log(publicToken);
-    axios({
-      method: 'POST',
-      url: '/api/plaid/exchange-public-token',
-      data: {
-        public_token: publicToken,
-        institution_id: institutionId,
-        institution_name: institutionName,
-        accounts: accounts,
-      },
-    })
-      .then((response: AxiosResponse): void => {
-        setSuccess(true);
-        setMessage(
-          'Your account(s) are now linked with Plaid and all transactions are being synced. You can now view your account details in the Cash page.'
-        );
+    WalterBackendProxy.exchangePublicToken(publicToken, institutionId, institutionName, accounts)
+      .then((response: ExchangePublicTokenResponse): void => {
+        if (response.isSuccess()) {
+          setSuccess(true);
+          setMessage(
+            'Your account(s) are now linked with Plaid and all transactions are being synced. You can now view your account details in the Cash page.'
+          );
+        } else {
+          setError(true);
+          setMessage(
+            'Unable to link account(s) with Plaid. Please try again or contact support if the issue persists.'
+          );
+        }
       })
       .catch((): void => {
         setError(true);

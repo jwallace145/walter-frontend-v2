@@ -1,4 +1,3 @@
-import axios, { AxiosResponse } from 'axios';
 import { GetServerSideProps } from 'next';
 import Link from 'next/link';
 import React, { useState } from 'react';
@@ -6,8 +5,8 @@ import React, { useState } from 'react';
 import ErrorNotification from '@/components/notifications/ErrorNotification';
 import SuccessNotification from '@/components/notifications/SuccessNotification';
 import { withAuthenticationRedirect } from '@/lib/auth/AuthenticationRedirect';
-import { WalterBackend } from '@/lib/backend/Client';
-import { LoginResponse } from '@/lib/backend/Login';
+import { WalterBackendProxy } from '@/lib/backend/proxy';
+import { LoginResponse } from '@/lib/backend/responses';
 
 const SignIn: React.FC = (): React.ReactElement => {
   const [loading, setLoading] = useState(false);
@@ -25,47 +24,23 @@ const SignIn: React.FC = (): React.ReactElement => {
     // call Login API with user email, password combination and attempt to generate
     // auth tokens
     setLoading(true);
-    axios
-      .post('/api/auth/login', { email: email, password: password })
-      .then((axios: AxiosResponse): LoginResponse => {
-        return LoginResponse.create(
-          axios.status,
-          axios.data.service,
-          axios.data.domain,
-          axios.data.api,
-          axios.data.status,
-          axios.data.message,
-          axios.data.responseTimeMillis,
-          axios.data.data
-        );
-      })
+    WalterBackendProxy.login(email, password)
       .then((response: LoginResponse): void => {
-        // set display message variables
-        setShowSuccess(true);
-        setSuccess(response.message);
-        setMessage('User successfully signed in! Redirecting to dashboard...');
-
-        // set returned tokens as cookies to be used for authenticated requests
-        WalterBackend.setRefreshToken(response.getRefreshToken());
-        WalterBackend.setAccessToken(response.getAccessToken());
-
-        // redirect user to their dashboard after successful login
-        window.location.href = '/dashboard';
         if (response.isSuccess()) {
-        } else if (response.isFailure()) {
-          // set display message variables
+          setShowSuccess(true);
+          setSuccess(response.message);
+          setMessage('User successfully signed in! Redirecting to dashboard...');
+          window.location.href = '/dashboard';
         } else {
-          // set display message variables
+          setShowError(true);
+          setError(response.message);
+          setMessage('Unable to sign in. Please try again or contact support.');
         }
       })
       .catch((error: Error): void => {
+        setShowError(true);
+        setError(error.message);
         setMessage('Unable to sign in. Please try again or contact support.');
-        if (axios.isAxiosError(error)) {
-          setShowError(true);
-          setError(error.response?.data.message);
-        } else {
-          setError(error.message);
-        }
       })
       .finally((): void => setLoading(false));
   };

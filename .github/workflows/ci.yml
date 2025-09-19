@@ -20,27 +20,30 @@ jobs:
         with:
           fetch-depth: 0 # Fetch full history so tags and all commits are available
 
-      # 2. Setup Node.js and pnpm
+      # 2. Setup Node.js
       - name: Set up Node.js and pnpm
         uses: actions/setup-node@v3
         with:
           node-version: '20'
-          cache: 'pnpm'
 
-      # 3. Install dependencies
+      # 3. Setup pnpm
+      - name: Install pnpm
+        run: npm install -g pnpm
+
+      # 4. Install dependencies
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      # 4. Run lint and format checks
+      # 5. Run lint and format checks
       - name: Lint & Prettier checks
         run: |
           pnpm exec eslint src --ext .js,.jsx,.ts,.tsx --max-warnings=0
           pnpm exec prettier --check .
 
-      # 5. TypeScript type-check
+      # 6. TypeScript type-check
       - name: Type-check
         run: pnpm exec tsc --noEmit
 
-      # 6. Production build
+      # 7. Production build
       - name: Build project
         run: pnpm run build

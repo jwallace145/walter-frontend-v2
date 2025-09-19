@@ -7,7 +7,6 @@ import {
   DialogPanel,
   DialogTitle,
 } from '@headlessui/react';
-import axios from 'axios';
 import React, { useState } from 'react';
 
 import ErrorNotification from '@/components/notifications/ErrorNotification';
@@ -40,20 +39,17 @@ const SignOutModal: React.FC<SignOutModalProps> = ({ open, setOpen }): React.Rea
           setMessage('User successfully signed out! Redirecting to sign in...');
           window.location.href = '/';
         } else {
+          console.error(response);
           setShowError(true);
           setError(response.message);
           setMessage('Error signing out user. Please try again later or contact support.');
         }
       })
       .catch((error: any): void => {
+        console.error(error);
+        setShowError(true);
         setMessage('Error signing out user. Please try again later or contact support.');
-        if (axios.isAxiosError(error)) {
-          setShowError(true);
-          setError(error.response?.data.message);
-        } else {
-          setShowError(true);
-          setError(error.message);
-        }
+        setError(error.message);
       })
       .finally((): void => setLoading(false));
   };
@@ -80,9 +76,10 @@ const SignOutModal: React.FC<SignOutModalProps> = ({ open, setOpen }): React.Rea
                   {/* Sign Out Button */}
                   <button
                     type="submit"
-                    className={`inline-flex w-full justify-center rounded-md px-4 py-2 text-sm font-semibold shadow-sm bg-red-600 text-white hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600`}
+                    disabled={loading}
+                    className={`inline-flex w-full justify-center rounded-md px-4 py-2 text-sm font-semibold shadow-sm bg-red-600 text-white hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
                   >
-                    Sign Out
+                    {loading ? 'Signing Out...' : 'Sign Out'}
                   </button>
                 </div>
 
@@ -91,7 +88,8 @@ const SignOutModal: React.FC<SignOutModalProps> = ({ open, setOpen }): React.Rea
                   <button
                     type="button"
                     onClick={(): void => setOpen(false)}
-                    className="inline-flex w-full justify-center rounded-md bg-gray-200 px-4 py-2 text-sm font-semibold text-gray-800 shadow-sm hover:bg-gray-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-400 aria-label=Cancel sign-out action"
+                    disabled={loading}
+                    className={`inline-flex w-full justify-center rounded-md bg-gray-200 px-4 py-2 text-sm font-semibold text-gray-800 shadow-sm hover:bg-gray-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-400 aria-label=Cancel sign-out action ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
                   >
                     Cancel
                   </button>

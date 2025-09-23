@@ -17,7 +17,7 @@ format:
 
 # Run ESLint with auto-fix (matches pre-commit behavior)
 lint:
-	npx eslint src --ext .js,.jsx,.ts,.tsx --fix --max-warnings=140
+	npx eslint src --ext .js,.jsx,.ts,.tsx --fix --max-warnings=93
 
 # Run ESLint without auto-fix (good for CI/checking)
 lint-check:

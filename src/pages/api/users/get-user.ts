@@ -1,14 +1,13 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 
 import { WalterBackend } from '@/lib/backend/client';
-import { WalterBackendProxy } from '@/lib/proxy/client';
 
 export default async function handler(
   request: NextApiRequest,
   response: NextApiResponse
 ): Promise<void> {
   try {
-    const token: string = request.cookies[WalterBackendProxy.ACCESS_TOKEN_KEY] || '';
+    const token: string = request.cookies[WalterBackend.ACCESS_TOKEN_KEY] || '';
     response.status(200).json(await WalterBackend.getUser(token));
   } catch (error) {
     const status = (error as any).response?.status || 500;

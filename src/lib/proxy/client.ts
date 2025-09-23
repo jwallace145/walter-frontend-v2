@@ -18,9 +18,6 @@ import {
 export class WalterBackendProxy {
   static readonly PROXY_URL: string = '/api';
 
-  static readonly REFRESH_TOKEN_KEY: string = 'WALTER_BACKEND_REFRESH_TOKEN';
-  static readonly ACCESS_TOKEN_KEY: string = 'WALTER_BACKEND_ACCESS_TOKEN';
-
   public static async login(email: string, password: string): Promise<LoginResponse> {
     return this.callProxy(PROXY_ENDPOINTS['LOGIN'].method, PROXY_ENDPOINTS['LOGIN'].path, {
       email,
@@ -80,7 +77,7 @@ export class WalterBackendProxy {
   ): Promise<ExchangePublicTokenResponse> {
     return this.callProxy(
       PROXY_ENDPOINTS['EXCHANGE_PUBLIC_TOKEN'].method,
-      PROXY_ENDPOINTS['CREATE_LINK_TOKEN_RESPONSE'].path,
+      PROXY_ENDPOINTS['EXCHANGE_PUBLIC_TOKEN'].path,
       {
         publicToken: publicToken,
         institutionId: institutionId,
@@ -96,11 +93,6 @@ export class WalterBackendProxy {
         (args: ResponseArguments<ExchangePublicTokenData>): ExchangePublicTokenResponse =>
           new ExchangePublicTokenResponse(args)
       );
-  }
-
-  public static isValidMethod(method: string | undefined, validMethods: string[]): boolean {
-    if (!method) return false;
-    return validMethods.includes(method);
   }
 
   private static async callProxy(method: string, path: string, data?: any): Promise<AxiosResponse> {

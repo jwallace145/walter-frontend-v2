@@ -1,13 +1,18 @@
+import { NextApiRequest } from 'next';
 import axios, { AxiosResponse } from 'axios';
 
 import { API_ENDPOINTS } from '@/lib/backend/endpoints';
+import { HttpStatus } from '@/lib/proxy/statuses';
 
 /****************************
  * WalterBackend API Client *
  ****************************/
 
 export class WalterBackend {
-  static readonly API_URL: string = process.env.NEXT_PUBLIC_WALTER_API_ENDPOINT as string;
+  static readonly API_URL: string = process.env.WALTER_BACKEND_API_URL as string;
+
+  static readonly REFRESH_TOKEN_KEY: string = 'WALTER_BACKEND_REFRESH_TOKEN';
+  static readonly ACCESS_TOKEN_KEY: string = 'WALTER_BACKEND_ACCESS_TOKEN';
 
   public static async login(email: string, password: string): Promise<AxiosResponse> {
     return this.callBackend(API_ENDPOINTS['LOGIN'].method, API_ENDPOINTS['LOGIN'].path, undefined, {
@@ -83,6 +88,40 @@ export class WalterBackend {
         accounts: accounts,
       }
     );
+  }
+
+  public static async refreshCookies(refreshToken: string): Promise<string[]> {
+    const refreshResponse: AxiosResponse = await WalterBackend.refresh(refreshToken);
+
+    if (refreshResponse.status === HttpStatus.OK) {
+      const cookies: string[] | undefined = refreshResponse.headers['set-cookie'];
+
+      if (cookies) {
+        return cookies;
+      }
+    }
+
+    throw new Error('Failed to refresh access token. Refresh response was not OK.');
+  }
+
+  public static getAccessTokenFromCookies(cookies: string[]): string {
+    const cookie: string | undefined = cookies.find((cookie) =>
+      cookie.startsWith(this.ACCESS_TOKEN_KEY)
+    );
+    if (!cookie)
+      throw new Error('Failed to get access token from cookie. No access token cookie found.');
+    const accessToken: string | undefined = cookie.split(';')[0].split('=')[1];
+    if (!accessToken)
+      throw new Error('Failed to get access token from cookie. Access token cookie was invalid.');
+    return accessToken;
+  }
+
+  public static getAccessToken(request: NextApiRequest): string | undefined {
+    return request.cookies[this.ACCESS_TOKEN_KEY];
+  }
+
+  public static getRefreshToken(request: NextApiRequest): string | undefined {
+    return request.cookies[this.REFRESH_TOKEN_KEY];
   }
 
   private static async callBackend(

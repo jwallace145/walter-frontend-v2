@@ -50,8 +50,6 @@ const PlaidLinkWrapper: React.FC<{
       institution_name: institutionName,
       accounts: accounts,
     };
-    console.log(accounts);
-    console.log(publicToken);
     WalterBackendProxy.exchangePublicToken(publicToken, institutionId, institutionName, accounts)
       .then((response: ExchangePublicTokenResponse): void => {
         if (response.isSuccess()) {

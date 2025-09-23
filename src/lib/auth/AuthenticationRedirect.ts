@@ -4,7 +4,6 @@ import { parse } from 'cookie';
 
 import { WalterBackend } from '@/lib/backend/client';
 import { User } from '@/lib/models/User';
-import { WalterBackendProxy } from '@/lib/proxy/client';
 import { GetUserResponse } from '@/lib/proxy/responses';
 
 const INVALID_REFRESH_TOKEN_DEFAULT_VALUE = 'INVALID_REFRESH_TOKEN';
@@ -19,11 +18,9 @@ export function withAuthenticationRedirect<T>(
     GetServerSidePropsResult<T & { user: User | null; accessToken: string | undefined }>
   > => {
     const refreshToken: string =
-      context.req.cookies?.[WalterBackendProxy.REFRESH_TOKEN_KEY] ||
-      INVALID_REFRESH_TOKEN_DEFAULT_VALUE;
+      context.req.cookies?.[WalterBackend.REFRESH_TOKEN_KEY] || INVALID_REFRESH_TOKEN_DEFAULT_VALUE;
     let accessToken: string =
-      context.req.cookies?.[WalterBackendProxy.ACCESS_TOKEN_KEY] ||
-      INVALID_ACCESS_TOKEN_DEFAULT_VALUE;
+      context.req.cookies?.[WalterBackend.ACCESS_TOKEN_KEY] || INVALID_ACCESS_TOKEN_DEFAULT_VALUE;
 
     let user: User | null = null;
 
@@ -45,8 +42,8 @@ export function withAuthenticationRedirect<T>(
           // Extract the access token from the refreshed cookies for SSR use
           for (const c of setCookies) {
             const parsed: Record<string, string | undefined> = parse(c);
-            if (parsed[WalterBackendProxy.ACCESS_TOKEN_KEY]) {
-              accessToken = parsed[WalterBackendProxy.ACCESS_TOKEN_KEY] as string;
+            if (parsed[WalterBackend.ACCESS_TOKEN_KEY]) {
+              accessToken = parsed[WalterBackend.ACCESS_TOKEN_KEY] as string;
               break;
             }
           }

@@ -97,8 +97,10 @@ export class CreateLinkTokenResponse extends WalterBackendAPIResponse<CreateLink
 }
 
 export interface ExchangePublicTokenData {
+  institution_id: string;
   institution_name: string;
   num_accounts: number;
+  sync_transactions_task_ids: string;
 }
 
 export class ExchangePublicTokenResponse extends WalterBackendAPIResponse<ExchangePublicTokenData> {

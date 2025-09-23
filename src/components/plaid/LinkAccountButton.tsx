@@ -30,6 +30,7 @@ const LinkAccountButton: React.FC = (): React.ReactElement => {
         );
       }
     } catch (error) {
+      console.error('Unexpected error occurred while linking accounts with Plaid:', error);
       setError(true);
       setMessage(
         'There was an error linking your bank account with Plaid. Please try again or contact support if the issue persists.'

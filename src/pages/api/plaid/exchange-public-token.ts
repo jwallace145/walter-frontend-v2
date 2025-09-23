@@ -47,6 +47,7 @@ export default async function handler(
 
     return response.status(backendResponse.status).json(backendResponse.data);
   } catch (err) {
+    console.error('Unexpected error occurred handling ExchangePublicToken API proxy request:', err);
     return response.status(500).json({ error: 'Internal Server Error' });
   }
 }

@@ -4,7 +4,6 @@ import { AxiosResponse } from 'axios';
 import { WalterBackend } from '@/lib/backend/client';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse): Promise<void> {
-  const method: string | undefined = req.method;
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }

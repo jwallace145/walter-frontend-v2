@@ -106,6 +106,22 @@ export class WalterBackend {
     );
   }
 
+  public static syncTransactions(
+    token: string,
+    userId: string,
+    accountId: string
+  ): Promise<AxiosResponse> {
+    return this.callBackend(
+      API_ENDPOINTS['SYNC_TRANSACTIONS'].method,
+      API_ENDPOINTS['SYNC_TRANSACTIONS'].path,
+      token,
+      {
+        user_id: userId,
+        account_id: accountId,
+      }
+    );
+  }
+
   public static async refreshCookies(refreshToken: string): Promise<string[]> {
     const refreshResponse: AxiosResponse = await WalterBackend.refresh(refreshToken);
 

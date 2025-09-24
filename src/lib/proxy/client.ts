@@ -16,6 +16,8 @@ import {
   LoginResponse,
   LogoutData,
   LogoutResponse,
+  SyncTransactionsData,
+  SyncTransactionsResponse,
 } from '@/lib/proxy/responses';
 
 export class WalterBackendProxy {
@@ -119,6 +121,28 @@ export class WalterBackendProxy {
       .then(
         (args: ResponseArguments<ExchangePublicTokenData>): ExchangePublicTokenResponse =>
           new ExchangePublicTokenResponse(args)
+      );
+  }
+
+  public static async syncTransactions(
+    userId: string,
+    accountId: string
+  ): Promise<SyncTransactionsResponse> {
+    return this.callProxy(
+      PROXY_ENDPOINTS['SYNC_TRANSACTIONS'].method,
+      PROXY_ENDPOINTS['SYNC_TRANSACTIONS'].path,
+      {
+        userId: userId,
+        accountId: accountId,
+      }
+    )
+      .then(
+        (response: AxiosResponse): ResponseArguments<SyncTransactionsData> =>
+          this.getResponseArgs(response)
+      )
+      .then(
+        (args: ResponseArguments<SyncTransactionsData>): SyncTransactionsResponse =>
+          new SyncTransactionsResponse(args)
       );
   }
 

@@ -5,10 +5,8 @@ import {
   BanknotesIcon,
   BuildingLibraryIcon,
   ChartBarIcon,
-  ChartPieIcon,
   Cog6ToothIcon,
   CreditCardIcon,
-  PresentationChartLineIcon,
   XMarkIcon,
 } from '@heroicons/react/24/outline';
 
@@ -53,20 +51,6 @@ const Sidebar: React.FC<{
         current: false,
       },
       { name: 'Credit', href: 'credit', icon: CreditCardIcon, numNotifications: 0, current: false },
-      {
-        name: 'Investments',
-        href: 'investments',
-        icon: ChartPieIcon,
-        numNotifications: 0,
-        current: false,
-      },
-      {
-        name: 'Retirement',
-        href: 'retirement',
-        icon: PresentationChartLineIcon,
-        numNotifications: 0,
-        current: false,
-      },
     ].map((item: Page): Page => {
       return {
         ...item,

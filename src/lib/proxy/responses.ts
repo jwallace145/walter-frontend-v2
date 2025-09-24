@@ -173,3 +173,23 @@ export class ExchangePublicTokenResponse extends WalterBackendAPIResponse<Exchan
     super(args);
   }
 }
+
+export interface SyncTransactionsData {
+  user_id: string;
+  task_id: string;
+  institution_name: string;
+  accounts: { account_id: string; account_name: string }[];
+}
+
+export class SyncTransactionsResponse extends WalterBackendAPIResponse<SyncTransactionsData> {
+  public constructor(args: ResponseArguments<SyncTransactionsData>) {
+    super(args);
+  }
+
+  public getTaskId() {
+    if (!this.data?.task_id) {
+      throw new Error('Task ID is not provided.');
+    }
+    return this.data.task_id;
+  }
+}

@@ -72,7 +72,7 @@ const Settings: React.FC<{ user: User }> = ({ user }): React.ReactElement => {
 
           <h1 className="sr-only">Account Settings</h1>
           <div className="divide-y divide-white/5">
-            {currentPage === 'Accounts' && <SettingsLinkAccounts />}
+            {currentPage === 'Accounts' && <SettingsLinkAccounts user={user} />}
             {currentPage === 'Personal Information' && (
               <SettingsPersonalInformationForm user={user} />
             )}

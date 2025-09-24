@@ -18,4 +18,8 @@ export const API_ENDPOINTS: { [key: string]: { method: string; path: string } } 
     method: 'POST',
     path: '/plaid/exchange-public-token',
   },
+  SYNC_TRANSACTIONS: {
+    method: 'POST',
+    path: '/plaid/sync-transactions',
+  },
 };

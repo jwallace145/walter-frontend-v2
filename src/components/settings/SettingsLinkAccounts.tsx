@@ -1,12 +1,13 @@
 import React, { useEffect } from 'react';
 
-import AccountsList from '@/components/accounts/AccountsList';
+import PlaidAccountsList from '@/components/accounts/PlaidAccountsList';
 import LinkAccountButton from '@/components/plaid/LinkAccountButton';
 import { Account } from '@/lib/models/account';
+import { User } from '@/lib/models/User';
 import { WalterBackendProxy } from '@/lib/proxy/client';
-import { GetAccountsResponse } from '@/lib/proxy/responses';
+import { GetAccountsResponse, SyncTransactionsResponse } from '@/lib/proxy/responses';
 
-const SettingsLinkAccounts: React.FC = (): React.ReactElement => {
+const SettingsLinkAccounts: React.FC<{ user: User }> = ({ user }): React.ReactElement => {
   const [loading, setLoading] = React.useState(false);
   const [accounts, setAccounts] = React.useState<Account[]>([]);
 
@@ -26,6 +27,22 @@ const SettingsLinkAccounts: React.FC = (): React.ReactElement => {
       })
       .catch((error: any): void => {
         console.error('There was an error fetching linked accounts:', error);
+      })
+      .finally((): void => setLoading(false));
+  };
+
+  const syncTransactions = (account: Account): void => {
+    WalterBackendProxy.syncTransactions(user.user_id, account.account_id)
+      .then((response: SyncTransactionsResponse): void => {
+        if (response.isSuccess()) {
+          console.log('Successfully synced transactions for account: ', account.account_id);
+          console.log('Submitted sync transactions request: ', response.getTaskId());
+        } else {
+          console.error('SyncTransactions API call failed: ', response.message);
+        }
+      })
+      .catch((error: any): void => {
+        console.error('Unexpected error occurred while syncing transactions: ', error);
       })
       .finally((): void => setLoading(false));
   };
@@ -113,7 +130,7 @@ const SettingsLinkAccounts: React.FC = (): React.ReactElement => {
         ) : accounts.length === 0 ? (
           renderEmptyState()
         ) : (
-          <AccountsList accounts={accounts} />
+          <PlaidAccountsList accounts={accounts} onSyncTransactions={syncTransactions} />
         )}
       </div>
     </div>

@@ -9,7 +9,7 @@ import { HttpStatus } from '@/lib/proxy/statuses';
  ****************************/
 
 export class WalterBackend {
-  static readonly API_URL: string = process.env.WALTER_BACKEND_API_URL as string;
+  static readonly API_URL: string = process.env.NEXT_PUBLIC_WALTER_BACKEND_API_URL as string;
 
   static readonly REFRESH_TOKEN_KEY: string = 'WALTER_BACKEND_REFRESH_TOKEN';
   static readonly ACCESS_TOKEN_KEY: string = 'WALTER_BACKEND_ACCESS_TOKEN';

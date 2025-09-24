@@ -13,7 +13,7 @@ import { User } from '@/lib/models/User';
 
 const Settings: React.FC<{ user: User }> = ({ user }): React.ReactElement => {
   const [openChangeAvatarModal, setOpenChangeAvatarModal] = useState(false);
-  const [currentPage, setCurrentPage] = useState('account');
+  const [currentPage, setCurrentPage] = useState('Accounts');
 
   const getUserAvatar: () => React.ReactElement = (): React.ReactElement => {
     if (!user.profile_picture_url)
@@ -35,9 +35,8 @@ const Settings: React.FC<{ user: User }> = ({ user }): React.ReactElement => {
     current: boolean;
   }[] => {
     return [
-      { name: 'Account', href: '#', current: currentPage.toLowerCase() === 'account' },
-      { name: 'Subscription', href: '#', current: currentPage.toLowerCase() === 'subscription' },
-      { name: 'Billing', href: '#', current: currentPage.toLowerCase() === 'billing' },
+      { name: 'Personal Information', href: '#', current: currentPage === 'Personal Information' },
+      { name: 'Accounts', href: '#', current: currentPage === 'Accounts' },
     ];
   };
 
@@ -56,8 +55,12 @@ const Settings: React.FC<{ user: User }> = ({ user }): React.ReactElement => {
                   <li key={item.name}>
                     <a
                       href={item.href}
-                      onClick={(): void => setCurrentPage(item.name)}
+                      onClick={(e): void => {
+                        e.preventDefault();
+                        setCurrentPage(item.name);
+                      }}
                       className={item.current ? 'text-gray-900' : ''}
+                      aria-current={item.current ? 'page' : undefined}
                     >
                       {item.name}
                     </a>
@@ -69,8 +72,10 @@ const Settings: React.FC<{ user: User }> = ({ user }): React.ReactElement => {
 
           <h1 className="sr-only">Account Settings</h1>
           <div className="divide-y divide-white/5">
-            <SettingsLinkAccounts />
-            <SettingsPersonalInformationForm user={user} />
+            {currentPage === 'Accounts' && <SettingsLinkAccounts user={user} />}
+            {currentPage === 'Personal Information' && (
+              <SettingsPersonalInformationForm user={user} />
+            )}
           </div>
         </main>
       </>

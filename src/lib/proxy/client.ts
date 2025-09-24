@@ -9,10 +9,15 @@ import {
   CreateUserResponse,
   ExchangePublicTokenData,
   ExchangePublicTokenResponse,
+  GetAccountsResponse,
+  GetTransactionsData,
+  GetTransactionsResponse,
   LoginData,
   LoginResponse,
   LogoutData,
   LogoutResponse,
+  SyncTransactionsData,
+  SyncTransactionsResponse,
 } from '@/lib/proxy/responses';
 
 export class WalterBackendProxy {
@@ -54,6 +59,30 @@ export class WalterBackendProxy {
       );
   }
 
+  public static async getAccounts(): Promise<GetAccountsResponse> {
+    return this.callProxy(
+      PROXY_ENDPOINTS['GET_ACCOUNTS'].method,
+      PROXY_ENDPOINTS['GET_ACCOUNTS'].path
+    )
+      .then((response: AxiosResponse): ResponseArguments<any> => this.getResponseArgs(response))
+      .then((args: ResponseArguments<any>): GetAccountsResponse => new GetAccountsResponse(args));
+  }
+
+  public static async getTransactions(): Promise<GetTransactionsResponse> {
+    return this.callProxy(
+      PROXY_ENDPOINTS['GET_TRANSACTIONS'].method,
+      PROXY_ENDPOINTS['GET_TRANSACTIONS'].path
+    )
+      .then(
+        (response: AxiosResponse): ResponseArguments<GetTransactionsData> =>
+          this.getResponseArgs<GetTransactionsData>(response)
+      )
+      .then(
+        (args: ResponseArguments<GetTransactionsData>): GetTransactionsResponse =>
+          new GetTransactionsResponse(args)
+      );
+  }
+
   public static async createLinkToken(): Promise<CreateLinkTokenResponse> {
     return this.callProxy(
       PROXY_ENDPOINTS['CREATE_LINK_TOKEN'].method,
@@ -92,6 +121,28 @@ export class WalterBackendProxy {
       .then(
         (args: ResponseArguments<ExchangePublicTokenData>): ExchangePublicTokenResponse =>
           new ExchangePublicTokenResponse(args)
+      );
+  }
+
+  public static async syncTransactions(
+    userId: string,
+    accountId: string
+  ): Promise<SyncTransactionsResponse> {
+    return this.callProxy(
+      PROXY_ENDPOINTS['SYNC_TRANSACTIONS'].method,
+      PROXY_ENDPOINTS['SYNC_TRANSACTIONS'].path,
+      {
+        userId: userId,
+        accountId: accountId,
+      }
+    )
+      .then(
+        (response: AxiosResponse): ResponseArguments<SyncTransactionsData> =>
+          this.getResponseArgs(response)
+      )
+      .then(
+        (args: ResponseArguments<SyncTransactionsData>): SyncTransactionsResponse =>
+          new SyncTransactionsResponse(args)
       );
   }
 

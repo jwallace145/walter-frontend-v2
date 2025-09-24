@@ -1,3 +1,5 @@
+import { Account } from '@/lib/models/account';
+import { Transaction } from '@/lib/models/transaction';
 import { User } from '@/lib/models/User';
 import WalterBackendAPIResponse, { ResponseArguments } from '@/lib/proxy/response';
 
@@ -76,6 +78,69 @@ export class CreateUserResponse extends WalterBackendAPIResponse<CreateUserData>
   }
 }
 
+export interface GetAccountsData {
+  user_id: string;
+  total_num_accounts: number;
+  total_balance: number;
+  accounts: Account[];
+}
+
+export class GetAccountsResponse extends WalterBackendAPIResponse<GetAccountsData> {
+  public constructor(args: ResponseArguments<GetAccountsData>) {
+    super(args);
+  }
+
+  public getPlaidAccounts(): Account[] {
+    if (!this.data?.accounts) {
+      throw new Error('Accounts are not provided.');
+    }
+    return this.data.accounts.filter((account: Account): boolean => account.linked_with_plaid);
+  }
+}
+
+export interface GetTransactionsData {
+  user_id: string;
+  num_transactions: number;
+  total_income: number;
+  total_expense: number;
+  cash_flow: number;
+  transactions: Transaction[];
+}
+
+export class GetTransactionsResponse extends WalterBackendAPIResponse<GetTransactionsData> {
+  public constructor(args: ResponseArguments<GetTransactionsData>) {
+    super(args);
+  }
+
+  public getTotalIncome(): number {
+    if (!this.data?.total_income) {
+      throw new Error('Total income is not provided.');
+    }
+    return this.data.total_income;
+  }
+
+  public getTotalExpenses(): number {
+    if (!this.data?.total_expense) {
+      throw new Error('Total expense is not provided.');
+    }
+    return this.data.total_expense;
+  }
+
+  public getCashFlow(): number {
+    if (!this.data?.cash_flow) {
+      throw new Error('Cash flow is not provided.');
+    }
+    return this.data.cash_flow;
+  }
+
+  public getTransactions(): Transaction[] {
+    if (!this.data?.transactions) {
+      throw new Error('Transactions are not provided.');
+    }
+    return this.data.transactions;
+  }
+}
+
 export interface CreateLinkTokenData {
   request_id: string;
   user_id: string;
@@ -106,5 +171,25 @@ export interface ExchangePublicTokenData {
 export class ExchangePublicTokenResponse extends WalterBackendAPIResponse<ExchangePublicTokenData> {
   public constructor(args: ResponseArguments<ExchangePublicTokenData>) {
     super(args);
+  }
+}
+
+export interface SyncTransactionsData {
+  user_id: string;
+  task_id: string;
+  institution_name: string;
+  accounts: { account_id: string; account_name: string }[];
+}
+
+export class SyncTransactionsResponse extends WalterBackendAPIResponse<SyncTransactionsData> {
+  public constructor(args: ResponseArguments<SyncTransactionsData>) {
+    super(args);
+  }
+
+  public getTaskId() {
+    if (!this.data?.task_id) {
+      throw new Error('Task ID is not provided.');
+    }
+    return this.data.task_id;
   }
 }

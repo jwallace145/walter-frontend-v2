@@ -9,7 +9,7 @@ import { HttpStatus } from '@/lib/proxy/statuses';
  ****************************/
 
 export class WalterBackend {
-  static readonly API_URL: string = process.env.WALTER_BACKEND_API_URL as string;
+  static readonly API_URL: string = process.env.NEXT_PUBLIC_WALTER_BACKEND_API_URL as string;
 
   static readonly REFRESH_TOKEN_KEY: string = 'WALTER_BACKEND_REFRESH_TOKEN';
   static readonly ACCESS_TOKEN_KEY: string = 'WALTER_BACKEND_ACCESS_TOKEN';
@@ -56,6 +56,22 @@ export class WalterBackend {
     );
   }
 
+  public static async getAccounts(token: string): Promise<AxiosResponse> {
+    return this.callBackend(
+      API_ENDPOINTS['GET_ACCOUNTS'].method,
+      API_ENDPOINTS['GET_ACCOUNTS'].path,
+      token
+    );
+  }
+
+  public static async getTransactions(token: string): Promise<AxiosResponse> {
+    return this.callBackend(
+      API_ENDPOINTS['GET_TRANSACTIONS'].method,
+      API_ENDPOINTS['GET_TRANSACTIONS'].path,
+      token
+    );
+  }
+
   public static async createLinkToken(token: string): Promise<AxiosResponse> {
     return this.callBackend(
       API_ENDPOINTS['CREATE_LINK_TOKEN'].method,
@@ -86,6 +102,22 @@ export class WalterBackend {
         institution_id: institutionId,
         institution_name: institutionName,
         accounts: accounts,
+      }
+    );
+  }
+
+  public static syncTransactions(
+    token: string,
+    userId: string,
+    accountId: string
+  ): Promise<AxiosResponse> {
+    return this.callBackend(
+      API_ENDPOINTS['SYNC_TRANSACTIONS'].method,
+      API_ENDPOINTS['SYNC_TRANSACTIONS'].path,
+      token,
+      {
+        user_id: userId,
+        account_id: accountId,
       }
     );
   }

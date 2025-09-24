@@ -1,5 +1,6 @@
 import React from 'react';
 
+import TransactionCategoryBadge from '@/components/transactions/TransactionCategoryBadge';
 import { Transaction } from '@/lib/models/transaction';
 
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
@@ -29,13 +30,13 @@ const formatDate = (dateStr: string): string => {
 const AmountBadge: React.FC<{ amount: number }> = ({ amount }) => {
   const isNegative = amount < 0;
   const color = isNegative ? 'text-red-600' : 'text-emerald-700';
-  return <span className={`text-sm/6 font-semibold ${color}`}>{formatCurrency(amount)}</span>;
+  return <span className={`text-sm font-semibold ${color}`}>{formatCurrency(amount)}</span>;
 };
 
 const TransactionsList: React.FC<{ transactions: Transaction[] }> = ({ transactions }) => {
   if (!transactions || transactions.length === 0) {
     return (
-      <div className="rounded-lg border border-dashed border-gray-300 p-8 text-center text-sm text-gray-500">
+      <div className="rounded-lg border border-dashed border-gray-300 p-6 text-center text-sm text-gray-500">
         No transactions yet.
       </div>
     );
@@ -44,59 +45,69 @@ const TransactionsList: React.FC<{ transactions: Transaction[] }> = ({ transacti
   return (
     <ul role="list" className="divide-y divide-gray-100">
       {transactions.map((tx) => (
-        <li key={tx.transaction_id} className="flex justify-between gap-x-6 py-5">
-          <div className="flex min-w-0 gap-x-4">
-            {/* Avatar placeholder circle */}
-            <div className="size-12 flex-none rounded-full bg-gray-100 ring-1 ring-inset ring-gray-200 flex items-center justify-center">
-              <span className="text-xs font-medium text-gray-500">
+        <li
+          key={tx.transaction_id}
+          className="flex items-center justify-between px-2 py-3 hover:bg-gray-50"
+        >
+          {/* LEFT SIDE */}
+          <div className="flex items-center gap-3 min-w-0">
+            <div className="size-10 flex-none rounded-full bg-gray-100 ring-1 ring-inset ring-gray-200 flex items-center justify-center">
+              <span className="text-sm font-medium text-gray-500">
                 {tx.merchant_name ? tx.merchant_name.charAt(0).toUpperCase() : 'T'}
               </span>
             </div>
-            <div className="min-w-0 flex-auto">
-              <p className="text-sm/6 font-semibold text-gray-900">
+            <div className="min-w-0 flex flex-col">
+              <p className="truncate text-sm font-medium text-gray-900">
                 {tx.merchant_name || 'Transaction'}
               </p>
-              <p className="mt-1 flex text-xs/5 text-gray-500">
+              <p className="flex items-center gap-2 text-xs text-gray-500 truncate">
                 <span className="truncate">
                   {tx.account_institution_name} • {tx.account_name}
                 </span>
-                <span className="mx-2">•</span>
-                <time className="whitespace-nowrap" dateTime={tx.transaction_date}>
-                  {formatDate(tx.transaction_date)}
-                </time>
+                <span className="text-gray-400">•</span>
+                <TransactionCategoryBadge category={tx.transaction_category} />
               </p>
             </div>
           </div>
-          <div className="flex shrink-0 items-center gap-x-6">
-            <div className="hidden sm:flex sm:flex-col sm:items-end">
+
+          {/* RIGHT SIDE */}
+          <div className="flex items-center gap-4 shrink-0">
+            <div className="flex flex-col items-end">
               <AmountBadge amount={tx.transaction_amount} />
-              <p className="mt-1 text-xs/5 text-gray-500">{tx.transaction_type}</p>
+              <p className="text-xs text-gray-500">{formatDate(tx.transaction_date)}</p>
             </div>
-            <Menu as="div" className="relative flex-none">
-              <MenuButton className="relative block text-gray-500 hover:text-gray-900">
-                <span className="absolute -inset-2.5" />
+            <Menu as="div" className="relative">
+              <MenuButton className="text-gray-400 hover:text-gray-600">
                 <span className="sr-only">Open options</span>
-                <EllipsisVerticalIcon aria-hidden="true" className="size-5" />
+                <EllipsisVerticalIcon aria-hidden="true" className="h-5 w-5" />
               </MenuButton>
               <MenuItems
                 transition
-                className="absolute right-0 z-10 mt-2 w-40 origin-top-right rounded-md bg-white py-2 shadow-lg outline outline-gray-900/5 transition data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in"
+                className="absolute right-0 z-10 mt-2 w-40 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none"
               >
                 <MenuItem>
-                  <a
-                    href="#"
-                    className="block px-3 py-1 text-sm/6 text-gray-900 data-focus:bg-gray-50 data-focus:outline-hidden"
-                  >
-                    View details
-                  </a>
+                  {({ active }) => (
+                    <a
+                      href="#"
+                      className={`block px-3 py-1 text-sm ${
+                        active ? 'bg-gray-50 text-gray-900' : 'text-gray-700'
+                      }`}
+                    >
+                      View details
+                    </a>
+                  )}
                 </MenuItem>
                 <MenuItem>
-                  <a
-                    href="#"
-                    className="block px-3 py-1 text-sm/6 text-gray-900 data-focus:bg-gray-50 data-focus:outline-hidden"
-                  >
-                    Categorize
-                  </a>
+                  {({ active }) => (
+                    <a
+                      href="#"
+                      className={`block px-3 py-1 text-sm ${
+                        active ? 'bg-gray-50 text-gray-900' : 'text-gray-700'
+                      }`}
+                    >
+                      Categorize
+                    </a>
+                  )}
                 </MenuItem>
               </MenuItems>
             </Menu>

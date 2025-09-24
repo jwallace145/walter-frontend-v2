@@ -1,4 +1,5 @@
 import { Account } from '@/lib/models/account';
+import { Transaction } from '@/lib/models/transaction';
 import { User } from '@/lib/models/User';
 import WalterBackendAPIResponse, { ResponseArguments } from '@/lib/proxy/response';
 
@@ -94,6 +95,49 @@ export class GetAccountsResponse extends WalterBackendAPIResponse<GetAccountsDat
       throw new Error('Accounts are not provided.');
     }
     return this.data.accounts.filter((account: Account): boolean => account.linked_with_plaid);
+  }
+}
+
+export interface GetTransactionsData {
+  user_id: string;
+  num_transactions: number;
+  total_income: number;
+  total_expense: number;
+  cash_flow: number;
+  transactions: Transaction[];
+}
+
+export class GetTransactionsResponse extends WalterBackendAPIResponse<GetTransactionsData> {
+  public constructor(args: ResponseArguments<GetTransactionsData>) {
+    super(args);
+  }
+
+  public getTotalIncome(): number {
+    if (!this.data?.total_income) {
+      throw new Error('Total income is not provided.');
+    }
+    return this.data.total_income;
+  }
+
+  public getTotalExpenses(): number {
+    if (!this.data?.total_expense) {
+      throw new Error('Total expense is not provided.');
+    }
+    return this.data.total_expense;
+  }
+
+  public getCashFlow(): number {
+    if (!this.data?.cash_flow) {
+      throw new Error('Cash flow is not provided.');
+    }
+    return this.data.cash_flow;
+  }
+
+  public getTransactions(): Transaction[] {
+    if (!this.data?.transactions) {
+      throw new Error('Transactions are not provided.');
+    }
+    return this.data.transactions;
   }
 }
 

@@ -10,6 +10,8 @@ import {
   ExchangePublicTokenData,
   ExchangePublicTokenResponse,
   GetAccountsResponse,
+  GetTransactionsData,
+  GetTransactionsResponse,
   LoginData,
   LoginResponse,
   LogoutData,
@@ -62,6 +64,21 @@ export class WalterBackendProxy {
     )
       .then((response: AxiosResponse): ResponseArguments<any> => this.getResponseArgs(response))
       .then((args: ResponseArguments<any>): GetAccountsResponse => new GetAccountsResponse(args));
+  }
+
+  public static async getTransactions(): Promise<GetTransactionsResponse> {
+    return this.callProxy(
+      PROXY_ENDPOINTS['GET_TRANSACTIONS'].method,
+      PROXY_ENDPOINTS['GET_TRANSACTIONS'].path
+    )
+      .then(
+        (response: AxiosResponse): ResponseArguments<GetTransactionsData> =>
+          this.getResponseArgs<GetTransactionsData>(response)
+      )
+      .then(
+        (args: ResponseArguments<GetTransactionsData>): GetTransactionsResponse =>
+          new GetTransactionsResponse(args)
+      );
   }
 
   public static async createLinkToken(): Promise<CreateLinkTokenResponse> {

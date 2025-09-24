@@ -56,6 +56,14 @@ export class WalterBackend {
     );
   }
 
+  public static async getAccounts(token: string): Promise<AxiosResponse> {
+    return this.callBackend(
+      API_ENDPOINTS['GET_ACCOUNTS'].method,
+      API_ENDPOINTS['GET_ACCOUNTS'].path,
+      token
+    );
+  }
+
   public static async createLinkToken(token: string): Promise<AxiosResponse> {
     return this.callBackend(
       API_ENDPOINTS['CREATE_LINK_TOKEN'].method,

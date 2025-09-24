@@ -8,6 +8,7 @@ export const PROXY_ENDPOINTS: { [key: string]: { method: string; path: string } 
   LOGOUT: { method: 'POST', path: '/auth/logout' },
   GET_USER: { method: 'GET', path: '/users/get-user' },
   CREATE_USER: { method: 'POST', path: '/users/create-user' },
+  GET_ACCOUNTS: { method: 'GET', path: '/accounts/get-accounts' },
   CREATE_LINK_TOKEN: {
     method: 'POST',
     path: '/plaid/create-link-token',

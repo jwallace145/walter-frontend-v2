@@ -1,3 +1,4 @@
+import { Account } from '@/lib/models/account';
 import { User } from '@/lib/models/User';
 import WalterBackendAPIResponse, { ResponseArguments } from '@/lib/proxy/response';
 
@@ -73,6 +74,26 @@ export interface CreateUserData {
 export class CreateUserResponse extends WalterBackendAPIResponse<CreateUserData> {
   public constructor(args: ResponseArguments<CreateUserData>) {
     super(args);
+  }
+}
+
+export interface GetAccountsData {
+  user_id: string;
+  total_num_accounts: number;
+  total_balance: number;
+  accounts: Account[];
+}
+
+export class GetAccountsResponse extends WalterBackendAPIResponse<GetAccountsData> {
+  public constructor(args: ResponseArguments<GetAccountsData>) {
+    super(args);
+  }
+
+  public getPlaidAccounts(): Account[] {
+    if (!this.data?.accounts) {
+      throw new Error('Accounts are not provided.');
+    }
+    return this.data.accounts.filter((account: Account): boolean => account.linked_with_plaid);
   }
 }
 

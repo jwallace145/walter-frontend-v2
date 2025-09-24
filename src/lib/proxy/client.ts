@@ -9,6 +9,7 @@ import {
   CreateUserResponse,
   ExchangePublicTokenData,
   ExchangePublicTokenResponse,
+  GetAccountsResponse,
   LoginData,
   LoginResponse,
   LogoutData,
@@ -52,6 +53,15 @@ export class WalterBackendProxy {
         (args: ResponseArguments<CreateUserData>): CreateUserResponse =>
           new CreateUserResponse(args)
       );
+  }
+
+  public static async getAccounts(): Promise<GetAccountsResponse> {
+    return this.callProxy(
+      PROXY_ENDPOINTS['GET_ACCOUNTS'].method,
+      PROXY_ENDPOINTS['GET_ACCOUNTS'].path
+    )
+      .then((response: AxiosResponse): ResponseArguments<any> => this.getResponseArgs(response))
+      .then((args: ResponseArguments<any>): GetAccountsResponse => new GetAccountsResponse(args));
   }
 
   public static async createLinkToken(): Promise<CreateLinkTokenResponse> {

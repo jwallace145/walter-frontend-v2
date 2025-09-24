@@ -7,6 +7,7 @@ export const API_ENDPOINTS: { [key: string]: { method: string; path: string } } 
   REFRESH: { method: 'POST', path: '/auth/refresh' },
   LOGOUT: { method: 'POST', path: '/auth/logout' },
   GET_USER: { method: 'GET', path: '/users' },
+  GET_ACCOUNTS: { method: 'GET', path: '/accounts' },
   CREATE_USER: { method: 'POST', path: '/users' },
   CREATE_LINK_TOKEN: {
     method: 'POST',

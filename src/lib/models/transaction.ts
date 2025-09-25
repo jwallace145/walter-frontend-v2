@@ -29,5 +29,6 @@ export interface Transaction {
   transaction_subtype: string;
   transaction_category: TransactionCategory;
   merchant_name: string;
+  merchant_logo_url: string;
   is_plaid_transaction: boolean;
 }

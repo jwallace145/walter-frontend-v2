@@ -3,7 +3,7 @@
 import React, { useEffect } from 'react';
 import { GetServerSideProps } from 'next';
 
-import TransactionsList from '@/components/transactions/TransactionsList';
+import PaginatedTransactionsList from '@/components/transactions/PaginatedTransactionsList';
 import TransactionsStats from '@/components/transactions/TransactionsStats';
 import AuthenticatedPageLayout from '@/layouts/AuthenticatedPageLayout';
 import { withAuthenticationRedirect } from '@/lib/auth/AuthenticationRedirect';
@@ -70,7 +70,7 @@ const TransactionsPage: React.FC<{ user: User }> = ({ user }) => {
             totalExpenses={totalExpenses}
             cashFlow={cashFlow}
           />
-          <TransactionsList transactions={transactions} />
+          <PaginatedTransactionsList transactions={transactions} />
         </>
       )}
     </div>

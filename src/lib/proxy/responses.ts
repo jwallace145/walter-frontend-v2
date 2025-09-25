@@ -113,24 +113,15 @@ export class GetTransactionsResponse extends WalterBackendAPIResponse<GetTransac
   }
 
   public getTotalIncome(): number {
-    if (!this.data?.total_income) {
-      throw new Error('Total income is not provided.');
-    }
-    return this.data.total_income;
+    return this.data?.total_income ?? -1.0;
   }
 
   public getTotalExpenses(): number {
-    if (!this.data?.total_expense) {
-      throw new Error('Total expense is not provided.');
-    }
-    return this.data.total_expense;
+    return this.data?.total_expense ?? -1.0;
   }
 
   public getCashFlow(): number {
-    if (!this.data?.cash_flow) {
-      throw new Error('Cash flow is not provided.');
-    }
-    return this.data.cash_flow;
+    return this.data?.cash_flow ?? -1.0;
   }
 
   public getTransactions(): Transaction[] {

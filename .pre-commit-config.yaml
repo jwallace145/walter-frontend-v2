@@ -18,7 +18,7 @@ repos:
         language: node
         types: [file]
         files: \.(js|jsx|ts|tsx)$
-        args: [--fix, --max-warnings=141] # TODO: Bring the max warnings down to zero
+        args: [--fix, --max-warnings=60] # TODO: Bring the max warnings down to zero
 
   # TODO: Enable typescript checking
   # TypeScript type checking

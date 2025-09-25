@@ -1,4 +1,5 @@
 import React, { ReactElement } from 'react';
+import Image from 'next/image';
 
 import UnauthenticatedPageLayout from '@/layouts/UnauthenticatedPageLayout';
 
@@ -35,7 +36,7 @@ export default function Team(): ReactElement {
           >
             {people.map((person) => (
               <li key={person.name}>
-                <img
+                <Image
                   alt=""
                   src={person.imageUrl}
                   className="aspect-3/2 w-full rounded-2xl object-cover"

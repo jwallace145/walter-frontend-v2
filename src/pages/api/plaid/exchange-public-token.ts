@@ -4,10 +4,24 @@ import { AxiosResponse } from 'axios';
 import { WalterBackend } from '@/lib/backend/client';
 import { HttpStatus } from '@/lib/proxy/statuses';
 
+const API_NAME: string = 'ExchangePublicToken';
+
 export default async function handler(
   request: NextApiRequest,
   response: NextApiResponse
 ): Promise<void> {
+  const apiUrl: string | undefined = process.env.WALTER_BACKEND_API_URL;
+  const apiKey: string | undefined = process.env.WALTER_BACKEND_API_KEY;
+
+  if (!apiUrl || !apiKey) {
+    console.error(
+      `WalterBackend API URL or API key is missing in ${API_NAME} API proxy request. Not calling WalterBackend.`
+    );
+    return response
+      .status(HttpStatus.INTERNAL_SERVER_ERROR)
+      .json({ error: 'Internal Server Error' });
+  }
+
   if (request.method !== 'POST') {
     return response.status(405).json({ error: 'Method not allowed' });
   }
@@ -24,6 +38,8 @@ export default async function handler(
 
   try {
     const backendResponse: AxiosResponse = await WalterBackend.exchangePublicToken(
+      apiUrl,
+      apiKey,
       accessToken,
       request.body.publicToken,
       request.body.institutionId,
@@ -32,10 +48,12 @@ export default async function handler(
     );
 
     if (backendResponse.status === HttpStatus.UNAUTHORIZED) {
-      const cookies: string[] = await WalterBackend.refreshCookies(refreshToken);
+      const cookies: string[] = await WalterBackend.refreshCookies(apiUrl, apiKey, refreshToken);
       response.setHeader('Set-Cookie', cookies);
       const newAccessToken: string = WalterBackend.getAccessTokenFromCookies(cookies);
       const backendRetryResponse: AxiosResponse = await WalterBackend.exchangePublicToken(
+        apiUrl,
+        apiKey,
         newAccessToken,
         request.body.publicToken,
         request.body.institutionId,

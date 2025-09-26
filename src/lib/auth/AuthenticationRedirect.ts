@@ -17,6 +17,9 @@ export function withAuthenticationRedirect<T>(
   ): Promise<
     GetServerSidePropsResult<T & { user: User | null; accessToken: string | undefined }>
   > => {
+    const apiUrl: string | undefined = process.env.WALTER_BACKEND_API_URL;
+    const apiKey: string | undefined = process.env.WALTER_BACKEND_API_KEY;
+
     const refreshToken: string =
       context.req.cookies?.[WalterBackend.REFRESH_TOKEN_KEY] || INVALID_REFRESH_TOKEN_DEFAULT_VALUE;
     let accessToken: string =
@@ -25,11 +28,19 @@ export function withAuthenticationRedirect<T>(
     let user: User | null = null;
 
     if (accessToken !== INVALID_ACCESS_TOKEN_DEFAULT_VALUE) {
-      let getUser: AxiosResponse = await WalterBackend.getUser(accessToken);
+      let getUser: AxiosResponse = await WalterBackend.getUser(
+        apiUrl as string,
+        apiKey as string,
+        accessToken
+      );
 
       // If access token is invalid/expired, try refreshing
       if (getUser.status === 401 && refreshToken !== INVALID_REFRESH_TOKEN_DEFAULT_VALUE) {
-        const refresh: AxiosResponse = await WalterBackend.refresh(refreshToken);
+        const refresh: AxiosResponse = await WalterBackend.refresh(
+          apiUrl as string,
+          apiKey as string,
+          refreshToken
+        );
 
         if (refresh.status === 200 && refresh.headers['set-cookie']) {
           const setCookies: string[] = Array.isArray(refresh.headers['set-cookie'])
@@ -50,7 +61,7 @@ export function withAuthenticationRedirect<T>(
 
           // Retry fetching the user with new access token
           if (accessToken && accessToken !== INVALID_ACCESS_TOKEN_DEFAULT_VALUE) {
-            getUser = await WalterBackend.getUser(accessToken);
+            getUser = await WalterBackend.getUser(apiUrl as string, apiKey as string, accessToken);
             if (getUser.status === 200) {
               user = new GetUserResponse({
                 statusCode: getUser.status,

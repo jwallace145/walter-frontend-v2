@@ -10,6 +10,18 @@ export default async function handler(
   request: NextApiRequest,
   response: NextApiResponse
 ): Promise<void> {
+  const apiUrl: string | undefined = process.env.WALTER_BACKEND_API_URL;
+  const apiKey: string | undefined = process.env.WALTER_BACKEND_API_KEY;
+
+  if (!apiUrl || !apiKey) {
+    console.error(
+      `WalterBackend API URL or API key is missing in ${API_NAME} API proxy request. Not calling WalterBackend.`
+    );
+    return response
+      .status(HttpStatus.INTERNAL_SERVER_ERROR)
+      .json({ error: 'Internal Server Error' });
+  }
+
   if (request.method !== 'POST') {
     return response.status(HttpStatus.METHOD_NOT_ALLOWED).json({ error: 'Method not allowed' });
   }
@@ -35,16 +47,20 @@ export default async function handler(
 
   try {
     const backendResponse: AxiosResponse = await WalterBackend.syncTransactions(
+      apiUrl,
+      apiKey,
       accessToken,
       userId,
       accountId
     );
 
     if (backendResponse.status === HttpStatus.UNAUTHORIZED) {
-      const cookies: string[] = await WalterBackend.refreshCookies(refreshToken);
+      const cookies: string[] = await WalterBackend.refreshCookies(apiUrl, apiKey, refreshToken);
       response.setHeader('Set-Cookie', cookies);
       const newAccessToken: string = WalterBackend.getAccessTokenFromCookies(cookies);
       const backendRetryResponse: AxiosResponse = await WalterBackend.syncTransactions(
+        apiUrl,
+        apiKey,
         newAccessToken,
         userId,
         accountId

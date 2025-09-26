@@ -4,10 +4,11 @@ frontend:
     preBuild:
       commands:
         - npm install -g pnpm
-        - export WALTER_BACKEND_API_URL=https://dev-api.walterai.dev
         - pnpm install
     build:
       commands:
+        - env | grep -e WALTER_BACKEND_API_URL >> .env.production
+        - env | grep -e WALTER_BACKEND_API_KEY >> .env.production
         - pnpm run build
   artifacts:
     baseDirectory: .next

@@ -9,28 +9,52 @@ import { HttpStatus } from '@/lib/proxy/statuses';
  ****************************/
 
 export class WalterBackend {
-  static readonly API_URL: string = process.env.NEXT_PUBLIC_WALTER_BACKEND_API_URL as string;
-
   static readonly REFRESH_TOKEN_KEY: string = 'WALTER_BACKEND_REFRESH_TOKEN';
   static readonly ACCESS_TOKEN_KEY: string = 'WALTER_BACKEND_ACCESS_TOKEN';
 
-  public static async login(email: string, password: string): Promise<AxiosResponse> {
-    return this.callBackend(API_ENDPOINTS['LOGIN'].method, API_ENDPOINTS['LOGIN'].path, undefined, {
-      email,
-      password,
-    });
-  }
-
-  public static async logout(token: string): Promise<AxiosResponse> {
-    return this.callBackend(API_ENDPOINTS['LOGOUT'].method, API_ENDPOINTS['LOGOUT'].path, token);
-  }
-
-  public static async refresh(token: string): Promise<AxiosResponse> {
-    return this.callBackend(API_ENDPOINTS['REFRESH'].method, API_ENDPOINTS['REFRESH'].path, token);
-  }
-
-  public static async getUser(token: string): Promise<AxiosResponse> {
+  public static async login(
+    url: string,
+    key: string,
+    email: string,
+    password: string
+  ): Promise<AxiosResponse> {
     return this.callBackend(
+      url,
+      key,
+      API_ENDPOINTS['LOGIN'].method,
+      API_ENDPOINTS['LOGIN'].path,
+      undefined,
+      {
+        email,
+        password,
+      }
+    );
+  }
+
+  public static async logout(url: string, key: string, token: string): Promise<AxiosResponse> {
+    return this.callBackend(
+      url,
+      key,
+      API_ENDPOINTS['LOGOUT'].method,
+      API_ENDPOINTS['LOGOUT'].path,
+      token
+    );
+  }
+
+  public static async refresh(url: string, key: string, token: string): Promise<AxiosResponse> {
+    return this.callBackend(
+      url,
+      key,
+      API_ENDPOINTS['REFRESH'].method,
+      API_ENDPOINTS['REFRESH'].path,
+      token
+    );
+  }
+
+  public static async getUser(url: string, key: string, token: string): Promise<AxiosResponse> {
+    return this.callBackend(
+      url,
+      key,
       API_ENDPOINTS['GET_USER'].method,
       API_ENDPOINTS['GET_USER'].path,
       token
@@ -38,14 +62,18 @@ export class WalterBackend {
   }
 
   public static async createUser(
+    url: string,
+    key: string,
     email: string,
     firstName: string,
     lastName: string,
     password: string
   ): Promise<AxiosResponse> {
     return this.callBackend(
+      url,
+      key,
       API_ENDPOINTS['CREATE_USER'].method,
-      `${this.API_URL}${API_ENDPOINTS['CREATE_USER'].path}`,
+      API_ENDPOINTS['CREATE_USER'].path,
       undefined,
       {
         email: email,
@@ -56,24 +84,38 @@ export class WalterBackend {
     );
   }
 
-  public static async getAccounts(token: string): Promise<AxiosResponse> {
+  public static async getAccounts(url: string, key: string, token: string): Promise<AxiosResponse> {
     return this.callBackend(
+      url,
+      key,
       API_ENDPOINTS['GET_ACCOUNTS'].method,
       API_ENDPOINTS['GET_ACCOUNTS'].path,
       token
     );
   }
 
-  public static async getTransactions(token: string): Promise<AxiosResponse> {
+  public static async getTransactions(
+    url: string,
+    key: string,
+    token: string
+  ): Promise<AxiosResponse> {
     return this.callBackend(
+      url,
+      key,
       API_ENDPOINTS['GET_TRANSACTIONS'].method,
       API_ENDPOINTS['GET_TRANSACTIONS'].path,
       token
     );
   }
 
-  public static async createLinkToken(token: string): Promise<AxiosResponse> {
+  public static async createLinkToken(
+    url: string,
+    key: string,
+    token: string
+  ): Promise<AxiosResponse> {
     return this.callBackend(
+      url,
+      key,
       API_ENDPOINTS['CREATE_LINK_TOKEN'].method,
       API_ENDPOINTS['CREATE_LINK_TOKEN'].path,
       token
@@ -81,6 +123,8 @@ export class WalterBackend {
   }
 
   public static async exchangePublicToken(
+    url: string,
+    key: string,
     token: string,
     publicToken: string,
     institutionId: string,
@@ -94,6 +138,8 @@ export class WalterBackend {
     }[]
   ): Promise<AxiosResponse> {
     return this.callBackend(
+      url,
+      key,
       API_ENDPOINTS['EXCHANGE_PUBLIC_TOKEN'].method,
       API_ENDPOINTS['EXCHANGE_PUBLIC_TOKEN'].path,
       token,
@@ -107,11 +153,15 @@ export class WalterBackend {
   }
 
   public static syncTransactions(
+    url: string,
+    key: string,
     token: string,
     userId: string,
     accountId: string
   ): Promise<AxiosResponse> {
     return this.callBackend(
+      url,
+      key,
       API_ENDPOINTS['SYNC_TRANSACTIONS'].method,
       API_ENDPOINTS['SYNC_TRANSACTIONS'].path,
       token,
@@ -122,8 +172,12 @@ export class WalterBackend {
     );
   }
 
-  public static async refreshCookies(refreshToken: string): Promise<string[]> {
-    const refreshResponse: AxiosResponse = await WalterBackend.refresh(refreshToken);
+  public static async refreshCookies(
+    url: string,
+    key: string,
+    refreshToken: string
+  ): Promise<string[]> {
+    const refreshResponse: AxiosResponse = await WalterBackend.refresh(url, key, refreshToken);
 
     if (refreshResponse.status === HttpStatus.OK) {
       const cookies: string[] | undefined = refreshResponse.headers['set-cookie'];
@@ -157,6 +211,8 @@ export class WalterBackend {
   }
 
   private static async callBackend(
+    url: string,
+    key: string,
     method: string,
     path: string,
     token?: string,
@@ -164,15 +220,20 @@ export class WalterBackend {
   ): Promise<AxiosResponse> {
     const config: any = {
       method: method,
-      url: `${this.API_URL}${path}`,
+      url: `${url}${path}`,
       validateStatus: function (status: number): boolean {
         return true;
       },
     };
 
+    const headers: Record<string, string> = {};
+    headers['x-api-key'] = key;
+
     if (token) {
-      config.headers = { Authorization: `Bearer ${token}` };
+      headers['Authorization'] = `Bearer ${token}`;
     }
+
+    config.headers = headers;
 
     if (data) {
       config.data = data;

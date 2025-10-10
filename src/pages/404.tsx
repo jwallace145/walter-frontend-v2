@@ -3,6 +3,8 @@
 import { useState } from 'react';
 import Link from 'next/link';
 
+import Logo from '@/components/branding/Logo';
+
 import { Dialog, DialogPanel } from '@headlessui/react';
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
 
@@ -48,14 +50,10 @@ const PageNotFound: React.FC = (): React.ReactElement => {
         <header className="mx-auto w-full max-w-7xl px-6 pt-6 lg:px-8">
           <nav aria-label="Global" className="flex items-center justify-between">
             <div className="flex lg:flex-1">
-              <a href="#" className="-m-1.5 p-1.5">
+              <Link href="/" className="-m-1.5 p-1.5">
                 <span className="sr-only">Your Company</span>
-                <img
-                  alt=""
-                  src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600"
-                  className="h-8"
-                />
-              </a>
+                <Logo className={'h-8'} />
+              </Link>
             </div>
             <div className="flex lg:hidden">
               <button
@@ -87,14 +85,18 @@ const PageNotFound: React.FC = (): React.ReactElement => {
           <Dialog open={mobileMenuOpen} onClose={setMobileMenuOpen}>
             <DialogPanel className="fixed inset-0 z-10 overflow-y-auto bg-white px-6 py-6 lg:hidden">
               <div className="flex items-center justify-between">
-                <a href="#" className="-m-1.5 p-1.5">
+                <Link href="/" className="-m-1.5 p-1.5">
                   <span className="sr-only">Your Company</span>
-                  <img
-                    alt=""
-                    src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600"
-                    className="h-8"
-                  />
-                </a>
+                  <Logo className={'h-8'} />
+                </Link>
+                <button
+                  type="button"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="-m-2.5 rounded-md p-2.5 text-gray-700"
+                >
+                  <span className="sr-only">Close menu</span>
+                  <XMarkIcon aria-hidden="true" className="size-6" />
+                </button>
                 <button
                   type="button"
                   onClick={() => setMobileMenuOpen(false)}
@@ -152,11 +154,7 @@ const PageNotFound: React.FC = (): React.ReactElement => {
           </h2>
           <div className="mx-auto max-w-7xl px-6 py-16 sm:py-24 lg:px-8 lg:py-32">
             <div className="xl:grid xl:grid-cols-3 xl:gap-8">
-              <img
-                alt="Company name"
-                src="https://tailwindcss.com/plus-assets/img/logos/mark.svg?color=indigo&shade=600"
-                className="h-7"
-              />
+              <Logo className={'h-8'} />
               <div className="mt-16 grid grid-cols-2 gap-8 xl:col-span-2 xl:mt-0">
                 <div className="md:grid md:grid-cols-2 md:gap-8">
                   <div>

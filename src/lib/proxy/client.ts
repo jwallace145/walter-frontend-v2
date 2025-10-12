@@ -9,6 +9,7 @@ import {
   CreateUserResponse,
   ExchangePublicTokenData,
   ExchangePublicTokenResponse,
+  GetAccountsData,
   GetAccountsResponse,
   GetTransactionsData,
   GetTransactionsResponse,
@@ -18,6 +19,8 @@ import {
   LogoutResponse,
   SyncTransactionsData,
   SyncTransactionsResponse,
+  UpdateTransactionData,
+  UpdateTransactionResponse,
 } from '@/lib/proxy/responses';
 
 export class WalterBackendProxy {
@@ -64,8 +67,14 @@ export class WalterBackendProxy {
       PROXY_ENDPOINTS['GET_ACCOUNTS'].method,
       PROXY_ENDPOINTS['GET_ACCOUNTS'].path
     )
-      .then((response: AxiosResponse): ResponseArguments<any> => this.getResponseArgs(response))
-      .then((args: ResponseArguments<any>): GetAccountsResponse => new GetAccountsResponse(args));
+      .then(
+        (response: AxiosResponse): ResponseArguments<GetAccountsData> =>
+          this.getResponseArgs(response)
+      )
+      .then(
+        (args: ResponseArguments<GetAccountsData>): GetAccountsResponse =>
+          new GetAccountsResponse(args)
+      );
   }
 
   public static async getTransactions(): Promise<GetTransactionsResponse> {
@@ -80,6 +89,32 @@ export class WalterBackendProxy {
       .then(
         (args: ResponseArguments<GetTransactionsData>): GetTransactionsResponse =>
           new GetTransactionsResponse(args)
+      );
+  }
+
+  public static async updateTransaction(
+    transactionDate: string,
+    transactionId: string,
+    updatedMerchantName: string,
+    updatedTransactionCategory: string
+  ): Promise<UpdateTransactionResponse> {
+    return this.callProxy(
+      PROXY_ENDPOINTS['UPDATE_TRANSACTION'].method,
+      PROXY_ENDPOINTS['UPDATE_TRANSACTION'].path,
+      {
+        transactionDate: transactionDate,
+        transactionId: transactionId,
+        updatedMerchantName: updatedMerchantName,
+        updatedTransactionCategory: updatedTransactionCategory,
+      }
+    )
+      .then(
+        (response: AxiosResponse): ResponseArguments<UpdateTransactionData> =>
+          this.getResponseArgs<UpdateTransactionData>(response)
+      )
+      .then(
+        (args: ResponseArguments<UpdateTransactionData>): UpdateTransactionResponse =>
+          new UpdateTransactionResponse(args)
       );
   }
 

@@ -108,6 +108,30 @@ export class WalterBackend {
     );
   }
 
+  public static async updateTransaction(
+    url: string,
+    key: string,
+    token: string,
+    transactionDate: string,
+    transactionId: string,
+    updatedMerchantName: string,
+    updatedTransactionCategory: string
+  ): Promise<AxiosResponse> {
+    return this.callBackend(
+      url,
+      key,
+      API_ENDPOINTS['UPDATE_TRANSACTION'].method,
+      API_ENDPOINTS['UPDATE_TRANSACTION'].path,
+      token,
+      {
+        transaction_date: transactionDate,
+        transaction_id: transactionId,
+        updated_merchant_name: updatedMerchantName,
+        updated_category: updatedTransactionCategory,
+      }
+    );
+  }
+
   public static async createLinkToken(
     url: string,
     key: string,

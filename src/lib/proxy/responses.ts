@@ -132,6 +132,16 @@ export class GetTransactionsResponse extends WalterBackendAPIResponse<GetTransac
   }
 }
 
+export interface UpdateTransactionData {
+  transaction: Transaction;
+}
+
+export class UpdateTransactionResponse extends WalterBackendAPIResponse<UpdateTransactionData> {
+  public constructor(args: ResponseArguments<UpdateTransactionData>) {
+    super(args);
+  }
+}
+
 export interface CreateLinkTokenData {
   request_id: string;
   user_id: string;

@@ -9,6 +9,7 @@ export const API_ENDPOINTS: { [key: string]: { method: string; path: string } } 
   GET_USER: { method: 'GET', path: '/users' },
   GET_ACCOUNTS: { method: 'GET', path: '/accounts' },
   GET_TRANSACTIONS: { method: 'GET', path: '/transactions' },
+  UPDATE_TRANSACTION: { method: 'PUT', path: '/transactions' },
   CREATE_USER: { method: 'POST', path: '/users' },
   CREATE_LINK_TOKEN: {
     method: 'POST',

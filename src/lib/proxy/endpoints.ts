@@ -10,6 +10,7 @@ export const PROXY_ENDPOINTS: { [key: string]: { method: string; path: string } 
   CREATE_USER: { method: 'POST', path: '/users/create-user' },
   GET_ACCOUNTS: { method: 'GET', path: '/accounts/get-accounts' },
   GET_TRANSACTIONS: { method: 'GET', path: '/transactions/get-transactions' },
+  UPDATE_TRANSACTION: { method: 'PUT', path: '/transactions/update-transaction' },
   CREATE_LINK_TOKEN: {
     method: 'POST',
     path: '/plaid/create-link-token',

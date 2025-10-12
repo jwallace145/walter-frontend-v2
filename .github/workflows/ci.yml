@@ -37,7 +37,7 @@ jobs:
       # 5. Run lint and format checks (TODO: reduce --max-warnings to 0)
       - name: Lint & Prettier checks
         run: |
-          pnpm exec eslint src --ext .js,.jsx,.ts,.tsx --max-warnings=60
+          pnpm exec eslint src --ext .js,.jsx,.ts,.tsx --max-warnings=45
           pnpm exec prettier --check .
 
       # 6. TypeScript type-check
